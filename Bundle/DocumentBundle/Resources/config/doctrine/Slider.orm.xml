@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\DocumentBundle\Entity\Slider"
+    		repository-class="TDN\Bundle\DocumentBundle\Entity\SliderRepository">
+		
+		<id name="idSlide" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="pitch" type="string" column="pitch" />
+		<field name="ordre" type="integer" column="ordre" nullable="true" />
+		<field name="statut" type="integer" column="statut" />
+		<field name="datePublication" type="datetime" column="date_publication" nullable="true" />
+
+		<!-- Owner de la relation (bidirectionnelle) Document source -->
+        <one-to-one field="lnSource" target-entity="Document" inversed-by="lnPromu" >
+           	<join-colum name="lnSource_id" referenced-column-name="id" />
+        </one-to-one>
+
+		<!-- Owner de la relation (unidirectionnelle) Image de couverture -->
+        <one-to-one field="lnCover" target-entity="TDN\Bundle\ImageBundle\Entity\Image">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        	<join-colum name="lnCover_id" referenced-column-name="id" />
+        </one-to-one>
+		
+	</entity>
+</doctrine-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\DocumentBundle\Entity\Tag"
+    		repository-class="TDN\Bundle\DocumentBundle\Entity\TagRepository">
+		
+		<id name="id" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="lemme" type="string" column="lemme" />
+		<field name="forme" type="string" column="forme" nullable="true" />
+		<field name="expression" type="string" column="expression" />
+
+		<!-- Inverse de la relation -->
+		<many-to-many field="filDocuments" mapped-by="filTags" target-entity="Document"/>
+	</entity>
+</doctrine-mapping>

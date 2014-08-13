@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\DocumentBundle\Entity\DocumentRubrique"
+			repository-class="TDN\Bundle\DocumentBundle\Entity\DocumentRubriqueRepository">
+
+		<id name="idRubrique" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="titre" type="string" column="titre" />
+		<field name="slug" type="string" column="slug" />
+		<field name="abstract" type="text" column="abstract" nullable="true" />
+		<field name="parent" type="integer" column="parent"  nullable="true" />
+		<field name="couleur" type="string" column="couleur" />
+		<field name="sponsorImage" type="string" column="image_sponsor" nullable="true" />
+		<field name="sponsorLink" type="string" column="link_sponsor" nullable="true" />
+		<field name="statut" type="integer" column="statut" default="0" />
+		<field name="datePublication" type="datetime" column="date_publication" />
+		<field name="dateModification" type="datetime" column="date_modification" />
+
+       <!-- Relation rubrique parente : sous-rubrique -->
+		<many-to-one field="rubriqueParente" target-entity="DocumentRubrique" inversed-by="sousRubriques">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+		</many-to-one>
+		
+		<one-to-many field="sousRubriques" target-entity="DocumentRubrique" mapped-by="rubriqueParente" />
+
+		<one-to-many field="setDomaines" target-entity="TDN\Bundle\NanaBundle\Entity\NanaExpertise" mapped-by="rubrique" />
+
+	</entity>
+	
+</doctrine-mapping>

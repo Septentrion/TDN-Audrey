@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\DocumentBundle\Entity\Document"
+			inheritance-type="JOINED" >
+		
+		<id name="idDocument" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<discriminator-column name="typeDocument" type="string" />
+		<discriminator-map>
+			<discriminator-mapping value="article" class="TDN\Bundle\RedactionBundle\Entity\Article" />
+			<discriminator-mapping value="concours" class="TDN\Bundle\ConcoursBundle\Entity\Concours" />
+			<discriminator-mapping value="conseil" class="TDN\Bundle\ConseilExpertBundle\Entity\ConseilExpert" />
+			<discriminator-mapping value="dossier" class="TDN\Bundle\DossierRedactionBundle\Entity\Dossier" />
+			<discriminator-mapping value="feuillet" class="TDN\Bundle\DossierRedactionBundle\Entity\Feuillet" />
+			<discriminator-mapping value="image" class="TDN\Bundle\ImageBundle\Entity\Image" />
+			<discriminator-mapping value="produit" class="TDN\Bundle\ProduitBundle\Entity\Produit" />
+			<discriminator-mapping value="question" class="TDN\Bundle\CauseuseBundle\Entity\Question" />
+			<discriminator-mapping value="quiz" class="TDN\Bundle\QuizBundle\Entity\Quiz" />
+			<discriminator-mapping value="reponse" class="TDN\Bundle\CauseuseBundle\Entity\Reponse" />
+			<discriminator-mapping value="selection" class="TDN\Bundle\RedactionBundle\Entity\SelectionShopping" />
+			<discriminator-mapping value="video" class="TDN\Bundle\VideoBundle\Entity\Video" />
+		</discriminator-map>
+
+		<field name="titre" type="string" column="titre" />
+		<field name="slug" type="string" column="slug" />
+		<field name="abstract" type="text" column="abstract" nullable="true" default="" />
+		<field name="likes" type="integer" column="likes" default="0" />
+		<field name="hits" type="text" column="hits" nullable="true" />
+		<field name="tags" type="text" column="tags" nullable="true" />
+		<field name="statut" type="string" column="statut" nullable="true" />
+		<field name="commentThread" type="integer" column="comment_thread" />
+		<field name="datePublication" type="datetime" column="date_publication" />
+		<field name="dateModification" type="datetime" column="date_modification" />
+		<field name="version" type="integer" column="version" default="1.0" />
+		<field name="v2ID" type="integer" column="v2_id" nullable="true" />
+		<field name="v1ID" type="string" column="v1_id" size="10" nullable="true" />
+		<field name="ordreDossier" type="integer" column="ordre_dossier" nullable="true" />
+
+		<!-- Owner de la relation (bi) Est écrit par -->
+		<many-to-one field="lnAuteur" target-entity="TDN\Bundle\NanaBundle\Entity\Nana" inversed-by="filProductions">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_auteur" referenced-column-name="id" />
+        </many-to-one>
+
+        <!-- Owner de la relation (uni) Est illustré par -->
+		<many-to-one field="lnIllustration" target-entity="TDN\Bundle\ImageBundle\Entity\Image">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_illustration" referenced-column-name="id" />
+        </many-to-one>
+
+        <!-- Owner de la relation (uni) Est illustré par -->
+		<many-to-one field="lnThematique" target-entity="TDN\Bundle\DocumentBundle\Entity\DocumentRubrique">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_thematique" referenced-column-name="id" />
+        </many-to-one>
+
+        <!-- Relation n-n Rubriques du document -->
+		<many-to-many field="rubriques" target-entity="DocumentRubrique"> <!-- Instancier l'inverse :  inversed-by="" -->
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+			<join-table name="DocumentThemes">
+				<join-columns>
+					<join-column name="for_document" referenced-column-name="id" />
+				</join-columns>
+				<inverse-join-columns>
+					<join-column name="for_rubrique" referenced-column-name="id" />
+				</inverse-join-columns>
+			</join-table>
+		</many-to-many>
+		
+		<!-- Relation n-n Documents analogues -->
+		<many-to-many field="analogues" target-entity="Document">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+			<join-table name="DocumentAnalogues">
+				<join-columns>
+					<join-column name="for_source" referenced-column-name="id" />
+				</join-columns>
+				<inverse-join-columns>
+					<join-column name="for_cible" referenced-column-name="id" />
+				</inverse-join-columns>
+			</join-table>
+		</many-to-many>
+		
+		<!-- Inverse de la relation (bi) Collection de commentaires -->
+		<one-to-many field="commentaires" target-entity="TDN\Bundle\CommentaireBundle\Entity\Commentaire" mapped-by="filDocument">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <order-by>
+                <order-by-field name="datePublication" direction="DESC" />
+            </order-by>
+        </one-to-many>
+
+   		<!-- Inverse de la relation Document promu -->
+        <one-to-one field="lnPromu" target-entity="Slider" mapped-by="lnSource">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-one>
+
+        <!-- Owner de la relation (uni) Fait partie du dossier -->
+		<many-to-one field="lnDossier" target-entity="TDN\Bundle\DossierRedactionBundle\Entity\Dossier">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_dossier" referenced-column-name="id" />
+        </many-to-one>
+
+        <!-- Relation n-n Mots-clefs du document -->
+		<many-to-many field="filTags" target-entity="Tag" inversed-by="filDocuments">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+			<join-table name="DocumentIndex">
+				<join-columns>
+					<join-column name="for_document" referenced-column-name="id" />
+				</join-columns>
+				<inverse-join-columns>
+					<join-column name="for_tag" referenced-column-name="id" />
+				</inverse-join-columns>
+			</join-table>
+		</many-to-many>
+		
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareDocument" />
+			<lifecycle-callbacks type="PreUpdate" method="updateDocument" />
+		</lifecycle-callbacks>
+		
+	</entity>
+</doctrine-mapping>
