@@ -7,3 +7,6 @@ Liste des bundles :
 
 TDNCoreBundle
 -------------
+
+TDNConseilExpertBundle
+---
