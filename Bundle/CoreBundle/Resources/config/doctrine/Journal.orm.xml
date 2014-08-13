@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\CoreBundle\Entity\Journal"
+			repository-class="TDN\Bundle\CoreBundle\Entity\JournalRepository">
+
+		<id name="id" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="action" type="string" column="action" />
+		<field name="url" type="string" column="url" nullable="true" />
+		<field name="titre" type="string" column="titre" default="0" />
+		<field name="texte" type="text" column="texte" />
+		<field name="support" type="string" column="support" />
+		<field name="dateEntree" type="datetime" column="date_entree" />
+
+		<many-to-one field="lnActeur" target-entity="TDN\Bundle\NanaBundle\Entity\Nana" inversed-by="filActivite">
+           <join-column name="ln_acteur" referenced-column-name="id" />
+        </many-to-one>
+
+		<many-to-one field="lnRubrique" target-entity="TDN\Bundle\DocumentBundle\Entity\DocumentRubrique">
+           <join-column name="ln_rubrique" referenced-column-name="id" />
+        </many-to-one>
+
+		<many-to-one field="lnVeilleur" target-entity="TDN\Bundle\NanaBundle\Entity\Nana" inversed-by="filAlertes">
+           <join-column name="ln_veilleur" referenced-column-name="id" />
+        </many-to-one>
+
+		<!-- <lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareArticle" />
+			<lifecycle-callbacks type="PreUpdate" method="updateArticle" />
+		</lifecycle-callbacks> -->
+		
+	</entity>
+	
+</doctrine-mapping>
