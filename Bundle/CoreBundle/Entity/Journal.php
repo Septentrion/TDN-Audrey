@@ -5,7 +5,7 @@ namespace TDN\Bundle\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TDN\CoreBundle\Entity\Journal
+ * TDN\Bundle\CoreBundle\Entity\Journal
  */
 class Journal
 {
@@ -45,12 +45,12 @@ class Journal
     private $id;
 
     /**
-     * @var TDN\NanaBundle\Entity\Nana
+     * @var TDN\Bundle\NanaBundle\Entity\Nana
      */
     private $lnActeur;
 
     /**
-     * @var TDN\DocumentBundle\Entity\DocumentRubrique
+     * @var TDN\Bundle\DocumentBundle\Entity\DocumentRubrique
      */
     private $lnRubrique;
 
@@ -206,10 +206,10 @@ class Journal
     /**
      * Set lnActeur
      *
-     * @param TDN\NanaBundle\Entity\Nana $lnActeur
+     * @param TDN\Bundle\NanaBundle\Entity\Nana $lnActeur
      * @return Journal
      */
-    public function setLnActeur(\TDN\NanaBundle\Entity\Nana $lnActeur = null)
+    public function setLnActeur(\TDN\Bundle\NanaBundle\Entity\Nana $lnActeur = null)
     {
         $this->lnActeur = $lnActeur;
     
@@ -219,7 +219,7 @@ class Journal
     /**
      * Get lnActeur
      *
-     * @return TDN\NanaBundle\Entity\Nana 
+     * @return TDN\Bundle\NanaBundle\Entity\Nana 
      */
     public function getLnActeur()
     {
@@ -229,10 +229,10 @@ class Journal
     /**
      * Set lnRubrique
      *
-     * @param TDN\DocumentBundle\Entity\DocumentRubrique $lnRubrique
+     * @param TDN\Bundle\DocumentBundle\Entity\DocumentRubrique $lnRubrique
      * @return Journal
      */
-    public function setLnRubrique(\TDN\DocumentBundle\Entity\DocumentRubrique $lnRubrique = null)
+    public function setLnRubrique(\TDN\Bundle\DocumentBundle\Entity\DocumentRubrique $lnRubrique = null)
     {
         $this->lnRubrique = $lnRubrique;
     
@@ -242,7 +242,7 @@ class Journal
     /**
      * Get lnRubrique
      *
-     * @return TDN\DocumentBundle\Entity\DocumentRubrique 
+     * @return TDN\Bundle\DocumentBundle\Entity\DocumentRubrique 
      */
     public function getLnRubrique()
     {
@@ -278,7 +278,7 @@ class Journal
     }
 
     /**
-     * @var TDN\NanaBundle\Entity\Nana
+     * @var TDN\Bundle\NanaBundle\Entity\Nana
      */
     private $lnVeilleur;
 
@@ -286,10 +286,10 @@ class Journal
     /**
      * Set lnVeilleur
      *
-     * @param TDN\NanaBundle\Entity\Nana $lnVeilleur
+     * @param TDN\Bundle\NanaBundle\Entity\Nana $lnVeilleur
      * @return Journal
      */
-    public function setLnVeilleur(\TDN\NanaBundle\Entity\Nana $lnVeilleur = null)
+    public function setLnVeilleur(\TDN\Bundle\NanaBundle\Entity\Nana $lnVeilleur = null)
     {
         $this->lnVeilleur = $lnVeilleur;
     
@@ -299,7 +299,7 @@ class Journal
     /**
      * Get lnVeilleur
      *
-     * @return TDN\NanaBundle\Entity\Nana 
+     * @return TDN\Bundle\NanaBundle\Entity\Nana 
      */
     public function getLnVeilleur()
     {
