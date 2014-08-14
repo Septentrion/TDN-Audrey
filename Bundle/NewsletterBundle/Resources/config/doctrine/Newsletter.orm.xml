@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NewsletterBundle\Entity\Newsletter"
+			repository-class="TDN\Bundle\NewsletterBundle\Entity\NewsletterRepository">
+
+		<id name="id" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="titre" type="string" column="titre" size="140" nullable="true" />
+		<field name="editorial" type="text" column="editorial" nullable="true" />
+		<field name="datePublication" type="datetime" column="date_publication" />
+		<field name="statut" type="string" column="statut" />
+		<field name="envoyes" type="string" column="envoyes" size="16" />
+
+		<!-- Owner de la relation (bi) Est posté par -->
+		<one-to-one field="lnBonPlan" target-entity="TDN\Bundle\RedactionBundle\Entity\Article">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_plan" referenced-column-name="id" />
+        </one-to-one>
+
+		<!-- Owner de la relation (bi) Est posté par -->
+		<one-to-one field="lnArticleSponsor" target-entity="TDN\Bundle\RedactionBundle\Entity\Article">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_article_sponsor" referenced-column-name="id" />
+        </one-to-one>
+
+		<!-- Owner de la relation (bi) Est posté par -->
+		<one-to-one field="lnLire" target-entity="TDN\Bundle\DocumentBundle\Entity\Document">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_lire" referenced-column-name="id" />
+        </one-to-one>
+
+		<!-- Owner de la relation (bi) Est posté par -->
+		<one-to-one field="lnQuestion" target-entity="TDN\Bundle\CauseuseBundle\Entity\Question">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_question" referenced-column-name="id" />
+        </one-to-one>
+
+		<!-- Owner de la relation (bi) Est posté par -->
+		<one-to-one field="lnVideo" target-entity="TDN\Bundle\VideoBundle\Entity\Video">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_video" referenced-column-name="id" />
+        </one-to-one>
+
+		<!-- Owner de la relation (bi) Est posté par -->
+		<many-to-one field="lnAuteur" target-entity="TDN\Bundle\NanaBundle\Entity\Nana">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_auteur" referenced-column-name="id" />
+        </many-to-one>
+
+		<field name="AstroLoveBelier" type="string" column="astro_belier" size="140" />
+		<field name="AstroLoveTaureau" type="string" column="astro_taureau" size="140" />
+		<field name="AstroLoveGemeaux" type="string" column="astro_gemeaux" size="140" />
+		<field name="AstroLoveCancer" type="string" column="astro_cancer" size="140" />
+		<field name="AstroLoveLion" type="string" column="astro_lion" size="140" />
+		<field name="AstroLoveVierge" type="string" column="astro_vierge" size="140" />
+		<field name="AstroLoveBalance" type="string" column="astro_balance" size="140" />
+		<field name="AstroLoveScorpion" type="string" column="astro_scorpion" size="140" />
+		<field name="AstroLoveSagittaire" type="string" column="astro_sagittaire" size="140" />
+		<field name="AstroLoveCapricorne" type="string" column="astro_capricorne" size="140" />
+		<field name="AstroLoveVerseau" type="string" column="astro_verseau" size="140" />
+		<field name="AstroLovePoissons" type="string" column="astro_poissons" size="140" />
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareBreve" />
+			<lifecycle-callbacks type="PreUpdate" method="updateBreve" />
+		</lifecycle-callbacks>
+	</entity>
+	
+</doctrine-mapping>
