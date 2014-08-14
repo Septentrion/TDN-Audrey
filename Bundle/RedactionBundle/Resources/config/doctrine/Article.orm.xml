@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\RedactionBundle\Entity\Article"
+			repository-class="TDN\Bundle\RedactionBundle\Entity\ArticleRepository">
+
+		<field name="corps" type="text" column="corps" />
+		<field name="sponsor" type="boolean" column="sponsor" default="0" />
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareArticle" />
+			<lifecycle-callbacks type="PreUpdate" method="updateArticle" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>
