@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\ConcoursBundle\Entity\ConcoursQuestion"
+			repository-class="TDN\Bundle\ConcoursBundle\Entity\ConcoursQuestionRepository">
+
+		<id name="idQuestion" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="question" type="text" column="question" />
+		<field name="reponse" type="text" column="reponse" nullable="true" />
+		<field name="multiple" type="integer" column="multiple" nullable="true" />
+		<field name="exact" type="boolean" column="exact" nullable="true"/>
+		
+		<!-- Owner de la relation Compte pour le concours -->
+        <many-to-one field="lnConcours" target-entity="Concours" inversed-by="questions">
+        	<join-colum name="lnConcours_id" referenced-column-name="id" />
+        </many-to-one>
+
+        <!-- Fil des réponses -->
+        <one-to-many field="filReponses" target-entity="ConcoursReponse" mapped-by="lnQuestion">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-many>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareVideo" />
+			<lifecycle-callbacks type="PreUpdate" method="updateVideo" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>

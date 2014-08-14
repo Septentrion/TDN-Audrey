@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\ConcoursBundle\Entity\ConcoursReponse"
+			repository-class="TDN\Bundle\ConcoursBundle\Entity\ConcoursReponseRepository">
+
+		<id name="idReponse" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="reponse" type="text" column="reponse" />
+		<field name="exact" type="boolean" column="exact" nullable="true" />
+		<field name="multiple" type="integer" column="multiple" nullable="true" />
+		
+		<!-- Owner de la relation Compte pour le concours -->
+        <many-to-one field="lnQuestion" target-entity="ConcoursQuestion" inversed-by="filReponses">
+        	<join-colum name="lnQuestion_id" referenced-column-name="id" />
+        </many-to-one>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareConcoursReponse" />
+			<lifecycle-callbacks type="PreUpdate" method="updateConcoursReponse" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>

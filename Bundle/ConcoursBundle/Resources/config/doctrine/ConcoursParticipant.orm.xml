@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\ConcoursBundle\Entity\ConcoursParticipant"
+			repository-class="TDN\Bundle\ConcoursBundle\Entity\ConcoursParticipantRepository">
+
+		<id name="idParticipation" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+	   	<field name="reponse" type="text" column="reponse" nullable="true" />
+    	<field name="invitations" type="text" column="invitations" nullable="true" />
+    	<field name="poids" type="float" column="poids" default="0" />
+	   	<field name="votes" type="integer" column="votes" nullable="true" default="0" />
+    	<field name="gagnant" type="boolean" column="gagnant" default="0" />
+    	<field name="dateParticipation" type="datetime" column="date_participation" />
+		<!-- Mail des participants non inscrits -->
+ 		<field name="mailParticipant" type="string" column="mail_participant" nullable="true" />
+     		
+		<!-- relation Participe à -->
+		<many-to-one field="lnConcours" inversed-by="filParticipants" target-entity="Concours">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+			<join-column name="ln_concours" referenced-column-name="id" />
+        </many-to-one>
+
+		<!-- relation Participant -->
+		<many-to-one field="lnParticipant" inversed-by="filConcours" target-entity="TDN\Bundle\NanaBundle\Entity\Nana">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+			<join-column name="ln_participant" referenced-column-name="id" />
+        </many-to-one>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareVideo" />
+			<lifecycle-callbacks type="PreUpdate" method="updateVideo" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>

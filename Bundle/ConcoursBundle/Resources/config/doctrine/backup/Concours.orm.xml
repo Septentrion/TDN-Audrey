@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\ConcoursBundle\Entity\Concours"
+			repository-class="TDN\ConcoursBundle\Entity\ConcoursRepository">
+
+		<field name="typeJeuConcours" type="string" column="type_jeu_concours" default="alea" />
+		<field name="mailParticipant" type="string" column="mail_participant" nullable="true" />
+		<field name="sponsor" type="string" column="sponsor" />
+		<field name="sponsorURL" type="string" column="sponsor_url" nullable="true" />
+		<field name="gain" type="string" column="gain" />
+		<field name="nombreGagnants" type="integer" column="nb_gagnants" default="1" />
+		<field name="dateDebut" type="datetime" column="date_debut" />
+		<field name="dateArret" type="datetime" column="date_arret" />
+		<!-- Les adresses sont-elles transmise à l'organisateur ? -->
+		<field name="transmission" type="boolean" column="transmission" />
+	   	<!-- Le jeu-concours est ouvert aux non-inscrits -->
+		<field name="open" type="boolean" column="open" default="1" />
+	   	<!-- Les réponses sont-elles publiées ? -->
+		<field name="reponsesVisibles" type="boolean" column="reponses_visibles" default="1" />
+		
+		<!-- Inverse de la relation Compte pour le concours : Questions du concours -->
+        <one-to-many field="questions" target-entity="ConcoursQuestion" mapped-by="lnConcours">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-many>
+
+		<!-- relation Participe à -->
+		<one-to-many field="filParticipants" mapped-by="lnConcours" target-entity="ConcoursParticipant">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-many>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareVideo" />
+			<lifecycle-callbacks type="PreUpdate" method="updateVideo" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>
