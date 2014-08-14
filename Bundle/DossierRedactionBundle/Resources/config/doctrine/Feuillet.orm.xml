@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\DossierRedactionBundle\Entity\Feuillet"
+			repository-class="TDN\Bundle\DossierRedactionBundle\Entity\FeuilletRepository">
+
+		<field name="ordre" type="integer" column="ordre" />
+		<field name="corps" type="text" column="corps" />
+
+		<!-- Owner de la relation (bi) Est inclus dans -->
+		<many-to-one field="inFascicule" target-entity="Dossier">
+           <join-column name="in_fascicule" referenced-column-name="id" />
+        </many-to-one>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareCauseuse" />
+			<lifecycle-callbacks type="PreUpdate" method="updateCauseuse" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>

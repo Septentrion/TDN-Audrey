@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\DossierRedactionBundle\Entity\Dossier"
+			repository-class="TDN\Bundle\DossierRedactionBundle\Entity\DossierRepository">
+
+		<!-- Inverse de la relation (bi) Est inclus dans : Comprend -->
+		<one-to-many field="fascicule" target-entity="Feuillet" mapped-by="inFascicule">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <order-by>
+                <order-by-field name="datePublication" direction="DESC" />
+            </order-by>
+        </one-to-many>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareDossier" />
+			<lifecycle-callbacks type="PreUpdate" method="updateDossier" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>
