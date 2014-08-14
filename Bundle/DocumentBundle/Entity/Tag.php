@@ -1,11 +1,11 @@
 <?php
 
-namespace TDN\DocumentBundle\Entity;
+namespace TDN\Bundle\DocumentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TDN\DocumentBundle\Entity\Tag
+ * TDN\Bundle\DocumentBundle\Entity\Tag
  */
 class Tag
 {
@@ -96,10 +96,10 @@ class Tag
     /**
      * Add setDocument
      *
-     * @param TDN\DocumentBundle\Entity\Document $filDocument
+     * @param TDN\Bundle\DocumentBundle\Entity\Document $filDocument
      * @return Tag
      */
-    public function addFilDocument(\TDN\DocumentBundle\Entity\Document $filDocument)
+    public function addFilDocument(\TDN\Bundle\DocumentBundle\Entity\Document $filDocument)
     {
         $this->filDocuments[] = $filDocument;
     
@@ -109,9 +109,9 @@ class Tag
     /**
      * Remove setDocument
      *
-     * @param TDN\DocumentBundle\Entity\Document $filDocument
+     * @param TDN\Bundle\DocumentBundle\Entity\Document $filDocument
      */
-    public function removeFilDocument(\TDN\DocumentBundle\Entity\Document $filDocument)
+    public function removeFilDocument(\TDN\Bundle\DocumentBundle\Entity\Document $filDocument)
     {
         $this->filDocuments->removeElement($filDocument);
     }
