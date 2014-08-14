@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\Nana"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaRepository">
+
+		<id name="idNana" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="username" type="string" column="username" unique="true" />
+		<field name="password" type="string" column="password" />
+		<field name="salt" type="string" column="salt" />
+		<field name="prenom" type="string" column="prenom" nullable="true" />
+		<field name="nom" type="string" column="nom" nullable="true" />
+		<field name="sexe" type="integer" column="sexe" size="2" />
+		<field name="dateNaissance" type="datetime" column="date_naissance" nullable="true" />
+		<field name="email" type="string" column="email" nullable="true" unique="true" />
+		<field name="ville" type="string" column="ville" nullable="true" />
+		<field name="occupation" type="string" column="occupation" nullable="true" />
+		<field name="popularite" type="text" column="popularite" nullable="true" />
+		<field name="biographie" type="text" column="biographie" nullable="true" />
+		<field name="dateInscription" type="datetime" column="date_inscription" />
+		<field name="dateAbonnement" type="datetime" column="date_abonnement" nullable="true" />
+		<field name="active" type="integer" column="active" size="2" />
+		<!-- <field name="elections" type="integer" column="elections" /> -->
+		<field name="newsletter" type="boolean" column="newsletter" />
+		<field name="offresPartenaires" type="boolean" column="offres_partenaires" />
+		<field name="blacklist" type="boolean" column="blacklist" default="1" />
+		<field name="adresseIP" type="text" column="ip_adresse" nullable="true" />
+		<field name="semainePromue" type="integer" column="semaine_promue" nullable="true" />
+		<!-- <field name="notifications" type="text" column="notifications" nullable="true" /> -->
+		<field name="v2ID" type="integer" column="v2_id" nullable="true" />
+
+		<many-to-many field="roles" target-entity="NanaRoles" inversed-by="groupe">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+			<join-table name="NanaAs">
+				<join-columns>
+					<join-column name="for_nana" referenced-column-name="id" />
+				</join-columns>
+				<inverse-join-columns>
+					<join-column name="for_role" referenced-column-name="role" />
+				</inverse-join-columns>
+			</join-table>
+		</many-to-many>
+
+
+		<!-- inverse de la relation Est produit par : A produit -->
+		<one-to-many field="filProductions" target-entity="TDN\Bundle\DocumentBundle\Entity\Document" mapped-by="lnAuteur">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <order-by>
+                <order-by-field name="datePublication" direction="DESC" />
+            </order-by>
+        </one-to-many>
+
+        <!-- Relation follow : is followed -->
+		<many-to-many field="follows" target-entity="Nana" inversed-by="isFollowed">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+			<join-table name="NanaFollowing">
+				<join-columns>
+					<join-column name="for_follower" referenced-column-name="id" />
+				</join-columns>
+				<inverse-join-columns>
+					<join-column name="for_followed" referenced-column-name="id" />
+				</inverse-join-columns>
+			</join-table>
+		</many-to-many>
+		
+		<many-to-many field="isFollowed" target-entity="Nana" mapped-by="follows" />
+
+		<!-- Inverse de la relation Réseaux sociaux de : Est une adresse de -->
+		<one-to-many field="lnSociaux" target-entity="NanaNetwork" mapped-by="isOwner">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+		<!-- Owner de la relation A annoté : Est annoté par (like, vote, etc.) -->
+		<many-to-many field="pokes" target-entity="TDN\Bundle\DocumentBundle\Entity\Document" inversed-by="pokers">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+			<join-table name="NanaPokes">
+				<field name="typePoke" type="string" column="type_poke" />
+				<join-columns>
+					<join-column name="for_nana" referenced-column-name="id" />
+				</join-columns>
+				<inverse-join-columns>
+					<join-column name="for_document" referenced-column-name="id" />
+				</inverse-join-columns>
+			</join-table>
+		</many-to-many>
+
+
+		<one-to-one field="lnAvatar" target-entity="TDN\Bundle\ImageBundle\Entity\Image">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+            <join-column name="avatar_id" referenced-column-name="id" />
+		</one-to-one>
+
+		<!-- inverse de la relation Portrait -->
+        <one-to-many field="galeriePerso" target-entity="NanaPortraitImageProxy" mapped-by="lnPortrait">
+           <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+		<!-- Inverse de la relation (bi) Est apprécié de < Apprécie dans la vie -->
+        <one-to-many field="lnHobbies" target-entity="NanaHobby" mapped-by="lnOwner">
+           <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+ 		<!-- Owner de la relation A annoté : Est annoté par (like, vote, etc.) -->
+		<one-to-many field="setExpertises" target-entity="TDN\Bundle\NanaBundle\Entity\NanaExpertise" mapped-by="expert">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+		</one-to-many>
+
+		<!-- inverse de la relation Expertises -->
+        <one-to-many field="expertises" target-entity="TDN\Bundle\ConseilExpertBundle\Entity\ConseilExpert" mapped-by="lnExpertise">
+           <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+		<!-- inverse de la relation Auteur du Commentaire -->
+        <one-to-many field="lnCommentaires" target-entity="TDN\Bundle\CommentaireBundle\Entity\Commentaire" mapped-by="filAuteur">
+           <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+		<!-- relation Participe à -->
+		<one-to-many field="filConcours" mapped-by="lnParicipant" target-entity="TDN\Bundle\ConcoursBundle\Entity\ConcoursParticipant">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-many>
+
+		<!-- Inverse de la relation Activité -->
+		<one-to-many field="filActivite" mapped-by="lnActeur" target-entity="TDN\Bundle\CoreBundle\Entity\Journal">
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-many>
+
+        <!-- Liste des alertes non encore relevées par la lectrice -->
+        <one-to-many field="filAlertes" mapped-by="lnVeilleur" target-entity="TDN\Bundle\CoreBundle\Entity\Journal">
+			<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-many>
+
+		<!-- inverse de la relation Inscrit sur un réseau social -->
+        <one-to-many field="filPresence" target-entity="NanaSocialNetwork" mapped-by="lnIdentite">
+           <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+
+
+	</entity>
+	
+</doctrine-mapping>

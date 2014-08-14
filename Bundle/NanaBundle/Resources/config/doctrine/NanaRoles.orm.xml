@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\NanaRoles"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaRolesRepository">
+
+		<id name="role" type="string" column="role">
+		</id>
+
+		<field name="name" type="string" column="name" />
+
+		<many-to-many field="groupe" target-entity="Nana" mapped-by="roles">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+		</many-to-many>
+
+		
+
+	</entity>
+	
+</doctrine-mapping>

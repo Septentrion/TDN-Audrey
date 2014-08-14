@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\NanaHobby"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaHobbyRepository">
+
+		<id name="idHobby" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="domaine" type="string" column="domaine" />
+		<field name="precisions" type="string" column="precisions" />
+
+		<!-- Owner de la relation (bi) Est apprécié de > Apprécie dans la vie -->
+		<many-to-one field="lnOwner" target-entity="Nana" inversed-by="lnHobbies">
+           <join-column name="ln_owner" referenced-column-name="id" />
+        </many-to-one>
+
+        <one-to-many field="galerieHobby" target-entity="NanaHobbyImageProxy" mapped-by="lnHobby">
+           <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+	</entity>
+	
+</doctrine-mapping>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\NanaHobbyImageProxy"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaHobbyImageProxyRepository">
+
+		<id name="idImageHobby" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<many-to-one field="lnHobby" target-entity="NanaHobby" inverse-by="galerieHobby">
+           <join-column name="ln_hobby" referenced-column-name="id" />
+        </many-to-one>
+
+        <one-to-one field="lnImage" target-entity="TDN\Bundle\ImageBundle\Entity\Image">
+             <cascade>
+                <cascade-persist/>
+            </cascade>
+	       	<join-column name="ln_image" referenced-column-name="id" />
+        </one-to-one>
+
+	</entity>
+	
+</doctrine-mapping>

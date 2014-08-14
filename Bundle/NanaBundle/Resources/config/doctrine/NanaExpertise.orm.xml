@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\NanaExpertise"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaExpertiseRepository">
+
+		<id name="id" type="string" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="domaine" type="string" size="60" column="domaine" />
+
+		<many-to-one field="expert" target-entity="Nana" inversed-by="setExpertises">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+		</many-to-one>
+		
+		<many-to-one field="rubrique" target-entity="TDN\Bundle\DocumentBundle\Entity\DocumentRubrique" inversed-by="setDomaines">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+		</many-to-one>
+
+
+	</entity>
+	
+</doctrine-mapping>

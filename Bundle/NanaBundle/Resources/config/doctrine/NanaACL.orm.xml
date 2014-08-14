@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\NanaRoles"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaRolesRepository">
+
+		<id name="idACL" type="integer" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+		
+		<field name="label" type="string" column="label" />
+		<field name="route" type="string" column="route" />
+
+		<!-- Inverse de la relation A le droit de -->
+		<many-to-many field="autorites" target-entity="NanaACL" inversed-by="allowed">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+		</many-to-many>
+
+	</entity>
+	
+</doctrine-mapping>

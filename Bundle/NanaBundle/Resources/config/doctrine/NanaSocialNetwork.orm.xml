@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\NanaBundle\Entity\NanaSocialNetwork"
+			repository-class="TDN\Bundle\NanaBundle\Entity\NanaSocialNetworkRepository">
+
+		<id name="id" type="string" column="id">
+			<generator strategy = "AUTO" />
+		</id>
+
+		<field name="plateforme" type="string" column="plate_forme" />
+		<field name="userID" type="string" column="user_id" />
+
+		<!-- Owner de la relation (bi) Est écrit par -->
+		<many-to-one field="lnIdentite" target-entity="TDN\Bundle\NanaBundle\Entity\Nana" inversed-by="filPresence">
+	        <cascade>
+                <cascade-persist/>
+            </cascade>
+           <join-column name="ln_identite" referenced-column-name="id" />
+        </many-to-one>
+
+
+	</entity>
+	
+</doctrine-mapping>
