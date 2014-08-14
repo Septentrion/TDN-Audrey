@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\ImageBundle\Entity\ImageFormat"
+			repository-class="TDN\Bundle\ImageBundle\Entity\ImageFormatRepository">
+
+		<field name="nom" type="string" column="nom" />
+		<field name="hauteur" type="integer" column="hauteur" />
+		<field name="largeur" type="integer" column="largeur" />
+		<field name="params" type="text" column="params" />
+
+	</entity>
+	
+</doctrine-mapping>
