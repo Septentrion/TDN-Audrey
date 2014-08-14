@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\CauseuseBundle\Entity\Question"
+			repository-class="TDN\Bundle\CauseuseBundle\Entity\QuestionRepository">
+
+		<field name="question" type="text" column="question" />
+		<field name="dateSoumission" type="datetime" column="date_soumission" />
+		<field name="reponseAcceptee" type="integer" column="reponse_acceptee" nullable="true" />
+
+		<!-- Inverse de la relation (bi) Collection de réponses -->
+		<one-to-many field="filReponses" target-entity="Reponse" mapped-by="lnConversation">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+            <order-by>
+                <order-by-field name="datePublication" direction="DESC" />
+            </order-by>
+        </one-to-many>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareCauseuse" />
+			<lifecycle-callbacks type="PreUpdate" method="updateCauseuse" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>
