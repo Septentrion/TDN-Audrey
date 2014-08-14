@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="TDN\Bundle\ProduitBundle\Entity\Produit"
+			repository-class="TDN\Bundle\ProduitBundle\Entity\ProduitRepository">
+
+		<field name="marque" type="string" column="marque" />
+		<field name="prix" type="float" column="prix" />
+		<field name="monnaie" type="string" column="monnaie" />
+		<field name="url" type="string" column="url" />
+		<field name="favori" type="boolean" column="favori" nullable="true" />
+		<field name="critique" type="text" column="critique" />
+		<field name="codePromoTDN" type="string" column="code_promotion" nullable="true" size="24" />
+
+		<many-to-one field="lnSelection" target-entity="TDN\Bundle\RedactionBundle\Entity\SelectionShopping" inversed-by="setProduit">
+           <join-column name="ln_selection" referenced-column-name="id" />
+        </many-to-one>
+
+        <one-to-one field="citation" target-entity="TDN\Bundle\RedactionBundle\Entity\Article">
+			<join-column name="citation" referenced-column-name="id" />
+        	<cascade>
+        		<cascade-persist />
+        	</cascade>
+        </one-to-one>
+
+		<lifecycle-callbacks>
+			<lifecycle-callbacks type="PrePersist" method="prepareArticle" />
+			<lifecycle-callbacks type="PreUpdate" method="updateArticle" />
+		</lifecycle-callbacks>
+		
+	</entity>
+	
+</doctrine-mapping>
