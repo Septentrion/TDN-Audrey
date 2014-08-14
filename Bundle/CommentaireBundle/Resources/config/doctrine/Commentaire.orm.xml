@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping 
+	xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+	xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+	<entity name="TDN\Bundle\CommentaireBundle\Entity\Commentaire"
+		repository-class="TDN\Bundle\CommentaireBundle\Entity\CommentaireRepository">
+
+		<id name="idCommentaire" type="integer" column="id_commentaire">
+			<generator strategy = "AUTO" />
+		</id>
+		<field name="idAuteur" type="integer" column="id_auteur" nullable="true" />
+		<field name="idThread" type="string" column="id_thread" nullable="true" length="15" />
+		<field name="idReponse" type="integer" column="id_reponse" nullable="true" />
+		<field name="texteCommentaire" type="text" column="texte" />
+		<field name="like" type="integer" column="likes" default="0" />
+		<field name="abonne" type="boolean" column="abonne" default="0" />
+		<field name="statut" type="integer" column="statut" default="1" />
+		<field name="datePublication" type="datetime" column="date_publication" />		
+		<field name="v2ID" type="integer" column="v2_id" nullable="true" />		
+
+		<!-- Owner de la relation Est un commentaire de ce document -->
+		<many-to-one field="filDocument" target-entity="TDN\Bundle\DocumentBundle\Entity\Document" inversed-by="commentaires">
+			<cascade>
+				<cascade-persist/>
+			</cascade>
+			<join-column name="fil_document" referenced-column-name="id" />
+		</many-to-one>
+
+		<!-- Owner de la relation Est commenté par -->
+		<many-to-one field="filAuteur" target-entity="TDN\Bundle\NanaBundle\Entity\Nana">
+			<cascade>
+				<cascade-persist/>
+			</cascade>
+			<join-column name="fil_auteur" referenced-column-name="id" />
+		</many-to-one>
+
+		<unique-constraints>
+			<unique-constraint columns="v2_id" name="legacy_idx" />
+		</unique-constraints>
+
+
+	</entity>
+</doctrine-mapping>
