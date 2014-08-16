@@ -1,0 +1,40 @@
+<div class="bloc-bandeau">
+	<div class="bandeau fond-vert bloc-conseils-experts row">
+		<a href="{#{ path() }#}" class="lien-propos">Questionne un(e) Expert(e)</a>
+		<h3 class="titre-icone">Conseils d’experts</h3>
+	</div>
+	<div class="hot row">
+	{% if conseilsRecents is empty %}
+		<p class="warning">Aucun conseil publié sur TDN</p>
+	{% else %}
+		{% for c in conseilsRecents %}
+		<article class="bloc-conseil col-lg-6">
+			<a href="{#{ c|targetURL }#}">
+				<img class="iconex60" src="{{ illustration(c, 'SQUARE') }}" alt="{{ c.lnIllustration.alt }}" title="{{ c.lnIllustration.alt }}" />
+			</a>
+			<div class="credits">
+				{% if c.lnAuteur is not null%}
+				<p class="lienAuteur">
+					<span class="as">de </span>
+					<a class="{#{ rubriquePrincipale(c.lnThematique) }#}_texte" href="{#{ path('NanaBundle_profil', {'id': c.lnAuteur.idNana}) }#}">
+						{{ c.lnAuteur.username }}
+					</a> 
+				{% endif %}
+				<p class="datePublication">{{ c.datePublication|date('d/m/Y') }}</p>
+				<a href="{#{ c|targetURL }#}">
+					<h4 class="apercuTexte">{{ c.titre|raw }}</h4>
+				</a>
+				{% if c.lnExpert is not null%}
+				<p class="lienExpert">
+					<span calss="as">Réponse de </span>
+					<a class="{#{ rubriquePrincipale(c.lnThematique) }#}_texte" href="{#{ path('NanaBundle_profil', {'id': c.lnExpert.idNana}) }#}">
+						{{ c.lnExpert.prenom~', '~c.lnExpert.occupation }}
+					</a>					
+				</p>
+				{% endif %}
+			</div>
+		</article>
+		{% endfor %}
+	{% endif %}
+	</div>
+</div>
