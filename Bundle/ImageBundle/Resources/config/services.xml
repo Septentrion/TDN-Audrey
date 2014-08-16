@@ -5,8 +5,8 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="image.remplacement.class">TDN\ImageBundle\Twig\RemplacementExtension</parameter>
-        <parameter key="image.processor.class">TDN\ImageBundle\Processing\imageProcessor</parameter>
+        <parameter key="image.remplacement.class">TDN\Bundle\ImageBundle\Twig\RemplacementExtension</parameter>
+        <parameter key="image.processor.class">TDN\Bundle\ImageBundle\Processing\imageProcessor</parameter>
     </parameters>
 
     <services>
