@@ -1,0 +1,37 @@
+<div class="bloc-bandeau">
+		<div class="bandeau fond-vert bloc-videos row">
+		<h3 class="titre-icone">Vidéos</h3>
+	</div>
+	<div class="hot row">
+	{% if videosRecentes is empty %}
+		<p class="warning">Aucune vidéo publiée sur TDN</p>
+	{% else %}
+		<div class="dernieres col-lg-6">
+		{% if live is not empty %}
+			<a href="{#{ live|targetURL }#}">
+				<h4>{{live.titre}}</h4>
+				<p class="videoAbstract">{{ videoAbstract|raw }}</p>
+			</a>
+		{% endif %}
+			<div class="videosRecentes row">
+			{% for v in videosRecentes %}
+				<a href="{#{ v|targetURL }#}">
+			  		<img class="snapshot col-lg-2" src="{{ illustration(v) }}" class="" />
+				</a>
+			{% endfor %}
+			</div>
+			<div class="videosToutes">
+				<a href="{#{ path('VideoBundle_sommaire') }#}">Toutes les vidéos <img src="{{ asset('assets/images/theme/forms/bt_fleche_droite_small.png') }}"style="border:0px; margin-left:5px" align="absmiddle"/></a>
+			</div>		
+		</div>
+		<div class="scene col-lg-6">
+		{% if codeIntegration is defined %}
+			<div class="rubriqueMarqueur coin_{{ rubriquePrincipale(live.lnThematique) }}">
+				<div style="position:relative; z-index:10">
+				{{ codeIntegration|raw }}
+				</div>
+			</div>
+		{% endif %}
+		</div>
+	{% endif %}
+</div>
