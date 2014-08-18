@@ -8,7 +8,6 @@ use TDN\Bundle\VideoBundle\Entity\Video;
 
 class RemplacementExtension extends \Twig_Extension {
 
-
     private $host = 'http://trucsdenana.com';
 
     public function getFilters()
