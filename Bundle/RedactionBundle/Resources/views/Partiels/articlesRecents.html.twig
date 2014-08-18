@@ -1,0 +1,21 @@
+<div class="bloc-bandeau">
+	<div class="bandeau fond-vert bloc-articles row">
+		<h3 class="titre-icone">Articles</h3>
+	</div>
+	<div class="hot row">
+	{% if articlesRecents is empty %}
+		<p class="warning">Aucun conseil publié sur TDN</p>
+	{% else %}
+		{% for a in articlesRecents %}
+		<article class="accroche-article col-lg-4">
+			<a href="{#{ a|targetURL }#}">
+				<div class="rubriqueMarqueur">
+					<img class="full" src="{{ illustration(a, 'SQUARE') }}" alt="{{ a.lnIllustration.alt }}" title="{{ a.lnIllustration.alt }}" />
+				</div>
+			</a>
+			<h4 class="bordGauche_{{ rubriquePrincipale(a.lnThematique) }}">{{ a.titre }}</h4>
+		</article>
+		{% endfor %}
+	{% endif %}
+	</div>
+</div>
