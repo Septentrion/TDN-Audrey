@@ -1,0 +1,12 @@
+<div class="messages_systeme latentSystemMessages">
+	{% for flashMessage in app.session.flashbag.get('success') %}
+	<div class="flash-success">
+		{{ flashMessage|raw }}
+	</div>
+	{% endfor %}
+	{% for flashMessage in app.session.flashbag.get('fail') %}
+	<div class="flash-fail">
+		{{ flashMessage|raw }}
+	</div>
+	{% endfor %}
+</div>

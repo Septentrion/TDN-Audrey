@@ -1,0 +1,44 @@
+<nav id="rubriquesNavigation">
+	<!-- <ul> -->
+	{#% for rubriquePrincipale in princeps %#}
+	{#% set menu = rubriquePrincipale.slug %#}
+	{#% set titre = rubriquePrincipale.titre %#}
+		<!-- <li class="itemRubrique menu-{#{ menu }}" data-rubrique="{{ menu }#}"> -->
+			<!-- <span class="mainMenuLabel"><a href="{#{path('Core_sommaire', {'slug': menu}) }#}">{#{ titre }#}</a></span> -->
+			<!-- <ul class="subMenuMasque"> -->
+			{#% for subMenu in navigation[menu] %#}
+				<!-- <li class="sub-menu"> -->
+					<!-- <a href="{#{path('Core_sommaire', {'slug': subMenu.slug})}#}">{#{ subMenu.titre}#}</a> -->
+				<!-- </li> -->
+			{#% endfor %#}
+			<!-- </ul> -->
+		<!-- </li> -->
+	{#% endfor %#}
+	<!-- </ul> -->
+	<ul class="menuRubriques">
+		<li class="itemRubrique a-la-une" data-rubrique="a-la-une">
+			<span class="mainMenuLabel"><a href="/sommaire/a-la-une">A la une</a></span>
+		</li>
+		<li class="itemRubrique beaute" data-rubrique="beaute">
+			<span class="mainMenuLabel"><a href="/sommaire/beaute">Beauté</a></span>
+		</li>
+		<li class="itemRubrique geekette" data-rubrique="geekette">
+			<span class="mainMenuLabel"><a href="/sommaire/geekette">Geekette</a></span>
+		</li>
+		<li class="itemRubrique deco" data-rubrique="deco">
+			<span class="mainMenuLabel"><a href="/sommaire/deco">Déco</a></span>
+		</li>
+		<li class="itemRubrique mode" data-rubrique="mode">
+			<span class="mainMenuLabel"><a href="/sommaire/mode">Mode</a></span>
+		</li>
+		<li class="itemRubrique bien-etre" data-rubrique="bien-etre">
+			<span class="mainMenuLabel"><a href="/sommaire/bien-etre">Bien-être</a></span>
+		</li>
+		<li class="itemRubrique sexo-psycho" data-rubrique="sexo-psycho">
+			<span class="mainMenuLabel"><a href="/sommaire/sexo-psycho">SexoPsycho</a></span>
+		</li>
+		<li class="itemRubrique recettes" data-rubrique="recettes">
+			<span class="mainMenuLabel"><a href="/sommaire/recettes">Recettes</a></span>
+		</li>
+	</ul>
+</nav>

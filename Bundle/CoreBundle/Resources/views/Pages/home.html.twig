@@ -1,0 +1,38 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title %}Webzine participatif d'actualité beauté, mode, déco, psycho, forme{% endblock %}
+
+{%block contenuPrincipal %}
+<div id="sommaire-home">
+  <div id="slider">
+    {#% render "DocumentBundle:Slider:show" with {'limite': 6} %#}
+  </div>
+
+  <div id="conseils-recents">
+    {% render(controller("TDNConseilExpertBundle:Partiels:conseilsRecents", {'limite': 2})) %}
+  </div>
+
+  <div id="questions-recentes">
+    {% render(controller("TDNCauseuseBundle:Partiels:questionsRecentes", {'limite': 2})) %}
+  </div>
+
+  <div id="articles-recents" class="bloc-bandeau">
+    {% render(controller("TDNRedactionBundle:Partiels:articlesRecents", {'limite': 3})) %}
+  </div>
+
+  <div id="coups-de-coeur-shopping">
+    {#% render "ProduitBundle:Partial:panoramaCoupsDeCoeur" with {'limite': 2} %#}
+  </div>
+
+  <div id="carton-tdn">
+  {#% render "RedactionBundle:Partial:articlesPlusLus" with {'limite': 3} %#}
+  {#% render "ConseilExpertBundle:Partial:conseilsPlusLus" with {'limite': 3} %#}
+  </div>
+
+  <div id="videos-recentes">
+    {#% render "ConseilExpertBundle:Partial:conseilsRecents" with {'limite': 2} %#}
+  </div>
+</div>
+
+<article>
+{% endblock %}

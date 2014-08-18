@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+	<title>{% block title %}{% endblock %} | Trucs De Nana</title>
+	{% if canonical is defined %}
+	<link rel="canonical" http="http://www.trucsdanana.com{{ canonical }}" />
+	{% endif %}
+	<link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.css' )}}" type="text/css">
+	<meta name="google-site-verification" content="fq8zrWpv2MoWmc3miAE5MecQa2oy6F9gjj2OFRU0zEk" />
+	<meta name="verification" content="2f58130aa4c3936441a51b3b7d85f013" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	{% stylesheets 
+	'assets/css/*'
+	filter='cssrewrite' filter='sass'
+	output='assets/css/TDN_large.css'
+	%}
+	<link rel="stylesheet" href="{{ asset_url }}">
+	{% endstylesheets %}
+
+	<!-- Affliliation aufeminin.com -->
+	<script type="text/javascript">
+	sas_tmstp=Math.round(Math.random()*10000000000);
+	sas_masterflag=1;
+	function SmartAdServer(sas_pageid,sas_formatid,sas_target) {
+		if (sas_masterflag==1) {
+			sas_masterflag=0;
+			sas_master='M';
+		} else {
+			sas_master='S';
+		};
+		document.write('<scr'+'ipt src="http://network.aufeminin.com/call/pubj/' + sas_pageid + '/' + sas_formatid + '/' + sas_master + '/' + sas_tmstp + '/' + escape(sas_target) + '?"></scr'+'ipt>');
+	}
+	</script>
+
+</head>
+<body class="theme-{#{ rubrique }#}">
+	<!-- Notifications et messages d'erreur -->
+	{% include "TDNCoreBundle:Partiels:systemMessages.html.twig" %}
+
+	<!-- Cadre global de la page -->
+	<div id="colonnePrincipale" class="container">
+		
+		<!-- Entête -->
+		<div class="row">
+			{% include "TDNCoreBundle:Partiels:entetePage.html.twig" %}
+		</div>
+
+		<!-- Menus -->
+		<div class="row">
+			{% include "TDNCoreBundle:Partiels:menuContenus.html.twig" %}
+		</div>
+		<div class="row">
+			{% include "TDNCoreBundle:Partiels:menuRubriques.html.twig" %}
+		</div>
+
+		<!--  -->
+		<main id="contenuPrincipal" class="row">
+			
+			<!-- Contenu Principal -->
+			<section class="col-lg-8 col-sm-12 col-xs-12 blanc scene">
+				{% block contenuPrincipal %}{% endblock %}
+			</section>
+
+			<!-- Barre latérale -->
+			<aside class="col-lg-4 blanc annexes">
+				{% include "TDNCoreBundle:Partiels:colonneLaterale.html.twig" %}
+			</aside>
+		</main>
+
+		<!-- Actus de la communauté -->
+		<div id="actu-communaute" class="bloc-bandeau-violet row">
+		{% include "TDNCoreBundle:Partiels:actuCommunaute.html.twig" %}
+		</div>
+
+		<!-- Pied de page -->
+		<footer class="row appendices">
+			{% include "TDNCoreBundle:Partiels:piedPage.html.twig" %}
+		</footer>
+	</div>
+</body>
+</html>

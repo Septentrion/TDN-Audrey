@@ -1,0 +1,16 @@
+<div class="bandeau bloc-communaute row">
+	<h3 class="titre">Actus de la communauté</h3>
+</div>
+<div class="hot row">
+	<div class="bloc-journal col-lg-6">
+		<h3>TDN en direct</h3>
+	    {#% render "CoreBundle:Journal:journal" with {'limite': 2} %#}
+
+	</div>
+	<div class="bloc-nanas col-lg-6">
+		<h3>Nanas</h3>
+	    {#% render "NanaBundle:Partiels:footerWidget" with {'limite': 2} %#}
+		<div class="col-lg-3"></div>
+		<div class="col-lg-9"></div>
+	</div>
+</div>
