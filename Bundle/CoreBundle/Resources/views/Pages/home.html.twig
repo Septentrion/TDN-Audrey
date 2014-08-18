@@ -24,14 +24,15 @@
     {#% render "ProduitBundle:Partial:panoramaCoupsDeCoeur" with {'limite': 2} %#}
   </div>
 
+  <div id="videos">
+    {% render(controller("TDNVideoBundle:Partiels:videosRecentes", {'limite': 6})) %}
+  </div>
+
   <div id="carton-tdn">
   {#% render "RedactionBundle:Partial:articlesPlusLus" with {'limite': 3} %#}
   {#% render "ConseilExpertBundle:Partial:conseilsPlusLus" with {'limite': 3} %#}
   </div>
 
-  <div id="videos-recentes">
-    {#% render "ConseilExpertBundle:Partial:conseilsRecents" with {'limite': 2} %#}
-  </div>
 </div>
 
 <article>
