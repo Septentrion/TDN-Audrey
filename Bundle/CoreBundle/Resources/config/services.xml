@@ -17,9 +17,9 @@
         <service id="tdn.core.urlsitemapper" class="%core.sitemapper.class%"></service -->
         <service id="tdn.core.textprocessor" class="%core.textprocessor.class%"></service>
 
-        <!-- service id="tdn.twig.age_extension" class="TDN\Bundle\CoreBundle\Twig\DateExtension">
+        <service id="tdn.twig.age_extension" class="TDN\Bundle\CoreBundle\Twig\DateExtension">
             <tag name="twig.extension" />
-        </service -->
+        </service>
 
     </services>
 

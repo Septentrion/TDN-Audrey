@@ -29,7 +29,7 @@
   </div>
 
   <div id="carton-tdn">
-  {#% render "RedactionBundle:Partial:articlesPlusLus" with {'limite': 3} %#}
+  {% render(controller("TDNRedactionBundle:Partiels:articlesPlusLus", {'limite': 6})) %}
   {#% render "ConseilExpertBundle:Partial:conseilsPlusLus" with {'limite': 3} %#}
   </div>
 
