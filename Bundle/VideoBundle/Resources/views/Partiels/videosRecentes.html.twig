@@ -16,12 +16,12 @@
 			<div class="videosRecentes row">
 			{% for v in videosRecentes %}
 				<a href="{#{ v|targetURL }#}">
-			  		<img class="snapshot col-lg-2" src="{{ illustration(v) }}" class="" />
+			  		<img class="snapshot" src="{{ illustration(v) }}" class="" />
 				</a>
 			{% endfor %}
 			</div>
 			<div class="videosToutes">
-				<a href="{#{ path('VideoBundle_sommaire') }#}">Toutes les vidéos <img src="{{ asset('assets/images/theme/forms/bt_fleche_droite_small.png') }}"style="border:0px; margin-left:5px" align="absmiddle"/></a>
+				<a href="{#{ path('VideoBundle_sommaire') }#}">Toutes les vidéos</a>
 			</div>		
 		</div>
 		<div class="scene col-lg-6">
