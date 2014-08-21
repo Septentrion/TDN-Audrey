@@ -35,11 +35,11 @@ class PartielsController extends Controller {
 	public function articlesPlusLusAction ($limite = 3, $panel = NULL, $shuffle = 30) {
 
 	    $em = $this->get('doctrine.orm.entity_manager');      
-		$rep = $em->getRepository('TDN\RBundle\edactionBundle\Entity\Article');
+		$rep = $em->getRepository('TDN\Bundle\RedactionBundle\Entity\Article');
 		$articlesPlusLus = $rep->findMostRead($shuffle, $panel);
 		shuffle($articlesPlusLus);
-		$variables['articlesPlusLus'] = array_slice($articlesPlusLus, 0, 3);
+		$variables['articlesPlusLus'] = array_slice($articlesPlusLus, 0, $limite);
 
-		return $this->render('RedactionBundle:Partiels:articlesPlusLus.html.twig', $variables);
+		return $this->render('TDNRedactionBundle:Partiels:articlesPlusLus.html.twig', $variables);
 	}
 }
