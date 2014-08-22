@@ -25,7 +25,7 @@ class RubriqueExtension extends \Twig_Extension
 
     public function slugPrincipalFilter($rubrique) {
 
-        if ($rubrique instanceof DocumentRubrique)) {
+        if ($rubrique instanceof DocumentRubrique) {
             $parent = $rubrique->getRubriqueParente();
             if (is_object($parent)) {
                 $marqueur = $parent->getSlug();
@@ -41,7 +41,7 @@ class RubriqueExtension extends \Twig_Extension
 
     public function titrePrincipalFilter($rubrique) {
 
-        if ($rubrique instanceof DocumentRubrique)) {
+        if ($rubrique instanceof DocumentRubrique) {
             $parent = $rubrique->getRubriqueParente();
             if (is_object($parent)) {
                 $marqueur = $parent->getTitre();
