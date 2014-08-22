@@ -6,8 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PartielsController extends Controller
 {
-    public function questionsRecentesAction($limite)
-    {
+    public function questionsRecentesAction($limite) {
+
     	// Récupération de l'entity manager qui va nous permettre de gérer les entités.
 	    $em = $this->get('doctrine.orm.entity_manager');      
 
@@ -18,4 +18,17 @@ class PartielsController extends Controller
 
         return $this->render('TDNCauseuseBundle:Partiels:questionsRecentes.html.twig', $variables);
     }
+
+    public function questionsPlusAimeesAction($limite) {
+
+    	// Récupération de l'entity manager qui va nous permettre de gérer les entités.
+	    $em = $this->get('doctrine.orm.entity_manager');      
+
+		// Récupération de la question la plus récente
+		$repCauseuse = $em->getRepository('TDN\Bundle\CauseuseBundle\Entity\Question');
+		$variables['questionsPlusAimees'] = $repCauseuse->findMostLiked($limite);
+
+        return $this->render('TDNCauseuseBundle:Partiels:questionsPlusAimees.html.twig', $variables);
+    }
+
 }
