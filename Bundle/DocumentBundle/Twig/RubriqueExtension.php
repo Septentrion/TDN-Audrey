@@ -6,12 +6,53 @@ use TDN\Bundle\DocumentBundle\Entity\DocumentRubrique;
 
 class RubriqueExtension extends \Twig_Extension
 {
+
+    public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter('slugPrincipal', array($this, 'slugPrincipalFilter')),
+            new \Twig_SimpleFilter('titrePrincipal', array($this, 'titrePrincipalFilter')),
+        );
+    }
+
     public function getFunctions()
     {
         return array(
             new \Twig_SimpleFunction('rubriquePrincipale', array($this, 'rubriquePrincipaleFunction')),
             new \Twig_SimpleFunction('hasSponsor', array($this, 'hasSponsorFunction')),
         );
+    }
+
+    public function slugPrincipalFilter($rubrique) {
+
+        if ($rubrique instanceof DocumentRubrique)) {
+            $parent = $rubrique->getRubriqueParente();
+            if (is_object($parent)) {
+                $marqueur = $parent->getSlug();
+            } else {
+                $marqueur = $rubrique->getSlug();
+            }
+        } else {
+            $marqueur = $rubrique;
+        }
+
+        return $marqueur;
+    }
+
+    public function titrePrincipalFilter($rubrique) {
+
+        if ($rubrique instanceof DocumentRubrique)) {
+            $parent = $rubrique->getRubriqueParente();
+            if (is_object($parent)) {
+                $marqueur = $parent->getTitre();
+            } else {
+                $marqueur = $rubrique->getTitre();
+            }
+        } else {
+            $marqueur = $rubrique;
+        }
+
+        return $marqueur;
     }
 
     public function rubriquePrincipaleFunction($rubrique)
