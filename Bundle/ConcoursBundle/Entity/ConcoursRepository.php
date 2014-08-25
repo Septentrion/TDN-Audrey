@@ -15,6 +15,10 @@ use TDN\Bundle\DocumentBundle\Entity\DocumentRepository;
 class ConcoursRepository extends DocumentRepository
 {
 
+	public function findMostRecent ($limite, $panel = NULL) {
+		return parent::findMostRecentDocument($limite, 'CONCOURS_PUBLIE', $panel);
+	}
+
 	public function findActive () {
 
 		$q = $this->createQueryBuilder('c')

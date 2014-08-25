@@ -1,0 +1,19 @@
+{% extends 'TDNDocumentBundle:Squelettes:blocBandeauVert.html.twig' %}
+
+{% block corpsPublicationsRecentes %}
+{% for rd in recents %}
+<article class="bloc-conseil col-lg-12">
+	<a href="{#{ c|targetURL }#}">
+		<div class="rubriqueMarqueur iconex60 coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3">
+			<img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
+		</div>
+	</a>
+	<div class="col-lg-9 col-extended">
+		<p class="datePublication credits">{{ rd.datePublication|laps }}</p>
+		<h4 class="apercuTexte">
+			<a href="{#{ rd|targetURL }#}">{{ rd.titre|raw }}</a>
+		</h4>
+	</div>
+</article>
+{% endfor %}
+{% endblock %}
