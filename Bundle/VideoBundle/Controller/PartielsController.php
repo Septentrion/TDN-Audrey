@@ -8,15 +8,21 @@ class PartielsController extends Controller {
 
     public function videosRecentesAction($limite) {
 
+		$variables['activeParticipe'] = 'Propose une vidéo';
+		$variables['typeEntite'] = 'video';
+		$variables['titreEntite'] = 'Vidéos';
+		$variables['messageEmpty'] = 'Aucun vidéo publiée sur TDN';
+		$variables['lienSommaire'] = 'Toutes les vidéos';
+		$variables['classeEntite'] = 'Video';
+
     	// Récupération de l'entity manager qui va nous permettre de gérer les entités.
 	    $em = $this->get('doctrine.orm.entity_manager');      
 	    $textProcessor = $this->get('tdn.core.textprocessor');      
 
-	    $variables = array();
 		// Récupération de la question la plus récente
 		$repCauseuse = $em->getRepository('TDN\Bundle\VideoBundle\Entity\Video');
-		$variables['videosRecentes'] = $repCauseuse->findMostRecent($limite);
-		$variables['live'] = array_shift($variables['videosRecentes']);
+		$variables['recents'] = $repCauseuse->findMostRecent($limite);
+		$variables['live'] = array_shift($variables['recents']);
 
 		if (!empty($variables['live'])) {		
 			$hebergeur = $variables['live']->getIdHebergeur();

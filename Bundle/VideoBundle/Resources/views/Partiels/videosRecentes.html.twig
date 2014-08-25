@@ -1,37 +1,28 @@
-<div class="bloc-bandeau">
-		<div class="bandeau fond-vert bloc-videos row">
-		<h3 class="titre-icone">Vidéos</h3>
+{% extends 'TDNDocumentBundle:Squelettes:blocBandeauVert.html.twig' %}
+
+{% block corpsPublicationsRecentes %}
+<div class="dernieres col-lg-6">
+{% if live is not empty %}
+	<a href="{#{ live|targetURL }#}">
+		<h4>{{live.titre}}</h4>
+		<p class="videoAbstract">{{ videoAbstract|raw }}</p>
+	</a>
+{% endif %}
+	<div class="videosRecentes row">
+	{% for rd in recents %}
+		<a href="{#{ rd|targetURL }#}">
+	  		<img class="snapshot" src="{{ illustration(rd) }}" class="" />
+		</a>
+	{% endfor %}
 	</div>
-	<div class="hot row">
-	{% if videosRecentes is empty %}
-		<p class="warning">Aucune vidéo publiée sur TDN</p>
-	{% else %}
-		<div class="dernieres col-lg-6">
-		{% if live is not empty %}
-			<a href="{#{ live|targetURL }#}">
-				<h4>{{live.titre}}</h4>
-				<p class="videoAbstract">{{ videoAbstract|raw }}</p>
-			</a>
-		{% endif %}
-			<div class="videosRecentes row">
-			{% for v in videosRecentes %}
-				<a href="{#{ v|targetURL }#}">
-			  		<img class="snapshot" src="{{ illustration(v) }}" class="" />
-				</a>
-			{% endfor %}
-			</div>
-			<div class="videosToutes">
-				<a href="{#{ path('VideoBundle_sommaire') }#}">Toutes les vidéos</a>
-			</div>		
-		</div>
-		<div class="scene col-lg-6">
-		{% if codeIntegration is defined %}
-			<div class="rubriqueMarqueur coin_{{ rubriquePrincipale(live.lnThematique) }}">
-				<div style="position:relative; z-index:10">
-				{{ codeIntegration|raw }}
-				</div>
-			</div>
-		{% endif %}
-		</div>
-	{% endif %}
 </div>
+<div class="scene col-lg-6">
+{% if codeIntegration is defined %}
+	<div class="rubriqueMarqueur coin_{{ rubriquePrincipale(live.lnThematique) }}">
+		<div class="lecteur">
+		{{ codeIntegration|raw }}
+		</div>
+	</div>
+{% endif %}
+</div>
+{% endblock %}
