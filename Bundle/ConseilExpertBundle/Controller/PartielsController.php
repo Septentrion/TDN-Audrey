@@ -14,9 +14,15 @@ class PartielsController extends Controller {
 
 	public function conseilsRecentsAction ($limite = 20, $panel = NULL) {
 
+		$variables['activeParticipe'] = 'Pose une question à un expert';
+		$variables['typeEntite'] = 'conseil-expert';
+		$variables['titreEntite'] = 'Conseils d’experts';
+		$variables['messageEmpty'] = 'Aucun conseil publié sur TDN';
+		$variables['lienSommaire'] = 'Tous les conseils des experts';
+		$variables['classeEntite'] = 'ConseilExpert';
+
 	    $em = $this->get('doctrine.orm.entity_manager');      
 		$repConseil = $em->getRepository('TDN\Bundle\ConseilExpertBundle\Entity\ConseilExpert');
-		$variables = array();
 		if (is_array($panel)) {
 			$_t = array_intersect($panel, array_keys($this->clefs));
 			$isException = !empty($_t);
@@ -25,10 +31,10 @@ class PartielsController extends Controller {
 		}
 
 		if (!empty($isException)) {
-			$variables['conseilsRecents'] = $repConseil->findMostRecentWithKeys($limite, $this->clefs[$panel[0]]);
+			$variables['recents'] = $repConseil->findMostRecentWithKeys($limite, $this->clefs[$panel[0]]);
 
 		} else {
-			$variables['conseilsRecents'] = $repConseil->findMostRecent($limite, $panel);
+			$variables['recents'] = $repConseil->findMostRecent($limite, $panel);
 		}
 
 		return $this->render('TDNConseilExpertBundle:Partiels:conseilsRecents.html.twig', $variables);

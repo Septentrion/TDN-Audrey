@@ -1,42 +1,34 @@
-<div class="bloc-bandeau">
-	<div class="bandeau fond-vert bloc-conseils-experts row">
-		<a href="{#{ path() }#}" class="lien-propos">Questionne un(e) Expert(e)</a>
-		<h3 class="titre-icone">Conseils d’experts</h3>
+{% extends 'TDNDocumentBundle:Squelettes:blocBandeauVert.html.twig' %}
+
+{% block corpsPublicationsRecentes %}
+{% for rd in recents %}
+<article class="bloc-conseil col-lg-6">
+	<a href="{#{ c|targetURL }#}">
+		<div class="rubriqueMarqueur iconex60 coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3">
+			<img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
+		</div>
+	</a>
+	<div class="col-lg-9 col-extended">
+		{% if rd.lnAuteur is not null%}
+		<p class="lienAuteur credits soude">
+			<span class="as">de </span>
+			<a class="{{ rubriquePrincipale(rd.lnThematique) }}" href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}">
+				{{ rd.lnAuteur.username }}
+			</a> 
+		{% endif %}
+		<p class="datePublication credits">{{ rd.datePublication|date('d/m/Y') }}</p>
+		<a href="{#{ c|targetURL }#}">
+			<h4 class="apercuTexte">{{ rd.titre|raw }}</h4>
+		</a>
+		{% if rd.lnExpert is not null%}
+		<p class="lienExpert credits">
+			<span calss="as">Réponse de </span>
+			<a class="{{ rubriquePrincipale(rd.lnThematique) }}" href="{#{ path('NanaBundle_profil', {'id': rd.lnExpert.idNana}) }#}">
+				{{ rd.lnExpert.prenom~', '~rd.lnExpert.occupation }}
+			</a>					
+		</p>
+		{% endif %}
 	</div>
-	<div class="hot row">
-	{% if conseilsRecents is empty %}
-		<p class="warning">Aucun conseil publié sur TDN</p>
-	{% else %}
-		{% for c in conseilsRecents %}
-		<article class="bloc-conseil col-lg-6">
-			<a href="{#{ c|targetURL }#}">
-				<div class="rubriqueMarqueur coin_{{ rubriquePrincipale(c.lnThematique) }}">
-					<img class="vignette iconex60 col-lg-5" src="{{ illustration(c, 'SQUARE') }}" alt="{{ c.lnIllustration.alt }}" title="{{ c.lnIllustration.alt }}" />
-				</div>
-			</a>
-			<div class="col-lg-7 col-extended">
-				{% if c.lnAuteur is not null%}
-				<p class="lienAuteur credits soude">
-					<span class="as">de </span>
-					<a class="{{ rubriquePrincipale(c.lnThematique) }}" href="{#{ path('NanaBundle_profil', {'id': c.lnAuteur.idNana}) }#}">
-						{{ c.lnAuteur.username }}
-					</a> 
-				{% endif %}
-				<p class="datePublication credits">{{ c.datePublication|date('d/m/Y') }}</p>
-				<a href="{#{ c|targetURL }#}">
-					<h4 class="apercuTexte">{{ c.titre|raw }}</h4>
-				</a>
-				{% if c.lnExpert is not null%}
-				<p class="lienExpert credits">
-					<span calss="as">Réponse de </span>
-					<a class="{{ rubriquePrincipale(c.lnThematique) }}" href="{#{ path('NanaBundle_profil', {'id': c.lnExpert.idNana}) }#}">
-						{{ c.lnExpert.prenom~', '~c.lnExpert.occupation }}
-					</a>					
-				</p>
-				{% endif %}
-			</div>
-		</article>
-		{% endfor %}
-	{% endif %}
-	</div>
-</div>
+</article>
+{% endfor %}
+{% endblock %}
