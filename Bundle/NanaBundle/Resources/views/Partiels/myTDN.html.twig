@@ -1,0 +1,150 @@
+	<div id="mytdn-dashboard">
+		<div id="my-identite">
+			<div id="avatar">
+			 {% if me is defined and me.lnAvatar is not null %}
+		     {% set sourceAvatar = '/uploads/documents/profils/'~me.idNana~'/'~me.lnAvatar.fichier %}
+		     {% else %}
+		     {% set sourceAvatar = 'assets/images/theme/centre/avatar_profil/avatar5%2080x95.png' %}
+		     {% endif %}
+				<img src="{{ asset(sourceAvatar)}}" />
+			</div>
+			<div id="whoami">
+				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+				<a class='headerLink' href="{#{ path('NanaBundle_myProfil') }#}">
+				{% endif %}
+				<img class="bloc" src="{#{ asset('assets/images/theme/tetiere/mytdn/myProfil.png') }#}" />
+				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+				</a>
+				{% endif %}
+				{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+				<p id="username" class="name">
+					<a class='headerLink' href="{#{ path('NanaBundle_myProfil') }#}">
+						{#{ username }#}
+					</a>
+				</p>
+				<p id="role" class="role">{#{ statut }#}</p>
+				<p><a class='deconnexion' href="{#{ path('NanaBundle_logout') }#}">Me déconnecter</a></p>
+				{% endif %}
+			</div>
+		</div>
+		<div id="my-options">
+		
+		{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+		<h3> Communauté </h3>
+			<ul class="groupe-options">
+				{% if is_granted('ROLE_USER') %}
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('ConseilExpert_creer') }#}">Poser une question à un expert</a>
+				</li>
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('CauseuseBundle_creer') }#}">Poser une question aux nanas</a>
+				</li>
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('Video_proposer') }#}">Proposer une vidéo</a>
+				</li>
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('NanaBundle_myProfil') }#}">Accéder à mon profil</a>
+				</li>
+				{% endif %}
+			</ul>
+			<ul class="groupe-options">
+				{% if is_granted('ROLE_USER') %}
+				<!--li class="granted-options">Jouer à un quiz</li-->
+				{% endif %}
+				{% if is_granted('ROLE_USER') %}
+				<li class="granted-options"><a href="{#{ path('Concours_sommaire') }#}">Voir les jeux-concours</a></li>
+				{% endif %}
+			</ul>
+			<ul class="groupe-options">
+				{% if is_granted('ROLE_JOURNALISTE') %}
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('RedactionBundle_articleAdd') }#}">Ecrire un article</a>
+				</li>
+				{% endif %}
+				{% if is_granted('ROLE_EXPERT') %}
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('ConseilExpert_logStatut', {'statut' : '2'}) }#}">Mes questions en attente</a>
+				</li>
+				{% endif %}
+				{% if is_granted('ROLE_EXPERT') %}
+				<li class="granted-options">
+					<a class='headerLink' href="{#{ path('Core_adminDashboard') }#}">Administration</a>
+				</li>
+				{% endif %}
+			</ul>
+		{% else %}
+			<h3>Connecte-toi sur TDN</h3>
+			{% render(controller("NanaBundle:Security:blockLogin", {'redirect_url': path('NanaBundle_myProfil')})) %}
+			<p class="inviteInscription">
+				<a href="{#{ path('Nana_passwordResetS1') }#}" class="lienFleche">J'ai perdu mes identifiants ? 
+					<img  src="{#{ asset('assets/images/theme/tetiere/mytdn/bt_fleche droite.png')}#}" align="absmiddle"style="margin-right:10px"/>
+				</a> 
+				<a href="{#{ path('NanaBundle_registerForm') }#}" class="lienFleche popin">Inscris-toi sur Trucdenana.com <img  src="{{ asset('assets/images/theme/tetiere/mytdn/bt_fleche droite.png')}}" align="absmiddle"/></a>
+			</p>				
+		{% endif %}
+		</div>
+	</div>
+	<div id="mytdn-grip">
+		<div id="bienvenue" class="bienvenue">
+		{% if username is defined %}
+		    Bienvenue {#{ username }#}
+		    <img class="avatar-minuscule" src="{#{ asset(sourceAvatar)}#}" />
+		{% else %}
+			Clique sur MyTDN pour ouvrir le tiroir
+		{% endif %}
+		</div>
+		<div id="dashboard" class="dashboard">
+			<div id="digest">
+				{% if gain is defined and gain > 0 %}
+		    	<div class="upgradeEscarpin digest-off">
+		    		<p class="contenu annotation">
+		    			<a class="notifCallback" href="{#{ path('NanaBundle_myProfil')}#}?msg=upesc">Bravo ! Tu as gagné un nouvel escarpin</a>
+		    		</p>
+		    	</div>
+				{% endif %}
+				{% if messages is defined and messages is not empty %}
+		    	<div class="messagesFeed digest-off">
+					{% include 'CoreBundle:Bloc:dashboardNotification.html.twig' with {'entrees': messages, 'me': me, 'actions': 'messages'} %}
+		    	</div>
+				{% endif %}
+				{% if likes is defined and likes is not empty %}
+		    	<div class="likesFeed digest-off">
+					{% include 'CoreBundle:Bloc:dashboardNotification.html.twig' with {'entrees': likes, 'me': me, 'actions': 'likes'} %}
+		    	</div>
+				{% endif %}
+				{% if follows is defined and follows is not empty %}
+		    	<div class="likesFeed digest-off">
+					{% include 'CoreBundle:Bloc:dashboardNotification.html.twig' with {'entrees': follows, 'me': me, 'actions': 'follows'} %}
+		    	</div>
+				{% endif %}
+			</div>
+		<!-- En cas de gain de « points » -->
+		{% if gain is defined and gain > 0 %}
+		    <a href="#" class="element-on hasGain-on">{{ gain }}</a>
+		{% else %}
+			<span class="element-on hasGain-off"></span>
+		{% endif %}
+		<!-- En cas de nouvelles relations -->
+		{% if likes is defined and likes is not empty %}
+		    <span class="element-on hasLikes-on">{{ likes|length }}</span>
+		{% else %}
+			<span class="element-on hasLikes-off"></span>
+		{% endif %}
+		<!-- En cas d'activité sur le site -->
+		{% if messages is defined and messages is not empty %}
+		    <a class="element-on hasActivite-on">{{ messages|length }}</a>
+		{% else %}
+			<span class="element-on hasActivite-off"></span>
+		{% endif %}
+		<!-- En cas de d'activié personnelle -->
+		{% if follows is defined and follows is not empty %}
+		    <span class="element-on hasFollowers-off">{{ follows|length }}</span>
+		{% else %}
+			<span class="element-on hasFollowers-off"></span>
+		{% endif %}
+		</div>
+		<div id="tiroir" class="tiroir">
+			<img src="{{ asset('assets/images/theme/tetiere/mytdn/logo_MyTDN.png')}}" />
+		</div>
+	</div>
+</div>
