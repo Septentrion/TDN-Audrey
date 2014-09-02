@@ -40,9 +40,9 @@
     </form>
 </div>
 <!-- Les derniers dossiers de la rédaction -->
-{#% render "DossierRedactionBundle:Partial:showDossierSidebar" %#}
+{% render(controller("TDNDossierRedactionBundle:Partiels:dossiersRecents", {'limite': 2})) %}
 <!-- Les derniers jeux-concours -->
-{#% render "ConcoursBundle:Partial:showConcoursSidebar" %#}
+{% render(controller("TDNConcoursBundle:Partiels:concoursRecents", {'limite': 1})) %}
 <!-- Les derniers quiz -->
 {#% render "QuizBundle:Partial:showQuizSidebar" with {'rubrique': 'tous'} %#}
 <!-- Facebook -->

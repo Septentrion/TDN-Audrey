@@ -17,6 +17,17 @@
 	<link rel="stylesheet" href="{{ asset_url }}">
 	{% endstylesheets %}
 
+	<!-- Polices de caractères -->
+	<link href='http://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css' />
+	<link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+	<!--style>
+		@font-face { font-family: Droid Sans; src: url('/assets/css/fonts/DroidSans.ttf'); } 
+		@font-face { font-family: Questrial; src: url('/assets/css/fonts/Questrial-Regular.ttf'); } 
+	</style-->
+
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
+
 	<!-- Affliliation aufeminin.com -->
 	<script type="text/javascript">
 	sas_tmstp=Math.round(Math.random()*10000000000);
@@ -40,6 +51,11 @@
 	<!-- Cadre global de la page -->
 	<div id="colonnePrincipale" class="container">
 		
+		<!-- My TDN -->
+		<div id="mytdn-wrapper">
+		{% render(controller("TDNNanaBundle:MyTDN:tiroir")) %}
+		</div>
+
 		<!-- Entête -->
 		<div class="row">
 			{% include "TDNCoreBundle:Partiels:entetePage.html.twig" %}
@@ -57,12 +73,12 @@
 		<main id="contenuPrincipal" class="row">
 			
 			<!-- Contenu Principal -->
-			<section class="col-lg-8 col-sm-12 col-xs-12 blanc scene">
+			<section class="col-lg-8 col-sm-12 col-xs-12 bg-blanc scene">
 				{% block contenuPrincipal %}{% endblock %}
 			</section>
 
 			<!-- Barre latérale -->
-			<aside class="col-lg-4 blanc annexes">
+			<aside class="col-lg-4 bg-blanc annexes">
 				{% include "TDNCoreBundle:Partiels:colonneLaterale.html.twig" %}
 			</aside>
 		</main>

@@ -33,7 +33,9 @@
   {#% render "ConseilExpertBundle:Partial:conseilsPlusLus" with {'limite': 3} %#}
   </div>
 
-</div>
+  <div id="questions-recentes">
+    {% render(controller("TDNCauseuseBundle:Partiels:questionsPopulaires", {'limite': 6})) %}
+  </div>
 
-<article>
+</div>
 {% endblock %}
