@@ -44,15 +44,15 @@
 	</script>
 
 </head>
-<body class="theme-{#{ rubrique }#}">
+<body class="theme-{#{ sponsored }#}">
 	<!-- Notifications et messages d'erreur -->
 	{% include "TDNCoreBundle:Partiels:systemMessages.html.twig" %}
 
 	<!-- Cadre global de la page -->
-	<div id="colonnePrincipale" class="container">
+	<div id="colonne-principale" class="container">
 		
 		<!-- My TDN -->
-		<div id="mytdn-wrapper">
+		<div id="mytdn-wrapper" class="container row">
 		{% render(controller("TDNNanaBundle:MyTDN:tiroir")) %}
 		</div>
 
@@ -73,12 +73,12 @@
 		<main id="contenuPrincipal" class="row">
 			
 			<!-- Contenu Principal -->
-			<section class="col-lg-8 col-sm-12 col-xs-12 bg-blanc scene">
+			<section class="col-lg-8 col-md-8 col-sm-12 col-xs-12 bg-blanc scene">
 				{% block contenuPrincipal %}{% endblock %}
 			</section>
 
 			<!-- Barre latérale -->
-			<aside class="col-lg-4 bg-blanc annexes">
+			<aside class="col-lg-4 col-md-4 col-sm-12 col-xs-12 bg-blanc annexes">
 				{% include "TDNCoreBundle:Partiels:colonneLaterale.html.twig" %}
 			</aside>
 		</main>
