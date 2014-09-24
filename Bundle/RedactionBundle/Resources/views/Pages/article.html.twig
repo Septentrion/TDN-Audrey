@@ -1,0 +1,55 @@
+{% extends 'CoreBundle:Topoi:TDNDocument.html.twig' %}
+
+{% block corps_contenu %}
+<!-- Bloc pour l'affichage des métadonnées de l'article -->
+<header id="metadata" class="metadata">
+   <p class="auteur">
+     <span class="standardEtiquette">Ecrit par </span> 
+      <a href="{{ path('NanaBundle_profil', { 'id' : feuille.lnAuteur.idNana }) }}" class="nom-auteur">{{TDNDocument.lnAuteur.prenom ~ " " ~ TDNDocument.lnAuteur.nom }}</a>,
+      <span class="standardEtiquette">le </span><span class="date-publication">{{ TDNDocument.datePublication | date('d/m/Y') }}</span>
+   </p>
+   <p>
+    <span class="standardEtiquette">Rubrique :</span>
+    {% if TDNDocument.lnThematique is not null %}
+      <a href="{{path('Core_sommaire', {'slug': TDNDocument.lnThematique.slug})}}">
+        <span class="rubrique-{{ rubriquePrincipale(TDNDocument.lnThematique) }}">{{ TDNDocument.lnThematique.titre }}
+      </a>
+    {% endif %}
+    {% for r in TDNDocument.rubriques %}
+      <a href="{{path('Core_sommaire', {'slug': r.slug})}}">
+        <span class="rubrique-{{ rubriquePrincipale(r) }}">{{ r.titre }}
+      </a>
+    {% endfor %}
+    </span>
+   </p>
+</header>
+
+<!-- Bloc pour l'affichage du contenu de l'article -->
+<div id="corps" class="corps">
+   <h1 class="titre-document titre-{{ rubriquePrincipale(rubriquePrincipale) }}">{{TDNDocument.titre}}</h1>
+    {% if TDNDocument.lnIllustration is not null%}
+      <img class="legacyIllustration" src="{{ illustration(article, 'SQUARE') }}" alt="{{ TDNDocument.lnIllustration.alt }}" />
+    {% endif %}
+   <div class="chapo">{{ TDNDocument.abstract|raw }}</div>
+   <div class="rawTexte">
+      {{TDNDocument.corps|raw}}
+      {% if TDNDocument.sponsor == 1 %}
+      <p class="sponsorise">Article sponsorisé</p>
+      {% endif %}
+    </div>
+</div>
+
+ <footer class="tags">
+ {% if TDNDocument.filTags is not empty %}
+   <ul class="tagBag">
+   {% for tag in TDNDocument.filTags %}
+    <li class="tag">
+      <a href="/recherche/{{ tag.expression }}">{{ tag.expression }}</a>
+    </li>
+   {% endfor %}
+   </ul>
+ {% else %}
+ {{TDNDocument.tags|tags|raw}}
+ {% endif %}
+ </footer>
+{% block %}

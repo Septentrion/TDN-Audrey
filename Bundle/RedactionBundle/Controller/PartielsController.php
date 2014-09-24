@@ -8,24 +8,30 @@ class PartielsController extends Controller {
 	
 	public function articlesRecentsAction ($limite = 3, $panel = NULL) {
 
+		$variables['typeEntite'] = 'article';
+		$variables['titreEntite'] = 'Articles';
+		$variables['messageEmpty'] = 'Aucun article publié sur TDN';
+		$variables['lienSommaire'] = 'Tous les articles';
+		$variables['classeEntite'] = 'Article';
+
 	    $em = $this->get('doctrine.orm.entity_manager');      
 		$rep = $em->getRepository('TDN\Bundle\RedactionBundle\Entity\Article');
 		$rep_sel = $em->getRepository('TDN\Bundle\RedactionBundle\Entity\SelectionShopping');
 		$selectionsRecentes = $rep_sel->findMostRecent($limite, $panel);
 		$articlesRecents = $rep->findMostRecent($limite, $panel);
-		$variables['articlesRecents'] = array();
+		$variables['recents'] = array();
 		for ($i = 0; $i < $limite; $i++) {
 			if (empty($selectionsRecentes)) {
-				$variables['articlesRecents'] = array_merge($variables['articlesRecents'], $articlesRecents);
+				$variables['recents'] = array_merge($variables['recents'], $articlesRecents);
 				break;
 			} elseif (empty($articlesRecents)) {
-				$variables['articlesRecents'] = array_merge($variables['articlesRecents'], $selectionsRecentes);
+				$variables['recents'] = array_merge($variables['recents'], $selectionsRecentes);
 				break;
 			} else {
 				if ($selectionsRecentes[0]->getDatePublication() > $articlesRecents[0]->getDatePublication()) {
-					$variables['articlesRecents'][] = array_shift($selectionsRecentes);
+					$variables['recents'][] = array_shift($selectionsRecentes);
 				} else {
-					$variables['articlesRecents'][] = array_shift($articlesRecents);
+					$variables['recents'][] = array_shift($articlesRecents);
 				}					
 			}
 		}
