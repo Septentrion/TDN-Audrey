@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="RedactionBundle_article" pattern="/{rubrique}/article/{id}/{slug}">
+        <default key="_controller">TDNRedactionBundle:Public:article</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="Redaction_showSelection" pattern="/{rubrique}/selection-shopping/{id}/{slug}">
+        <default key="_controller">RedactionBundle:Shopping:show</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <!-- Routes administratives -->
+
+    <route id="RedactionBundle_articleIndex" pattern="/admin/article/index">
+        <default key="_controller">RedactionBundle:Admin:articleIndex</default>
+    </route>
+
+    <route id="RedactionBundle_articleBrouillons" pattern="/admin/article/mes-brouillons">
+        <default key="_controller">RedactionBundle:Admin:articleBrouillons</default>
+    </route>
+
+    <route id="RedactionBundle_articleAdd" pattern="/admin/article/add">
+        <default key="_controller">RedactionBundle:Admin:articleAdd</default>
+    </route>
+
+    <route id="RedactionBundle_articleModifier" pattern="/admin/article/modifier/{id}">
+        <default key="_controller">RedactionBundle:Admin:articleModifier</default>
+    </route>
+
+    <route id="Redaction_articlePublier" pattern="/admin/article/publier/{id}">
+        <default key="_controller">RedactionBundle:Admin:articlePublier</default>
+    </route>
+
+    <route id="Redaction_articleSupprimer" pattern="/admin/article/supprimer/{id}">
+        <default key="_controller">RedactionBundle:Admin:supprimer</default>
+    </route>
+
+    <route id="Redaction_selectionShoppingIndex" pattern="/admin/selection-shopping/index">
+        <default key="_controller">RedactionBundle:AdminShopping:index</default>
+    </route>
+
+    <route id="Redaction_ajouterSelection" pattern="/admin/selection-shopping/ajouter">
+        <default key="_controller">RedactionBundle:AdminShopping:ajouter</default>
+    </route>
+
+    <route id="Redaction_modifierSelection" pattern="/admin/selection-shopping/modifier/{id}">
+        <default key="_controller">RedactionBundle:AdminShopping:modifier</default>
+    </route>
+
+    <route id="Redaction_selectionShoppingPublier" pattern="/admin/selection-shopping/publier/{id}">
+        <default key="_controller">RedactionBundle:AdminShopping:publier</default>
+    </route>
+
+    <route id="Redaction_selectionShoppingSupprimer" pattern="/admin/selection-shopping/publier/{id}">
+        <default key="_controller">RedactionBundle:AdminShopping:supprimer</default>
+    </route>
+
+    <!-- Migration -->
+
+    <route id="Article_migration" pattern="/migration/articles/{fichier}">
+        <default key="_controller">RedactionBundle:Migration:migration</default>
+    </route>
+
+    <route id="Article_migrationV1ID" pattern="/migration/articles/v1/{fichier}">
+        <default key="_controller">RedactionBundle:Migration:migrationV1ID</default>
+    </route>
+
+    <!-- Reprise v2 -->
+
+    <route id="RedactionLegacy_articleSimpleNode" pattern="/article/node/{slug},{id},{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:article</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_articleNode" pattern="/{rubrique}/article/node/{slug},{id},{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:article</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">a|\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_articleNodeNoSlug" pattern="/{rubrique}/article/node/,{id},{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:article</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">a|\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_article" pattern="/{rubrique}/article/{slug},{id},{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:article</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_articleSommaire" pattern="/{rubrique}/{sousRubrique}/article/sommaire/{slug}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:sommaireSousRubrique</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_rubriquePrincipaleSommaire" pattern="/{rubrique}/article/{level}/index.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:sommaireRubrique</default>
+        <requirement key="level">sommaire|node</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_rubriquePrincipaleSommaireDomaine" pattern="{domaine}.com/{rubrique}/article/{level}/index.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:sommaireRubrique</default>
+        <requirement key="domaine">trucdenana|www\.trucdenana</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="level">sommaire|node</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!-- Reprise v1 -->
+
+    <route id="RedactionLegacy_articleV1" pattern="/{slug},art-{id}-{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:articleV1</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_tendanceV1" pattern="/{slug},ten-{id}-{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:tendanceV1</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionLegacy_rubriqueV1" pattern="/{slug},{rubrique}-{id}-{page}.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:rubriqueV1</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="rubrique">hig</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!-- URL malformées -->
+
+    <route id="RedactionDummy_1" pattern="{lettre}/article/node/{expression}/index.{_format}">
+        <default key="_controller">CoreBundle:Legacy:home</default>
+        <requirement key="lettre">[A-Z]</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="RedactionDummy_2" pattern="{lettre}/article/node/index.{_format}">
+        <default key="_controller">CoreBundle:Legacy:home</default>
+        <requirement key="lettre">[A-Z]</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+</routes>
