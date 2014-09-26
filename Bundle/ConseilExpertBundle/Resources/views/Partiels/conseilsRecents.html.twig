@@ -2,13 +2,13 @@
 
 {% block corpsPublicationsRecentes %}
 {% for rd in recents %}
-<article class="bloc-conseil col-lg-6">
-	<a href="{#{ c|targetURL }#}">
-		<div class="rubriqueMarqueur iconex60 coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3">
+<article class="bloc-conseil col-lg-6 col-md-6 col-sm-6 col-xs-12">
+	<div class="coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-4 col-md-4 col-sm-4 col-xs-4">
+		<a href="{#{ c|targetURL }#}">
 			<img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
-		</div>
-	</a>
-	<div class="col-lg-9 col-extended">
+		</a>
+	</div>
+	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 col-extended">
 		{% if rd.lnAuteur is not null%}
 		<p class="lienAuteur credits soude">
 			<span class="as">de </span>

@@ -12,7 +12,7 @@ class MyTDNController extends Controller {
 
     	// $me = $this->getUser();
         $em = $this->get('doctrine.orm.entity_manager');      
-        $rep_journal = $em->getRepository('TDN\CoreBundle\Entity\Journal');
+        $rep_journal = $em->getRepository('TDN\Bundle\CoreBundle\Entity\Journal');
 		$security = $this->container->get('security.context');
 
 

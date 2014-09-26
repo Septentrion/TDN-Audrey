@@ -1,39 +1,28 @@
-<div class="bloc-bandeau">
-	<div class="bandeau fond-vert bloc-questions row">
-		<div class="apropos">
-			<span class="n-reponses">Réponses</span>
-			<span class="n-votes">Votes</span>
-		</div>
-		<h3 class="titre-icone">Questions de  nanas (sans tabou)</h3>
-	</div>
-	<div class="hot row">
-	{% if questionsPlusAimees is empty %}
-		<p class="warning">Aucune question publiée sur TDN</p>
-	{% else %}
-		{% for q in questionsPlusAimees %}
-		{% set princeps = rubriquePrincipale(q.lnThematique) %}
-		{% set qlikes = 0%}
-		{% for r in q.filReponses %}
-		{% set qlikes = qlikes + r.likes %}
-		{% endfor %}
-		<article class="question-de-nana plus-aimees {{ rubriquePrincipale(q.lnThematique) }}_secondaire">
-			<p class="{{ rubriquePrincipale(q.lnThematique) }} etiquette-rubrique">{{ q.lnThematique|titrePrincipal }}</p>
-			<div class="row">
-				<div class="stats col-lg-2">
-					<span class="n-reponses">{{ q.filReponses|length }}</span>
-					<span class="n-votes">{{ qlikes }}</span>
-				</div>
-				<div class="col-lg-10">
-					<h4 class="soude" style="margin:0">
-						<a href="{#{ a|targetURL }#}">{{ q.titre }}</a>
-					</h4>
-					<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': q.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(q.lnThematique) }}">{{ q.lnAuteur.prenom~' '~q.lnAuteur.nom }}</a></p>
-					<p class="credits datePublication soude">{{ q.datePublication|laps }}</p>
-				</div>
-			</div>
+{% extends 'TDNDocumentBundle:Squelettes:blocBandeauVert.html.twig' %}
 
-		</article>
-		{% endfor %}
-	{% endif %}
+{% block corpsPublicationsRecentes %}
+{% for rd in recents %}
+{% set princeps = rubriquePrincipale(rd.lnThematique) %}
+{% set qlikes = 0%}
+{% for r in rd.filReponses %}
+{% set qlikes = qlikes + r.likes %}
+{% endfor %}
+<article class="question-de-nana plus-aimees {{ rubriquePrincipale(rd.lnThematique) }}_secondaire">
+	<p class="{{ rubriquePrincipale(rd.lnThematique) }} etiquette-rubrique">{{ rd.lnThematique|titrePrincipal }}</p>
+	<div class="row">
+		<div class="stats col-lg-2">
+			<span class="n-reponses">{{ rd.filReponses|length }}</span>
+			<span class="n-votes">{{ qlikes }}</span>
+		</div>
+		<div class="col-lg-10">
+			<h4 class="soude" style="margin:0">
+				<a href="{#{ a|targetURL }#}">{{ rd.titre }}</a>
+			</h4>
+			<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(rd.lnThematique) }}">{{ rd.lnAuteur.prenom~' '~rd.lnAuteur.nom }}</a></p>
+			<p class="credits datePublication soude">{{ rd.datePublication|laps }}</p>
+		</div>
 	</div>
-</div>
+
+</article>
+{% endfor %}
+{% endblock %}

@@ -21,12 +21,18 @@ class PartielsController extends Controller
 
     public function questionsPlusAimeesAction($limite) {
 
-    	// Récupération de l'entity manager qui va nous permettre de gérer les entités.
+		$variables['typeEntite'] = 'question';
+		$variables['titreEntite'] = 'Questions de nanas (sans tabou)';
+		$variables['messageEmpty'] = 'Aucune question publié sur TDN';
+		$variables['lienSommaire'] = 'Toutes les questions des nanas';
+		$variables['classeEntite'] = 'Causeuse';
+
+     	// Récupération de l'entity manager qui va nous permettre de gérer les entités.
 	    $em = $this->get('doctrine.orm.entity_manager');      
 
 		// Récupération de la question la plus récente
 		$repCauseuse = $em->getRepository('TDN\Bundle\CauseuseBundle\Entity\Question');
-		$variables['questionsPlusAimees'] = $repCauseuse->findMostLiked($limite);
+		$variables['recents'] = $repCauseuse->findMostLiked($limite);
 
         return $this->render('TDNCauseuseBundle:Partiels:questionsPlusAimees.html.twig', $variables);
     }

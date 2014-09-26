@@ -14,9 +14,14 @@ class PartielsController extends Controller {
 
 	public function dossiersRecentsAction ($limite = 20, $panel = NULL) {
 
+		$variables['typeEntite'] = 'dossier';
+		$variables['titreEntite'] = 'Dossiers';
+		$variables['messageEmpty'] = 'Aucun dossier publié sur TDN';
+		$variables['lienSommaire'] = 'Tous les dossiers de la rédaction';
+		$variables['classeEntite'] = 'DossierRedaction';
+
 	    $em = $this->get('doctrine.orm.entity_manager');      
 		$repConseil = $em->getRepository('TDN\Bundle\DossierRedactionBundle\Entity\Dossier');
-		$variables = array();
 		if (is_array($panel)) {
 			$_t = array_intersect($panel, array_keys($this->clefs));
 			$isException = !empty($_t);

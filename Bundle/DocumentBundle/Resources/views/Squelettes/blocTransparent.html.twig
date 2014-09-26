@@ -1,0 +1,22 @@
+<div class="bloc-transparent">
+	<div class="bandeau bloc-{{ typeEntite }} row">
+		{% if activeParticipe is defined %}
+		<a href="{#{ path() }#}" class="lien-propos">{{ activeParticipe }}</a>
+		{% endif %}
+		<h3 class="titre-icone">{{ titreEntite }}</h3>
+	</div>
+	<div class="hot row">
+		<div class="filigrane-{{ typeEntite }}"></div>
+		<div class="col-lg-2"></div>
+		{% if questionsRecentes is empty %}
+			<p class="warning">{{ messageEmpty }}</p>
+		{% else %}
+			{% block corpsPublicationsRecentes %}{% endblock %}
+			{% if lienSommaire is defined %}
+			<div class="lienSommaire">
+				<a href="{#{ path(classeEntite.'_sommaire') }#}">{{ lienSommaire }}</a>
+			</div>
+			{% endif %}
+		{% endif %}
+	</div>
+</div>
