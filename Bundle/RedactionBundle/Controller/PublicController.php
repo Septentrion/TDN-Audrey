@@ -1,13 +1,13 @@
 <?php
 
-namespace TDN\RedactionBundle\Controller;
+namespace TDN\Bundle\RedactionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use TDN\DocumentBundle\Entity\DocumentRubrique;
-use TDN\CommentaireBundle\Entity\Commentaire;
-use TDN\RedactionBundle\Entity\Article;
-use TDN\NanaBundle\Entity\Nana;
+use TDN\Bundle\DocumentBundle\Entity\DocumentRubrique;
+use TDN\Bundle\CommentaireBundle\Entity\Commentaire;
+use TDN\Bundle\RedactionBundle\Entity\Article;
+use TDN\Bundle\NanaBundle\Entity\Nana;
 
 class PublicController extends Controller {
     
@@ -18,7 +18,7 @@ class PublicController extends Controller {
     public function articleAction($rubrique, $slug, $id) {
 
 	    $em = $this->get('doctrine.orm.entity_manager');      
-		$repository = $em->getRepository('TDN\RedactionBundle\Entity\Article');
+		$repository = $em->getRepository('TDN\Bundle\RedactionBundle\Entity\Article');
 	
 		/* Tableau qui va stocker toutes les données à remplacer dans le template twig */
 	    $variables = array();  
@@ -54,7 +54,7 @@ class PublicController extends Controller {
 			$variables['TDNDocument']->updateHits();
 			$em->flush();
 
-			$variables['canonical'] = $this->generateURL('RedactionBundle_TDNDocument', 
+			$variables['canonical'] = $this->generateURL('Article_page', 
 				array('id' => $variables['TDNDocument']->getIdDocument(),
 					  'slug' => $variables['TDNDocument']->getSlug(),
 					  'rubrique' => $variables['rubrique'])
@@ -62,15 +62,15 @@ class PublicController extends Controller {
 			$variables['meta_description'] = strip_tags($variables['TDNDocument']->getAbstract());
 			
 			// Documents proches (pour aller plus loin)
-		    $rep_tags = $em->getRepository('TDN\DocumentBundle\Entity\Tag');
-		    $statement = $this->get('database_connection');	    
-		    $sims = $rep_tags->findSimilars($id);
+		    // $rep_tags = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\Tag');
+		    // $statement = $this->get('database_connection');	    
+		    // $sims = $rep_tags->findSimilars($id);
 
-		    $rep_docs = $em->getRepository('TDN\DocumentBundle\Entity\Document');
-		    $variables['similaires'] = array();
-		    foreach($sims as $s) {
-		    	$variables['similaires'][] = $rep_docs->find($s['id']);
-		    }
+		    // $rep_docs = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\Document');
+		    // $variables['similaires'] = array();
+		    // foreach($sims as $s) {
+		    // 	$variables['similaires'][] = $rep_docs->find($s['id']);
+		    // }
 
 		    $variables['paths'] = array(
 		    	'Article' => 'RedactionBundle_article',
@@ -81,7 +81,7 @@ class PublicController extends Controller {
 		    	);
 
 			// Affichage de la page
-			return $this->render('RedactionBundle:Default:TDNDocument.html.twig', $variables);			
+			return $this->render('TDNRedactionBundle:Pages:article.html.twig', $variables);			
 		}
     }
 }
