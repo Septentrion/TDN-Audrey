@@ -1,21 +1,19 @@
-{% extends 'DocumentBundle:Default:TDNPageLarge.html.twig' %}
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
 
 {% block title TDNDocument.titre ~ " | Article " ~ titreRubrique  %}
 
-{% block contenu_principal %}
+{% block contenuPrincipal %}
 <section id="" class="enveloppe-contenu">
      <h1 class="titre-document titre-{{ rubriquePrincipale(rubriquePrincipale) }}">{{TDNDocument.titre}}</h1>
 
-</section>
   <!-- Contenu de l'article -->
-   <section class="contenu main-section">
-
-     <article class="">
-      {% block corps_contenu %}{% block %}   
+     <article class="corps-document">
+      {% block corpsContenu %}{% endblock %}   
      </article>
 
        <!-- Bloc pour les boutons sociaux -->
-      {% include 'DocumentBundle:Bloc:socialTDNLinks.html.twig' with {'id': TDNDocument.idDocument, 'likes': TDNDocument.likes} %}
+      {% include 'DocumentBundle:Bloc:socialTDNLinks.html.twig' 
+          with {'id': TDNDocument.idDocument, 'likes': TDNDocument.likes} %}
 
        <!-- Mediabong -->
       <div id="mb_container"></div>
@@ -31,7 +29,8 @@
       </script>
 
       <!-- Bloc pour les commentaires -->
-      {% render 'CommentaireBundle:Public:flux' with {'id': TDNDocument.idDocument } %}
+      {#% render 'CommentaireBundle:Public:flux' 
+           with {'id': TDNDocument.idDocument } %#}
   </section>
 
   <!-- Publications en rapport avec ce sujet -->

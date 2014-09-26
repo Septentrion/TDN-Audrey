@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="tdn_core_homepage" pattern="/hello/{name}">
+        <default key="_controller">TDNCoreBundle:Default:index</default>
+    </route>
+    <route id="Core_home" pattern="/">
+        <default key="_controller">TDNCoreBundle:Default:home</default>
+    </route>
+	<route id="question_liste" pattern="/questionsdenanas">
+		<default key="_controller">TDNCoreBundle:Default:qln</default>
+	</route>
+    <route id="Core_main" pattern="/{mainCat}">
+        <default key="_controller">TDNCoreBundle:Default:main</default>
+    </route>
+    <route id="redaction_page_article" pattern="/article/{id}">
+        <default key="_controller">TDNRedactionBundle:article</default>
+    </route>
+    <route id="redaction_liste_article" pattern="/article/">
+        <default key="_controller">TDNRedactionBundle:article-l</default>
+    </route>
+    <route id="redaction_page_shopping" pattern="/shopping/{id}">
+        <default key="_controller">TDNRedactionBundle:shopping</default>
+    </route>
+    <route id="redaction_liste_shopping" pattern="/shopping/">
+        <default key="_controller">TDNRedactionBundle:shopping-l</default>
+    </route>
+    <route id="conseilExpert_liste" pattern="/conseils/">
+        <default key="_controller">TDNConseilBundle:conseil-l</default>
+    </route>
+    <route id="conseilExpert_page" pattern="/conseils/{id}">
+        <default key="_controller">TDNConseilBundle:conseil</default>
+    </route>
+	
+</routes>
