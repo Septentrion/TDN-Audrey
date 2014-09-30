@@ -15,7 +15,7 @@ class PublicController extends Controller {
 		
 	}
 
-    public function articleAction($rubrique, $slug, $id) {
+    public function articleAction($theme, $rubrique, $slug, $id) {
 
 	    $em = $this->get('doctrine.orm.entity_manager');      
 		$repository = $em->getRepository('TDN\Bundle\RedactionBundle\Entity\Article');
@@ -57,6 +57,7 @@ class PublicController extends Controller {
 			$variables['canonical'] = $this->generateURL('Article_page', 
 				array('id' => $variables['TDNDocument']->getIdDocument(),
 					  'slug' => $variables['TDNDocument']->getSlug(),
+					  'theme' => $variables['rubriquePrincipale']->getSlug() ,
 					  'rubrique' => $variables['rubrique'])
 				);
 			$variables['meta_description'] = strip_tags($variables['TDNDocument']->getAbstract());
