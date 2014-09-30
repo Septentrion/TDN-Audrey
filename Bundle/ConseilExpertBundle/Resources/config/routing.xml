@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!-- CRON -->
+
+    <route id="ConseilExpert_journalExpert" pattern="/cron/journal-expert">
+        <default key="_controller">ConseilExpertBundle:Admin:journalExpert</default>
+    </route>
+
+    <!-- routes publiques -->
+
+    <route id="ConseilExpert_conseil" pattern="/{rubrique}/conseil-expert/{id}/{slug}">
+        <default key="_controller">ConseilExpertBundle:Publication:conseil</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="ConseilExpertLegacy_conseil" pattern="/conseil/node/{slug},{id},{page}.html">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseil</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="ConseilExpert_conseiByID" pattern="/{rubrique}/conseil-expert/{id}">
+        <default key="_controller">ConseilExpertBundle:Publication:conseil</default>
+    </route>
+
+    <route id="ConseilExpert_creer" pattern="/conseil-expert/demande">
+        <default key="_controller">ConseilExpertBundle:Publication:conseilDemande</default>
+    </route>
+
+    <route id="ConseilExpert_filPerso" pattern="/conseil-expert/liste-personnelle/{id}">
+        <default key="_controller">ConseilExpertBundle:Publication:filPerso</default>
+    </route>
+
+    <!-- routes administratives -->
+
+    <route id="ConseilExpertBundle_index" pattern="/admin/conseils/index">
+        <default key="_controller">ConseilExpertBundle:Admin:index</default>
+    </route>
+
+    <route id="ConseilExpertBundle_logTri" pattern="/admin/conseils/index/{ordre}">
+        <default key="_controller">ConseilExpertBundle:Admin:logTri</default>
+    </route>
+
+    <route id="ConseilExpert_logStatut" pattern="/admin/conseils/workflow/{statut}">
+        <default key="_controller">ConseilExpertBundle:Admin:logStatut</default>
+    </route>
+
+    <route id="ConseilExpertBundle_deleguer" pattern="/admin/conseil/deleguer/{id}">
+        <default key="_controller">ConseilExpertBundle:Admin:conseilDispatch</default>
+    </route>
+
+    <route id="ConseilExpertBundle_flowDeleguer" pattern="/admin/conseil/deleguer/">
+        <default key="_controller">ConseilExpertBundle:Admin:conseilFlowDispatch</default>
+    </route>
+
+    <route id="ConseilExpertBundle_repondre" pattern="/admin/conseil/repondre/{id}">
+        <default key="_controller">ConseilExpertBundle:Admin:conseilRepondre</default>
+    </route>
+
+    <route id="ConseilExpertBundle_flowRepondre" pattern="/admin/conseil/flow/repondre">
+        <default key="_controller">ConseilExpertBundle:Admin:conseilFlowRepondre</default>
+    </route>
+
+    <route id="ConseilExpertBundle_relire" pattern="/admin/conseil/relire/{id}">
+        <default key="_controller">ConseilExpertBundle:Admin:conseilRelire</default>
+    </route>
+
+    <route id="ConseilExpertBundle_flowEnd" pattern="/admin/conseil/flow/end">
+        <default key="_controller">ConseilExpertBundle:Admin:conseilFlowEnd</default>
+    </route>
+
+    <route id="ConseilExpertBundle_editer" pattern="/admin/conseil/editer/{id}">
+        <default key="_controller">ConseilExpertBundle:Admin:editer</default>
+    </route>
+
+    <route id="ConseilExpertBundle_publier" pattern="/admin/conseil/publier/{id}">
+        <default key="_controller">ConseilExpertBundle:Admin:publier</default>
+    </route>
+
+    <route id="ConseilExpertBundle_supprimer" pattern="/admin/conseil/supprimer/{id}">
+        <default key="_controller">ConseilExpertBundle:Admin:supprimer</default>
+    </route>
+
+    <!-- Migration -->
+
+    <route id="Conseil_migration" pattern="/migration/conseils/{fichier}">
+        <default key="_controller">ConseilExpertBundle:Migration:migration</default>
+    </route>
+
+    <route id="Conseil_migrationV1ID" pattern="/migration/conseils/v1/{fichier}">
+        <default key="_controller">ConseilExpertBundle:Migration:migrationV1ID</default>
+    </route>
+
+    <!-- Reprise v2 -->
+
+    <route id="ConseilLegacy_conseilSimpleNode" pattern="/conseil/node/{slug},{id},{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseil</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="ConseilLegacy_conseilSimpleNodeNoSlug" pattern="/conseil/node/,{id},{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseil</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="ConseilLegacy_conseilNode" pattern="/{rubrique}/conseil/node/{slug},{id},{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseil</default>
+         <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="ConseilLegacy_conseilNodeNoSlug" pattern="/{rubrique}/conseil/node/,{id},{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseil</default>
+         <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="ConseilLegacy_conseil" pattern="/{rubrique}/conseil/{slug},{id},{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseil</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!--route id="RedactionLegacy_articleSommaire" pattern="/{rubrique}/{sousRubrique}/article/sommaire/index.{_format}">
+        <default key="_controller">RedactionBundle:Legacy:sommaireSousRubrique</default>
+        <requirement key="_format">html</requirement>
+    </route-->
+
+    <route id="ConseilExpertLegacy_rubriquePrincipaleSommaire" pattern="/{rubrique}/conseil/{level}/index.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:sommaireRubrique</default>
+        <requirement key="level">sommaire|node</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!-- Reprise v1 -->
+
+    <route id="ConseilLegacy_conseilV1" pattern="/{slug},con-{id}-{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:conseilV1</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="ConseilLegacy_conseilV1NoID" pattern="/{slug},con--{page}.{_format}">
+        <default key="_controller">ConseilExpertBundle:Legacy:gone</default>
+        <requirement key="page">\d</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!-- IOS -->
+    <route id="ConseilExpert_IOSDemander" pattern="/ios/conseil-expert/demande">
+        <default key="_controller">ConseilExpertBundle:IOS:conseilDemande</default>
+    </route>
+
+
+</routes>

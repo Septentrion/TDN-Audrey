@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="nana.activite.class">TDN\Bundle\NanaBundle\Activite\relaisActivite</parameter>
+    </parameters>
+
+    <services>
+
+        <!--service id="tdn.activite_processor" class="%nana.activite.class%">
+            <argument type="service" id="mailer"/>
+        </service-->
+
+        <service id="tdn.twig.nana_extension" class="TDN\Bundle\NanaBundle\Twig\NanaExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="router"/>
+        </service>
+
+    </services>
+</container>

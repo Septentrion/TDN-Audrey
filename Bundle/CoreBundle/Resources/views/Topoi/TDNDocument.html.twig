@@ -29,14 +29,13 @@
       </script>
 
       <!-- Bloc pour les commentaires -->
-      {#% render 'CommentaireBundle:Public:flux' 
-           with {'id': TDNDocument.idDocument } %#}
+      {% render(controller('TDNCommentaireBundle:Public:flux', {'id': TDNDocument.idDocument })) %}
   </section>
 
   <!-- Publications en rapport avec ce sujet -->
   {% if similaires is defined and similaires is not empty %}
   <section id="more">
-    {% include 'DocumentBundle:Bloc:documentsSimilaires.html.twig' with {'similaires': similaires, 'type': 'Article'} %}
+    {% include 'TDNDocumentBundle:Bloc:documentsSimilaires.html.twig' with {'similaires': similaires, 'type': 'Article'} %}
   </section>
   {% endif %}
 
