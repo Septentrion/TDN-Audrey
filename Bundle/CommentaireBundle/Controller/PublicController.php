@@ -35,7 +35,7 @@ class PublicController extends Controller
 			krsort($variables['commentaires']);
 		}
 		$variables['idDocument'] = $id;
-        return $this->render('CommentaireBundle:Flux:flux.html.twig', $variables);
+        return $this->render('TDNCommentaireBundle:Blocs:flux.html.twig', $variables);
     	// return new Response("<div>".count($comms)."</div>");
     }
 

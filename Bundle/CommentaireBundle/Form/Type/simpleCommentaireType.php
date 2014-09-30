@@ -20,7 +20,7 @@ class simpleCommentaireType extends AbstractType {
         $builder->add('abonne', 'checkbox', 
             array(
                 'required' => false,
-                'label' => 'Suivre le fil des commentaires (pour les inscrits)',
+                'label' => 'Suivre le fil des commentaires',
                 'attr' => array('class' => 'inline-label')
             ));
         $builder->add('idThread', 'hidden', array());

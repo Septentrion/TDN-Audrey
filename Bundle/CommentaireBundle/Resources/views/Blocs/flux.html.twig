@@ -1,6 +1,6 @@
 <div id="avis">
 	<h2 class="titreFormContribution">Ajoute un commentaire</h2>
-<form id="formCommentaire" class="formUser formCommentaire" name="formCommentaire" action="{{ path('Commentaire_add') }}" class="table-content" method="post">
+<form id="formCommentaire" class="formUser formCommentaire" name="formCommentaire" action="{#{ path('Commentaire_add') }#}" class="table-content" method="post">
 
 	<figure class="avatar">
 		<img src="{{ avatar(app.user) }}" class="avatar-image" alt="Avatar {% if app.user.username is defined %}de {{ app.user.username }}{% endif %}" title="{% if app.user.username is defined %}{{ app.user.username }}{% else %}Commentateur anonyme{% endif %}" />
@@ -12,16 +12,20 @@
 		<div class="form-element">
 			{{ form_row(form.texteCommentaire, {'attr': {'class': 'texteContribution'}} )}}
 		</div>
-		<div class="form-element formCellFollow">
-			{{ form_row(form.abonne) }}
-		</div>
-		<div class="form-element formCellAntispam">
-			<label for="antispam" class="inline-label" required><strong>1 + 1 vaut ?</strong> (question anti-spam)</label>
-			<input type="text" name="antispam" id="antispam" size="8" required />
+		<div class="form-options">
+			<div class="form-element formCellFollow">
+				{{ form_row(form.abonne) }}
+			</div>
+			<div class="form-element formCellAntispam">
+				<label for="antispam" class="inline-label" required><strong>1 + 1 vaut ?</strong> (question anti-spam)</label>
+				<input type="text" name="antispam" id="antispam" size="4" required />
+			</div>
+			<div class="form-element">
+				<input type="submit" class="submitter" name="envoiCommentaire" value="Envoyer" />
+			</div>			
 		</div>
 	</div>
 	
-		<input type="submit" name="envoiCommentaire" value="Publier" style="float:right; margin-top:10px; margin-right:20px"/> 
 	
 </form>
 </div>
@@ -30,7 +34,10 @@
 <h2 style="margin-left:10px; color:#488C8C">{{ commentaires|length }} commentaire{% if commentaires|length > 1 %}s{% endif %}</h2>
 <div id="flux-commentaires">
 	{% if commentaires is not empty %}
+		{% set i = 0 %}
+		{% set commentStatut = 'commentaire-affiche' %}
 		{% for thread in commentaires %}
+		{% if i == 3 %}{% set commentStatut = 'commentaire-masque stalled' %}{% endif %}
 			<div class="commentaire-reponses" data-thread="{{ thread[0][0].idThread }}">
 			{% for parts in 0..1 %}
 				{% if thread[parts] is defined %}
@@ -50,7 +57,7 @@
 				{% endif %}
 
 				<!-- Bloc du commentaire -->
-				<div class="commentaire-wrapper {{ style }} {{ commentClass }}">
+				<div class="commentaire-wrapper {{ style }} {{ commentClass }} {{ commentStatut }}">
 					<figure class="avatar">
 						{% if auteur is not null %}<a href="/profil/{{auteur.idNana}}">{% endif %}
 						<img src="{{ avatar(auteur, 'sqr_') }}" class="avatar-image" alt="Avatar {{ alias }}" title="{{ alias }}" />
@@ -65,24 +72,23 @@
 								Anonyme
 								{% endif %}
 							</span>
-							{% if auteur is not null %}
-							<span class="statut-tdn">
-								{{ auteur.roles[0].name }}
-							</span>
-							{% endif %}
 							<span class="date-publication">
 								{{ c.datePublication|date('d/m/Y') }}
 							</span>
+							{% if auteur is not null %}
+							<span class="escarpins">{{ auteur.popularite|stiletto|raw }}</span>
+							{% endif %}
 						</p>
 						<p class="texte">
 							{{ c.texteCommentaire|raw }}
 						</p>
 						<p class="actions-commentaires">
-					        <a href="{{ path('commentaireBundle_voteFor', { 'id': c.idCommentaire }) }}" class="bottomTextLink">J'aime
-							<span style="color:#159993">
-							{% if c.like > 0 %}{{ c.like }} {% if c.like > 1 %}{% endif %}{% endif %}
-							</span>
-							<img src="{{asset('assets/images/theme/commentaire/jaime.png')}}" align="absmiddle" title="J’aime"/>
+					        <a href="{#{ path('commentaireBundle_voteFor', { 'id': c.idCommentaire }) }#}" class="bottomTextLink">
+								<span style="color:#159993">
+								{% if c.like > 0 %}{{ c.like }} {% if c.like > 1 %}{% endif %}{% endif %}
+								</span>
+								<img src="{{asset('assets/images/theme/commentaire/jaime.png')}}" align="absmiddle" title="J’aime"/>
+								<span class="icone-aime">J'aime</span>
 							</a>
 							{% if commentClass == 'isMain' %}
 							<a href="#" id="responseCommentaire" class="bottomTextLink boutonReponse"> Répondre à ce commentaire </a>
@@ -104,9 +110,13 @@
 				{% endif %}
 			{% endfor %}
 			</div>
+		{% set i = i + 1 %}
 		{% endfor %}
 	{% else %}
 		<p>Aucun commentaire pour ce contenu</p>
+	{% endif %}
+	{% if i > 2%}
+	<p class="pliCommentaire">Tous les commentaires</p>
 	{% endif %}
 </div>
 
@@ -132,6 +142,10 @@
 			var texte = $(formReponse);
 			$(texte).focus();
 			return false;
+		});
+		$('.pliCommentaire').click(function (e) {
+			$('.commentaire-masque').toggleClass('stalled unstall');
+			$(this).html('Masquer les commentaires');
 		});
 	});		
 </script>
