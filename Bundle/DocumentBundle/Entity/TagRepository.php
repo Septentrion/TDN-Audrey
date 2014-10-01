@@ -1,6 +1,6 @@
 <?php
 
-namespace TDN\DocumentBundle\Entity;
+namespace TDN\Bundle\DocumentBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -20,9 +20,9 @@ class TagRepository extends EntityRepository
 		$statement = $this->getEntityManager()->getConnection();
 
 		// $rsm = new ResultSetMapping;
-		// $rsm->addEntityResult('TDN\DocumentBundle\Entity\Document', 'd');
-		// $rsm->addJoinedEntityResult('TDN\DocumentBundle\Entity\Tag', 't', 'd', 'filTags');
-		// $rsm->addJoinedEntityResult('TDN\ImageBundle\Entity\Image', 'v', 'd', 'lnIllustration');
+		// $rsm->addEntityResult('TDN\Bundle\DocumentBundle\Entity\Document', 'd');
+		// $rsm->addJoinedEntityResult('TDN\Bundle\DocumentBundle\Entity\Tag', 't', 'd', 'filTags');
+		// $rsm->addJoinedEntityResult('TDN\Bundle\ImageBundle\Entity\Image', 'v', 'd', 'lnIllustration');
 		// $rsm->addFieldResult('d', 'id', 'idDocument');
 		// $rsm->addFieldResult('d', 'titre', 'titre');
 		// $rsm->addFieldResult('d', 'slug', 'slug');
@@ -70,8 +70,8 @@ class TagRepository extends EntityRepository
 	public function findNotIndexed () {
 
 		$rsm = new ResultSetMapping;
-		$rsm->addEntityResult('TDN\DocumentBundle\Entity\Document', 'd');
-		$rsm->addJoinedEntityResult('TDN\DocumentBundle\Entity\Tag', 't', 'd', 'filTags');
+		$rsm->addEntityResult('TDN\Bundle\DocumentBundle\Entity\Document', 'd');
+		$rsm->addJoinedEntityResult('TDN\Bundle\DocumentBundle\Entity\Tag', 't', 'd', 'filTags');
 		$rsm->addFieldResult('d', 'id', 'idDocument');
 		$rsm->addFieldResult('d', 'tags', 'tags');
 		$rsm->addMetaResult('d', 'typeDocument', 'typeDocument'); // discriminator column
