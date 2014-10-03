@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!-- Reprise v2 -->
+
+    <route id="VideoLegacy_video" pattern="/video/{slug},{id}.html">
+        <default key="_controller">TDNVideoBundle:Legacy:video</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="VideoLegacy_videoTxt" pattern="/video.txt/{slug},{id}.html">
+        <default key="_controller">TDNVideoBundle:Legacy:video</default>
+        <requirement key="id">\d+</requirement>
+       <!--requirement key="_format">html</requirement-->
+     </route>
+
+    <route id="VideoLegacy_videoTools" pattern="/video/tools/{slug},{id}.html">
+        <default key="_controller">TDNVideoBundle:Legacy:video</default>
+        <requirement key="id">\d+</requirement>
+       <!--requirement key="_format">html</requirement-->
+     </route>
+
+    <route id="VideoLegacy_videoRubriqueToolsIndex" pattern="{rubrique}/video/tools/index.php">
+        <default key="_controller">TDNVideoBundle:Legacy:videoRubriqueIndex</default>
+    </route>
+
+    <route id="VideoLegacy_videoRubriqueIndex" pattern="{rubrique}/video/index.php">
+        <default key="_controller">TDNVideoBundle:Legacy:videoRubriqueIndex</default>
+    </route>
+
+    <route id="VideoLegacy_videoRubriqueIndex_page" pattern="/{rubrique}-videos-{page}.html">
+        <default key="_controller">TDNVideoBundle:Legacy:videoRubriqueIndex</default>
+        <requirement key="slug">(alaune|deco|beaute|recettes|bienetre|hightech|sexo|mode)</requirement>
+        <requirement key="id">\d</requirement>
+    </route>
+
+    <route id="VideoLegacy_videoLong" pattern="/{rubrique}/video/tools/{slug},{id}.html">
+        <default key="_controller">TDNVideoBundle:Legacy:video</default>
+        <requirement key="rubrique">alaune|deco|beaute|recettes|bienetre|hightech|sexo|mode</requirement>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="VideoLegacy_videoRubrique" pattern="/{rubrique}/video/{slug},{id}.html">
+        <default key="_controller">TDNVideoBundle:Legacy:video</default>
+        <requirement key="rubrique">alaune|deco|beaute|recettes|bienetre|hightech|sexo|mode</requirement>
+        <!--requirement key="slug">\w+</requirement-->
+        <requirement key="id">\d+</requirement>
+    </route>
+
+ 	<!-- Routes publiques -->
+
+    <route id="Video_page" pattern="/{theme}/{rubrique}/video/{id}/{slug}">
+        <default key="_controller">TDNVideoBundle:Public:video</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="slug">[0-9|a-z|-]+</requirement>
+      </route>
+
+    <route id="Video_sommaire" pattern="/videos">
+        <default key="_controller">TDNVideoBundle:Public:videoSommaire</default>
+    </route>
+
+    <route id="Video_sommaireRubrique" pattern="/{rubrique}/videos">
+        <default key="_controller">TDNVideoBundle:Public:videoSommaire</default>
+    </route>
+
+    <route id="Video_proposer" pattern="/videos/proposer">
+        <default key="_controller">TDNVideoBundle:Public:videoProposer</default>
+    </route>
+
+ 	<!-- Routes d'administration -->
+
+    <route id="Video_index" pattern="/admin/video/index">
+        <default key="_controller">TDNVideoBundle:Admin:index</default>
+    </route>
+
+    <route id="Video_enAttente" pattern="/admin/video/en-attente">
+        <default key="_controller">TDNVideoBundle:Admin:enAttente</default>
+    </route>
+
+    <route id="Video_ajouter" pattern="/admin/video/ajouter">
+        <default key="_controller">TDNVideoBundle:Admin:ajouter</default>
+    </route>
+
+    <route id="Video_inspecter" pattern="/admin/video/inspecter/{id}">
+        <default key="_controller">TDNVideoBundle:Admin:inspecter</default>
+    </route>
+
+    <route id="Video_publier" pattern="/admin/video/publier/{id}">
+        <default key="_controller">TDNVideoBundle:Admin:publier</default>
+    </route>
+
+    <route id="Video_supprimer" pattern="/admin/video/supprimer/{id}">
+        <default key="_controller">TDNVideoBundle:Admin:supprimer</default>
+    </route>
+
+    <!-- Migration -->
+
+    <route id="Video_migration" pattern="/migration/videos/{fichier}">
+        <default key="_controller">TDNVideoBundle:Migration:migration</default>
+    </route>
+
+    <route id="Video_updateTags" pattern="/migration/videos/update-tags/{fichier}">
+        <default key="_controller">TDNVideoBundle:Migration:updateTags</default>
+    </route>
+
+    <!--route id="VideoLegacy_videoVoid" pattern="/video/">
+        <default key="_controller">TDNVideoBundle:Legacy:videoSommaire</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="VideoLegacy_videoIndex" pattern="/video/index.html">
+        <default key="_controller">TDNVideoBundle:Legacy:videoSommaire</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="VideoLegacy_videoForm" pattern="/video/form">
+        <default key="_controller">TDNVideoBundle:Legacy:videoProposer</default>
+        <requirement key="id">\d+</requirement>
+    </route-->
+
+</routes>
