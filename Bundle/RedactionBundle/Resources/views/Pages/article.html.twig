@@ -25,7 +25,7 @@
 </header>
 
 <!-- Bloc pour l'affichage du contenu de l'article -->
-<div id="corps" class="corps">
+<div id="corps" class="corps images-centrees">
    <!--h1 class="titre-document titre-{{ rubriquePrincipale(rubriquePrincipale) }}">{#{TDNDocument.titre}#}</h1-->
     {% if TDNDocument.lnIllustration is not null%}
       <img class="vignette-illustration" src="{{ illustration(TDNDocument, 'SQUARE') }}" alt="{{ TDNDocument.lnIllustration.alt }}" />
