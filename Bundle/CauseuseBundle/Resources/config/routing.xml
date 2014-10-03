@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+   <!-- Routes d'administration -->
+
+    <route id="Causeuse_index" pattern="/admin/question-de-nanas/index">
+        <default key="_controller">TDNCauseuseBundle:Admin:index</default>
+    </route>
+
+    <route id="Causeuse_pending" pattern="/admin/question-de-nanas/attente">
+        <default key="_controller">TDNCauseuseBundle:Admin:pending</default>
+    </route>
+
+    <route id="Causeuse_editer" pattern="/admin/question-de-nanas/modifier/{id}">
+        <default key="_controller">TDNCauseuseBundle:Admin:modifier</default>
+    </route>
+
+    <route id="Causeuse_publier" pattern="/admin/question-de-nanas/publier/{id}">
+        <default key="_controller">TDNCauseuseBundle:Admin:publier</default>
+    </route>
+
+    <route id="Causeuse_transferer" pattern="/admin/question-de-nanas/transferer/{id}">
+        <default key="_controller">TDNCauseuseBundle:Admin:transferer</default>
+    </route>
+
+    <route id="Causeuse_repondre" pattern="/admin/question-de-nanas/repondre/{id}">
+        <default key="_controller">TDNCauseuseBundle:Admin:repondre</default>
+    </route>
+
+    <route id="Causeuse_supprimer" pattern="/admin/question-de-nanas/supprimer/{id}">
+        <default key="_controller">TDNCauseuseBundle:Admin:supprimer</default>
+    </route>
+
+    <route id="Causeuse_reponseSupprimer" pattern="/admin/question-de-nanas/reponse/supprimer/{id}">
+        <default key="_controller">TDNCauseuseBundle:ReponseAdmin:reponseSupprimer</default>
+    </route>
+
+    <!-- Routes publiques -->
+
+    <route id="Causeuse_sommaire" pattern="/questions-de-nanas">
+        <default key="_controller">TDNCauseuseBundle:Public:sommaire</default>
+    </route>
+
+    <route id="Causeuse_page" pattern="/{theme}/{rubrique}/question-de-nanas/{id}/{slug}">
+        <default key="_controller">TDNCauseuseBundle:Public:question</default>
+    </route>
+
+    <route id="Causeuse_creer" pattern="/demande/question-de-nanas">
+        <default key="_controller">TDNCauseuseBundle:Public:questionDemande</default>
+    </route>
+
+    <route id="Causeuse_postReponse" pattern="/question-de-nanas/repondre">
+        <default key="_controller">TDNCauseuseBundle:Public:reponsePoster</default>
+    </route>
+
+    <route id="Causeuse_voteReponse" pattern="/question-de-nanas/voter/{id}">
+        <default key="_controller">TDNCauseuseBundle:Public:reponseVoter</default>
+    </route>
+
+    <route id="Causeuse_accepteReponse" pattern="/question-de-nanas/accepter/{idQuestion},{idReponse}">
+        <default key="_controller">TDNCauseuseBundle:Public:reponseAccepter</default>
+    </route>
+
+    <route id="Causeuse_recherche" pattern="/rechercher/question-de-nanas">
+        <default key="_controller">TDNCauseuseBundle:Public:recherche</default>
+    </route>
+
+    <!-- iOS -->
+
+    <route id="Causeuse_IOSCreer" pattern="/ios/question-de-nanas/demande">
+        <default key="_controller">TDNCauseuseBundle:IOS:questionDemande</default>
+    </route>
+
+    <route id="Causeuse_IOSReponse" pattern="/ios/question-de-nanas/repondre">
+        <default key="_controller">TDNCauseuseBundle:IOS:reponsePoster</default>
+    </route>
+
+    <route id="Causeuse_IOSVoteReponse" pattern="/ios/question-de-nanas/voter/{id}">
+        <default key="_controller">TDNCauseuseBundle:IOS:reponseVoter</default>
+    </route>
+
+    <route id="Causeuse_IOSAccepteReponse" pattern="/ios/question-de-nanas/accepter/{idQuestion},{idReponse}">
+        <default key="_controller">TDNCauseuseBundle:IOS:reponseAccepter</default>
+    </route>
+
+
+</routes>

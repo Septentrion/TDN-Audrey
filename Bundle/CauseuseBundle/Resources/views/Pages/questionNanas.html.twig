@@ -1,0 +1,221 @@
+{% extends 'TDNCoreBundle:Topoi:TDNDocument.html.twig' %}
+
+{% block corpsContenu %}
+<!-- Bloc pour l'affichage des métadonnées de l'article -->
+<header id="metadata" class="metadata">
+   <p class="auteur">
+     <span class="standard-etiquette">Publié </span> 
+     <span class="standardEtiquette">le </span><span class="date-publication">{{ TDNDocument.datePublication | date('d/m/Y') }}</span>
+   </p>
+   <p>
+    <span class="standard-etiquette">Rubrique :</span>
+    {% if TDNDocument.lnThematique is not null %}
+      <a href="{#{path('Core_sommaire', {'slug': TDNDocument.lnThematique.slug})}#}">
+        <span class="rubrique-{{ rubriquePrincipale(TDNDocument.lnThematique) }}">{{ TDNDocument.lnThematique.titre }}
+      </a>
+    {% endif %}
+    {% for r in TDNDocument.rubriques %}
+      <a href="{#{path('Core_sommaire', {'slug': r.slug})}#}">
+        <span class="rubrique-{{ rubriquePrincipale(r) }}">{{ r.titre }}
+      </a>
+    {% endfor %}
+    </span>
+   </p>
+</header>
+
+<!-- Bloc pour l'affichage du contenu de la question -->
+<div id="corps" class="corps-question">
+  <!-- <h1 class="titre-document titre-{{ rubriquePrincipale(TDNDocument.rubriques[0]) }}">{{TDNDocument.titre}}</h1> -->
+  <div id="enveloppe-question">
+    <div class="colonne">
+        <a href="{#{ path('NanaBundle_profil', {'id': TDNDocument.idNana}) }#}">
+          <img src="{{ avatar(TDNDocument.lnAuteur) }}" alt="{{ TDNDocument.lnAuteur.username }}" />
+        </a>
+      <div class="statistiques">
+        <span class="backed-bulle cardinal">{{ TDNDocument.filReponses|length }}</span>
+        <span class="backed-pouce cardinal">{{ totalVotes }}</span>
+      </div>
+    </div>
+    <div class="colonne">
+      <!-- Données personnelles de l'auteur de la question -->
+      <p class="signature-personnelle moyenne-signature">
+        <span class="auteur">
+          <a href="/profil/{{TDNDocument.lnAuteur.idNana}}">{{ TDNDocument.lnAuteur.username }}</a>
+        </span>
+        <span class="age">
+          {{ ageAuteur }}
+        </span>
+        <span class="escarpins">{{ TDNDocument.lnAuteur.popularite|stiletto|raw }}</span>
+      </p>
+      <!-- Texte de la question -->
+      <div class="question">{{TDNDocument.question|raw}}</div>
+      <!-- Image fournie par l'auteur le cas échéant -->
+      {% if TDNDocument.lnIllustration is not null %}
+      {% set Y = TDNDocument.lnIllustration.datePublication|date('Y') %}
+      {% set m = TDNDocument.lnIllustration.datePublication|date('m') %}
+      {% set source = "/uploads/documents/public/"~Y~"/"~m~"/n_/"~TDNDocument.lnAuteur.idNana~"/"~TDNDocument.lnIllustration.fichier %}
+      <a class="popin" href="{{ source }}">
+        <img class="vignette-causeuse" src="{{ source }}" alt="{{ TDNDocument.lnIllustration.alt }}" />
+      </a>
+      {% endif %} 
+    </div>
+  </div>
+
+  <!-- Formulaire pour la réponse -->
+  <div id="avis" class="enveloppe-avis">
+    <a href="{#{ path('Core_contact', {'type': 'ABUS'}) }#}" class="abuse-warning">Signaler un abus à la rédaction</a>
+    <h2 class="titre-avis">Ose, donne ton avis !</h2>
+    {#% if is_granted('ROLE_USER') %#}
+    <form name="form-reponse-de-nana" id="form-reponse-de-nana" class="form-colonnes form-reponse-de-nana constraintFile" method="post" action="{#{ path('CauseuseBundle_postReponse')}#}" {{ form_enctype(formReponse) }} class="table-content">
+      <div class="colonne">
+        <figure class="avatar colonne cadre-bulle-verte">
+          <img src="{#{ avatar(app.user) }#}" alt="Avatar de {#{ app.user.username }#}" />
+        </figure>        
+      </div>
+      <div class="colonne">
+        <fieldset class="no-border colonne">
+          <input type="hidden" name='idQuestion' id="idQuestion" value="{{ TDNDocument.idDocument }}" />
+          {{ form_widget(formReponse.reponse, {'attr': {'class': 'contribution'}}) }}
+          {{ form_row(formReponse.lnIllustration, {'attr': {'class': 'uploader fichier-contrainte'}}) }}
+          {{ form_row(formReponse._token) }}
+          <div class="fer-a-droite">
+            <input type="submit" name="envoyer" id="envoyer" value="Publie ta réponse"  class="submitter" /> 
+          </div>
+        </fieldset>      
+      </div>
+
+    </form>
+    {#% else %#}
+    <!-- <p>Connecte-toi ou inscris-toi pour échanger sur TDN</p> -->
+    {#% endif %#}   
+  </div>
+
+  <!-- Les réponses -->
+  {% if nbReponses == 0 %}
+  <p class="warning">Aucune réponse à cette question pour le moment</p>
+  {% else %}
+  {% set a = 0 %}
+  {% if TDNDocument.reponseAcceptee %}
+  {% set a = 1%}
+  {% for rep in TDNDocument.filReponses%}
+  <!-- Une réponse a-t-elle été préférée par l'auteur(e) de la question ? -->
+  {% if TDNDocument.reponseAcceptee == rep.idDocument %}
+  <div class="enveloppe-reponse">
+    <h2>La réponse préférée</h2>
+    <div>
+      <div class="colonne">
+        <a href="{#{ path('NanaBundle_profil', {'id': rep.lnAuteur.idNana}) }#}">
+          <img src="{{ avatar(rep.lnAuteur) }}" />
+        </a>
+      </div>
+
+      <div class="colonne">
+        {% set classePopularite = 0 %}
+        <p class="signature-personnelle petite-signature">
+          <span class="auteur">{{ rep.lnAuteur.username }}</span>
+          <span class="date-publication">{{ rep.datePublication | date('d/m/y H:i') }}</span>
+          <span class="escarpins">{{ rep.lnAuteur.popularite|stiletto|raw }}</span>
+        </p>
+        <div class="texte-reponse">
+          {% if rep.lnIllustration is not null %}
+          <a href="{{ illustration(rep, NULL, rep.lnAuteur.idNana) }}" class='popin image-jointe'>
+            <img src="{{ illustration(rep, 'SQUARE', rep.lnAuteur.idNana) }}" style="width:80px" alt="Avatar de {{ rep.lnAuteur.idNana }}" title="{{ rep.lnAuteur.idNana }}" />
+          </a>
+          {% endif %}
+          {{rep.reponse|raw}}
+        </div>
+    </div>
+
+    <ul class="back-actions">
+      <!-- Suppression de la réponse par un administrateur -->
+      {% if is_granted('ROLE_ADMIN') %}
+      <li class="lien-suppression">
+        <a class="actionValidation" href="{#{ path('Causeuse_reponseSupprimer', {'id': rep.idDocument}) }#}">Supprimer</a>
+      </li>
+      {% endif %}
+      <!-- Choix de la meilleure réponse par l'auteur(e) de la question -->
+      {% if is_granted('ROLE_USER') and (TDNDocument.reponseAcceptee is null) and (app.user.idNana == TDNDocument.lnAuteur.idNana) %}
+      <li class="meilleure-reponse">
+        <a class="lien-mince" href="{#{ path('CauseuseBundle_accepteReponse', {'idQuestion' : TDNDocument.idDocument, 'idReponse' : rep.idDocument}) }#}">C'est ma réponse préférée</a>
+      </li>
+      {% endif %}
+      <!-- Voter pour cette réponse -->
+      <li class="approuve">
+        <span class="backed-pouce votes">{{ rep.likes }}</span>
+        <a href="{#{ path('CauseuseBundle_voteReponse', {'id' : rep.idDocument}) }#}">Je vote pour&nbsp;!</a>
+      </li>     
+    </ul>
+  </div>      
+ {% endif %}
+ {% endfor %}
+ {% endif %}
+
+ <h2 style="margin-left:10px; color:#488C8C">Réponses de nanas ({{ nbReponses - a }})</h2>
+ {% for rep in TDNDocument.filReponses%}
+ <!-- Affichage des réponses non-préférées -->
+ {% if TDNDocument.reponseAcceptee != rep.idDocument %}
+ <div id="enveloppe-reponse">
+    <div>
+      <div class="colonne">
+        <a href="{#{ path('NanaBundle_profil', {'id': rep.lnAuteur.idNana}) }#}">
+          <img src="{{ avatar(rep.lnAuteur) }}" />
+        </a>
+      </div>
+
+      <div class="colonne">
+        {% set classePopularite = 0 %}
+        <p class="signature-personnelle petite-signature">
+          <span class="auteur">{{ rep.lnAuteur.username }}</span>
+          <span class="date-publication">{{ rep.datePublication | date('d/m/y H:i') }}</span>
+          <span class="escarpins">{{ rep.lnAuteur.popularite|stiletto|raw }}</span>
+        </p>
+        <div class="texte-reponse">
+          {% if rep.lnIllustration is not null %}
+          <a href="{{ illustration(rep, NULL, rep.lnAuteur.idNana) }}" class='popin image-jointe'>
+            <img src="{{ illustration(rep, 'SQUARE', rep.lnAuteur.idNana) }}" style="width:80px" alt="Avatar de {{ rep.lnAuteur.idNana }}" title="{{ rep.lnAuteur.idNana }}" />
+          </a>
+          {% endif %}
+          {{rep.reponse|raw}}
+        </div>
+    </div>
+
+    <ul class="back-actions">
+      <!-- Suppression de la réponse par un administrateur -->
+      {% if is_granted('ROLE_ADMIN') %}
+      <li class="lien-suppression">
+        <a class="actionValidation" href="{#{ path('Causeuse_reponseSupprimer', {'id': rep.idDocument}) }#}">Supprimer</a>
+      </li>
+      {% endif %}
+      <!-- Choix de la meilleure réponse par l'auteur(e) de la question -->
+      {% if is_granted('ROLE_USER') and (TDNDocument.reponseAcceptee is null) and (app.user.idNana == TDNDocument.lnAuteur.idNana) %}
+      <li class="meilleure-reponse">
+        <a class="lien-mince" href="{#{ path('CauseuseBundle_accepteReponse', {'idQuestion' : TDNDocument.idDocument, 'idReponse' : rep.idDocument}) }#}">C'est ma réponse préférée</a>
+      </li>
+      {% endif %}
+      <!-- Voter pour cette réponse -->
+      <li class="approuve">
+        <span class="backed-pouce votes">{{ rep.likes }}</span>
+        <a href="{#{ path('CauseuseBundle_voteReponse', {'id' : rep.idDocument}) }#}">Je vote pour&nbsp;!</a>
+      </li>     
+    </ul>
+  </div>
+  {% endif %}
+  {% endfor %}
+{% endif %}
+
+</div>
+
+ <footer class="tags">
+ {% if TDNDocument.filTags is not empty %}
+   <ul class="tag-bag">
+   {% for tag in TDNDocument.filTags %}
+    <li class="tag">
+      <a href="/recherche/{{ tag.expression }}">{{ tag.expression }}</a>
+    </li>
+   {% endfor %}
+   </ul>
+ {% else %}
+ {{TDNDocument.tags|tags|raw}}
+ {% endif %}
+ </footer>
+{% endblock %}
