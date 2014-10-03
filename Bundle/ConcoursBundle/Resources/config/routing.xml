@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!-- Routes publiques -->
+
+    <route id="Concours_page" pattern="{theme}/{rubrique}/concours/{id}/{slug}">
+        <default key="_controller">TDNConcoursBundle:Public:concours</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="slug">[0-9|a-z|-]+</requirement>
+    </route>
+
+    <route id="Concours_sommaire" pattern="/concours/sommaire">
+        <default key="_controller">TDNConcoursBundle:Public:concoursSommaire</default>
+    </route>
+
+    <route id="Concours_participer" pattern="/concours/participer/{id}">
+        <default key="_controller">TDNConcoursBundle:Public:concoursParticiper</default>
+    </route>
+
+    <route id="Concours_voter" pattern="/concours/voter/{participant}">
+        <default key="_controller">TDNConcoursBundle:Public:concoursVoter</default>
+    </route>
+
+    <!-- Routes administratives -->
+
+    <route id="ConcoursBundle_index" pattern="/admin/concours/index">
+        <default key="_controller">TDNConcoursBundle:Admin:concoursIndex</default>
+    </route>
+
+    <route id="ConcoursBundle_add" pattern="/admin/concours/add">
+        <default key="_controller">TDNConcoursBundle:Admin:Add</default>
+    </route>
+
+    <route id="Concours_reviser" pattern="/admin/concours/reviser/{id}">
+        <default key="_controller">TDNConcoursBundle:Admin:reviser</default>
+    </route>
+    
+    <route id="Concours_tirageGagnants" pattern="/admin/concours/tirer/{id}">
+        <default key="_controller">TDNConcoursBundle:Admin:tirageGagnants</default>
+    </route>
+
+    <route id="Concours_notificationGagnants" pattern="/admin/concours/notifier/{id}">
+        <default key="_controller">TDNConcoursBundle:Admin:notificationGagnants</default>
+    </route>
+
+    <route id="ConcoursBundle_publier" pattern="/admin/concours/publier">
+        <default key="_controller">TDNConcoursBundle:Admin:concoursPublication</default>
+    </route>
+
+    <!-- Migration -->
+
+    <route id="Concours_migration" pattern="/migration/concours/{fichier}">
+        <default key="_controller">TDNConcoursBundle:Migration:migration</default>
+    </route>
+    
+    <!-- cron -->
+
+    <route id="Concours_cronTirage" pattern="/cron/concours/tirages-a-effectuer">
+        <default key="_controller">TDNConcoursBundle:Cron:tirages</default>
+    </route>
+    
+</routes>

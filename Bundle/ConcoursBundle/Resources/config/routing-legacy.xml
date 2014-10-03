@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!-- Reprise v2 -->
+
+    <route id="Concours_sommaireLegacy_1" pattern="/concours/tools/index.{_format}">
+        <default key="_controller">TDNConcoursBundle:Legacy:sommaireConcours</default>
+        <requirement key="_format">html|php</requirement>
+    </route>
+
+    <route id="Concours_sommaireLegacy_2" pattern="/tools/concours/index.{_format}">
+        <default key="_controller">TDNConcoursBundle:Legacy:sommaireConcours</default>
+        <requirement key="_format">html|php</requirement>
+    </route>
+
+    <route id="Concours_legacy" pattern="/concours/tools/{slug},{id}.{_format}">
+        <default key="_controller">TDNConcoursBundle:Legacy:sommaireConcours</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="_Concours_pageMarylinLegacy" pattern="/concours/{id}/{slug}">
+        <default key="_controller">TDNConcoursBundle:Public:concours</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="slug">[0-9|a-z|-]+</requirement>
+    </route>
+
+</routes>
