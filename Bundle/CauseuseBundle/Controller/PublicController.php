@@ -9,7 +9,7 @@ use TDN\Bundle\CauseuseBundle\Form\Type\CauseuseSoumissionType;
 use TDN\Bundle\CauseuseBundle\Entity\Reponse;
 use TDN\Bundle\CauseuseBundle\Form\Type\CauseuseReponseType;
 
-use TDN\Bundle\DocumentBundle\Controller\PublicController as DocumentController;
+use TDN\Bundle\DocumentBundle\Controller\PublicController as MainPublicController;
 use TDN\Bundle\DocumentBundle\Entity\DocumentRubrique;
 use TDN\Bundle\DocumentBundle\Form\Model\Thematique;
 use TDN\Bundle\DocumentBundle\Form\Type\ThematiquePrincipaleType;
@@ -19,7 +19,7 @@ use TDN\Bundle\ImageBundle\Entity\Image;
 use TDN\Bundle\CoreBundle\Entity\Journal;
 
 
-class PublicController extends DocumentController {
+class PublicController extends MainPublicController {
 	
 	public function questionAction ($theme, $rubrique, $slug, $id) {
 
@@ -101,57 +101,26 @@ class PublicController extends DocumentController {
 
 	public function sommaireAction ($rubrique = NULL)
 	{
-		$longueurPage = 40;
-		$session = $this->get('session');
-		$request = $this->get('request');
-	    $variables['rubrique'] = 'tdn';
+        $request = $this->get('request');
 
-		if (is_null($rubrique)) {
-			$rubrique = $request->query->get('rubrique');
-		}
-		$page = $request->query->get('page');
+		$variables = $this->makeSommaire($rubrique, 'TDN\Bundle\CauseuseBundle\Entity\Question', 'QUESTION_PUBLIEE');
 
-		if (!is_null($rubrique)) {
-			$session->set('tri-questions', $rubrique);
+		$channel = $request->query->get('channel');
+		if ($channel === 'ajax') {
+			$response = new Response($this->renderView('TDNConseilExpertBundle:Partiels:conseilsListe.html.twig', $variables));
+	        $response->headers->set('Content-Type', 'text/html');
+	        $response->headers->set('Accept-Charset', 'utf-8');
+	        return $response;
+
 		} else {
-			if (!empty($page)) {
-				$rubrique = $session->get('tri-questions');
-			} else {
-				$rubrique = $session->remove('tri-questions');
+			// Affichage de la page
+	        $variables['titreSommaire'] = 'Conseils d’experts';
+			$variables['routeSommaire'] = 'ConseilExpert_sommaire';
+			for ($i = 0 ; $i < 2; $i++) if (!empty($variables['listeContenus'])) {
+				$variables['featuredContenus'][] = array_shift($variables['listeContenus']);
 			}
-			
+			return $this->render('TDNCauseuseBundle:Pages:questionNanasSommaire.html.twig', $variables);
 		}
-
-		$rubrique = !(is_null($rubrique)) ? $rubrique : 'tdn';
-		$page = ((int)$page === 0) ? 0 : (int)$page - 1;
-
-	    $em = $this->get('doctrine.orm.entity_manager');      
-		$rep = $em->getRepository('TDN\Bundle\CauseuseBundle\Entity\Question');
-
-	    if ($rubrique == 'tdn' || empty($rubrique)) {
-	    	$variables['listeQuestions'] = $rep->findBy(array('statut' => 'QUESTION_PUBLIEE'), array('idDocument' => 'DESC'), $longueurPage, 1+$page*($longueurPage-1));
-		    $variables['totalQuestions'] = $rep->count();
-	    } else {
-	    	$variables['listeQuestions'] = $rep->findByRubrique($rubrique, $longueurPage, $page);
-		    $variables['totalQuestions'] = $rep->count($rubrique);
-	    }
-
-		// Récupération de la question la plus récente
-		// $variables['questionsRecentes'] = $repCauseuse->findMostRecent(100);
-		// $variables['totalQuestions'] = count($variables['questionsRecentes']);
-
-		$rep = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\DocumentRubrique');
-		$variables['rubriques'] = $rep->findBy(array('parent' => NULL));
-		$_objRubrique = $rep->findOneBySlug($rubrique);
-
-		$largeurSegment = 4;
-		$variables['rubrique'] = $rubrique;
-		$variables['nomRubrique'] = $rubrique == 'tdn' ? 'Toutes' : $_objRubrique->getTitre();
-
-		$variables['page'] = $page + 1;
-		$variables['derniere'] = ceil($variables['totalQuestions'][1] / $longueurPage);
-
-        return $this->render('CauseuseBundle:Page:questionsNanasSommaire.html.twig', $variables);
 	}
 
 

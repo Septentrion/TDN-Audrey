@@ -1,0 +1,79 @@
+{% extends 'TDNCoreBundle:Topoi:TDNSommaire.html.twig' %}
+
+{% block title "Sommaire des questions de nanas" %}
+
+{% block incipitSommaire %}
+<span class="hot-number">{{ totalContenus }}</span> <strong>questions</strong> / Rubrique : {{ nomRubrique }}
+{% endblock %}
+
+{% block sommaireContenu %}
+<div id="sommaire" class="sommaire liste-questions">
+  <div class="featured">
+  {% for featured in featuredContenus %}
+    {% set qlikes = 0 %}
+    {% for r in featured.filReponses %}
+    {% set qlikes = qlikes + r.likes %}
+    {% endfor %}
+    <article class="carte verticale par-questions question-de-nana">
+      <div class="stats qr-{{ rubriquePrincipale(featured.lnThematique) }}">
+        <span class="n-reponses">{{ featured.filReponses|length }}</span>
+        <span class="n-votes">{{ qlikes }}</span>
+      </div>
+      <div class="presentation">
+        <p class="auteur">de {{ featured.lnAuteur.username }}</p>
+        <p class="publication">{{featured.datePublication|date('d/m/Y')}}</p>
+        <p class="titre">
+          <a href="{{ path('Causeuse_page', {'theme': featured.lnThematique.slug, 'rubrique': featured.lnThematique.slug, 'slug': featured.slug, 'id':featured.idDocument}) }}">
+          {{ featured.titre[0:240] }}
+          </a>
+        </p>
+      </div>
+    </article>
+  {% endfor %}
+  </div>
+
+  {% for contenu in listeContenus %}
+    {% set qlikes = 0 %}
+    {% for r in contenu.filReponses %}
+    {% set qlikes = qlikes + r.likes %}
+    {% endfor %}
+    <article class="carte verticale par-articles question-de-nana">
+      <div class="stats qr-{{ rubriquePrincipale(contenu.lnThematique) }}">
+        <span class="n-reponses">{{ contenu.filReponses|length }}</span>
+        <span class="n-votes">{{ qlikes }}</span>
+      </div>
+      <div class="presentation">
+        <p class="titre">
+          <a href="{{ path('Causeuse_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+          {{ contenu.titre[0:240] }}
+          </a>
+        </p>
+        <p class="expert">de {{ contenu.lnAuteur.username }}, {{contenu.datePublication|laps }}</p>
+      </div>
+    </article>
+  {% endfor %}    
+</div>  
+<script type="text/javascript">
+  $(document).ready(function () {
+    var page = 1;
+    $('#tri-rubrique #critere-tri').on('change', function () {
+      $('#tri-rubrique').submit();
+    });
+    $('.bouton-suite').on('click', function () {
+      page += 1;
+      $.ajax({
+        url: '{{ path(routeSommaire) }}',
+        type: 'GET',
+        data: {channel: 'ajax', page: page},
+        dataType: 'html'
+      })
+      .success(function (html) {
+        $("#sommaire").append(html);
+      })
+      .fail(function( jqXHR, textStatus ) {
+        alert( "Request failed: " + textStatus )
+      });
+    })
+  })
+</script>
+{% endblock %}
