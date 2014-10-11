@@ -4,12 +4,13 @@ namespace TDN\Bundle\RedactionBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use TDN\Bundle\DocumentBundle\Controller\PublicController as MainPublicController;
 use TDN\Bundle\DocumentBundle\Entity\DocumentRubrique;
 use TDN\Bundle\CommentaireBundle\Entity\Commentaire;
 use TDN\Bundle\RedactionBundle\Entity\Article;
 use TDN\Bundle\NanaBundle\Entity\Nana;
 
-class PublicController extends Controller {
+class PublicController extends MainPublicController {
     
 	protected function cutText($completeArticle) {
 		
@@ -85,4 +86,27 @@ class PublicController extends Controller {
 			return $this->render('TDNRedactionBundle:Pages:article.html.twig', $variables);			
 		}
     }
+
+	public function sommaireAction ($theme = '', $rubrique = '') {
+
+        $request = $this->get('request');
+
+		$variables = $this->makeSommaire($rubrique, 'TDN\Bundle\RedactionBundle\Entity\Article', 'ARTICLE_PUBLIE');
+
+		$channel = $request->query->get('channel');
+		if ($channel === 'ajax') {
+			$response = new Response($this->renderView('TDNRedactionBundle:Partiels:articlesListe.html.twig', $variables));
+	        $response->headers->set('Content-Type', 'text/html');
+	        $response->headers->set('Accept-Charset', 'utf-8');
+	        return $response;
+
+		} else {
+			// Affichage de la page
+	        $variables['titreSommaire'] = 'Articles de la rédaction';
+			$variables['routeSommaire'] = 'Article_sommaire';
+			return $this->render('TDNRedactionBundle:Pages:articleSommaire.html.twig', $variables);
+		}
+	}
+
+
 }

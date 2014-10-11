@@ -9,8 +9,13 @@
         <requirement key="id">\d+</requirement>
     </route>
 
-    <route id="Article_sommaire" pattern="/{theme}/{rubrique}/articles">
-        <default key="_controller">TDNRedactionBundle:Public:sommaireArticle</default>
+    <route id="Article_sommaire" pattern="/articles">
+        <default key="_controller">TDNRedactionBundle:Public:sommaire</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="Article_sommaireRubrique" pattern="/{theme}/{rubrique}/articles">
+        <default key="_controller">TDNRedactionBundle:Public:sommaire</default>
         <requirement key="id">\d+</requirement>
     </route>
 
