@@ -34,7 +34,11 @@
       </section>
     </div>
     <footer class="suite-contenus row">
-      {% if listeContenus|length >= 42 %}
+      {% set total = listeContenus|length %}
+      {% if featuredContenus is defined %}
+      {% set total = total + featuredContenus|length %}
+      {% endif %}
+      {% if total >= 42 %}
       <span class="bouton-suite">Voir +</span>
       {% endif %}
     </footer>
