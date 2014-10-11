@@ -211,7 +211,6 @@ class PublicController extends MainPublicController {
 		}
 	}
 
-
 	public function filPersoAction ($id) {
 
 		$variables['rubrique'] = 'tdn';
