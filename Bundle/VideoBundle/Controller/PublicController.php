@@ -138,47 +138,9 @@ class PublicController extends DocumentController {
 
 	public function videoSommaireAction ($rubrique = '') {
 
-		$longueurPage = 42;
-		$session = $this->get('session');
-		$request = $this->get('request');
-		$page = $request->query->get('page');
-		$currentRubrique = $session->get('tri-video');
-		if (empty($rubrique)) {
-			$rubrique = $request->query->get('rubrique');
-		}
+        $request = $this->get('request');
 
-		if (!empty($rubrique)) {
-			$session->set('tri-video', $rubrique);
-		} else {
-			if (empty($page)) {
-				$session->remove('tri-video');
-			}
-			$rubrique = (!empty($currentRubrique)) ? $currentRubrique : 'tdn';
-		}
-		$page = ((int)$page === 0) ? 0 : (int)$page - 1;
-
-	    // Récupération de l'entity manager qui va nous permettre de gérer les entités.
-	    $em = $this->get('doctrine.orm.entity_manager');      
-		$rep = $em->getRepository('TDN\Bundle\VideoBundle\Entity\Video');
-	    // $listeVideos = $rep->findWithin($longueurPage);
-	    if ($rubrique == 'tdn' || empty($rubrique)) {
-	    	$variables['listeContenus'] = $rep->findBy(array('statut' => 'VIDEO_PUBLIEE'), array('idDocument' => 'DESC'), $longueurPage, 1+$page*($longueurPage-1));
-		    $variables['totalVideos'] = $rep->count();
-	    } else {
-	    	$variables['listeContenus'] = $rep->findByRubrique($rubrique, $longueurPage, $page);
-		    $variables['totalVideos'] = $rep->count($rubrique);
-	    }
-
-		$rep = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\DocumentRubrique');
-		$variables['rubriques'] = $rep->findBy(array('parent' => NULL));
-		$_objRubrique = $rep->findOneBySlug($rubrique);
-		
-		$largeurSegment = 4;
-		$variables['rubrique'] = $rubrique;
-		$variables['nomRubrique'] = ($_objRubrique instanceof DocumentRubrique) ? $_objRubrique->getTitre() : 'Toutes';
-		$variables['titreSommaire'] = 'Videos';
-		$variables['page'] = $page + 1;
-		$variables['derniere'] = ceil($variables['totalVideos'] / $longueurPage);
+		$variables = $this->makeSommaire($rubrique, 'TDN\Bundle\VideoBundle\Entity\Video', 'VIDEO_PUBLIEE');
 
 		$channel = $request->query->get('channel');
 		if ($channel === 'ajax') {
@@ -189,6 +151,8 @@ class PublicController extends DocumentController {
 
 		} else {
 			// Affichage de la page
+	        $variables['titreSommaire'] = 'Vidéos';
+			$variables['routeSommaire'] = 'Video_sommaire';
 			return $this->render('TDNVideoBundle:Pages:videoSommaire.html.twig', $variables);
 		}
 	}
