@@ -1,0 +1,20 @@
+{% for contenu in listeContenus %}
+  {% set qlikes = 0 %}
+  {% for r in contenu.filReponses %}
+  {% set qlikes = qlikes + r.likes %}
+  {% endfor %}
+  <article class="carte verticale par-articles question-de-nana">
+    <div class="stats qr-{{ rubriquePrincipale(contenu.lnThematique) }}">
+      <span class="n-reponses">{{ contenu.filReponses|length }}</span>
+      <span class="n-votes">{{ qlikes }}</span>
+    </div>
+    <div class="presentation">
+      <p class="titre">
+        <a href="{{ path('Causeuse_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+        {{ contenu.titre[0:240] }}
+        </a>
+      </p>
+      <p class="expert">de {{ contenu.lnAuteur.username }}, {{contenu.datePublication|laps }}</p>
+    </div>
+  </article>
+{% endfor %}    

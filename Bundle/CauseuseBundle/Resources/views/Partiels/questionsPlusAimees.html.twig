@@ -3,7 +3,7 @@
 {% block corpsPublicationsRecentes %}
 {% for rd in recents %}
 {% set princeps = rubriquePrincipale(rd.lnThematique) %}
-{% set qlikes = 0%}
+{% set qlikes = 0 %}
 {% for r in rd.filReponses %}
 {% set qlikes = qlikes + r.likes %}
 {% endfor %}

@@ -107,7 +107,7 @@ class PublicController extends MainPublicController {
 
 		$channel = $request->query->get('channel');
 		if ($channel === 'ajax') {
-			$response = new Response($this->renderView('TDNConseilExpertBundle:Partiels:conseilsListe.html.twig', $variables));
+			$response = new Response($this->renderView('TDNCauseuseBundle:Partiels:questionsNanasListe.html.twig', $variables));
 	        $response->headers->set('Content-Type', 'text/html');
 	        $response->headers->set('Accept-Charset', 'utf-8');
 	        return $response;
@@ -115,7 +115,7 @@ class PublicController extends MainPublicController {
 		} else {
 			// Affichage de la page
 	        $variables['titreSommaire'] = 'Conseils d’experts';
-			$variables['routeSommaire'] = 'ConseilExpert_sommaire';
+			$variables['routeSommaire'] = 'Causeuse_sommaire';
 			for ($i = 0 ; $i < 2; $i++) if (!empty($variables['listeContenus'])) {
 				$variables['featuredContenus'][] = array_shift($variables['listeContenus']);
 			}
