@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use TDN\Bundle\ConseilExpertBundle\Entity\ConseilExpert;
 use TDN\Bundle\ConseilExpertBundle\Form\Type\ConseilExpertSoumissionType;
 
+use TDN\Bundle\DocumentBundle\Controller\PublicController as MainPublicController;
 use TDN\Bundle\DocumentBundle\Form\Type\selecteurRubriquesType;
 use TDN\Bundle\DocumentBundle\Entity\DocumentRubrique;
 use TDN\Bundle\DocumentBundle\Form\Model\Thematique;
@@ -18,7 +19,7 @@ use TDN\Bundle\NanaBundle\Entity\Nana;
 
 use TDN\Bundle\ImageBundle\Entity\Image;
 
-class PublicController extends Controller {
+class PublicController extends MainPublicController {
 	
 	public function conseilDemandeAction () {
 
@@ -188,6 +189,28 @@ class PublicController extends Controller {
             return new Response($response, 410);
 		}
 	}
+
+	public function sommaireAction ($theme = '', $rubrique = '') {
+
+        $request = $this->get('request');
+
+		$variables = $this->makeSommaire($rubrique, 'TDN\Bundle\ConseilExpertBundle\Entity\ConseilExpert', 'CONSEIL_PUBLIE');
+
+		$channel = $request->query->get('channel');
+		if ($channel === 'ajax') {
+			$response = new Response($this->renderView('TDNConseilExpertBundle:Partiels:conseilsListe.html.twig', $variables));
+	        $response->headers->set('Content-Type', 'text/html');
+	        $response->headers->set('Accept-Charset', 'utf-8');
+	        return $response;
+
+		} else {
+			// Affichage de la page
+	        $variables['titreSommaire'] = 'Conseils d’experts';
+			$variables['routeSommaire'] = 'ConseilExpert_sommaire';
+			return $this->render('TDNConseilExpertBundle:Pages:conseilSommaire.html.twig', $variables);
+		}
+	}
+
 
 	public function filPersoAction ($id) {
 

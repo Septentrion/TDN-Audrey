@@ -17,7 +17,11 @@
         <requirement key="id">\d+</requirement>
     </route>
 
-    <route id="ConseilExpert_sommaire" pattern="/{theme}/{rubrique}/conseils-experts">
+    <route id="ConseilExpert_sommaire" pattern="/conseils-experts">
+        <default key="_controller">TDNConseilExpertBundle:Public:sommaire</default>
+    </route>
+
+    <route id="ConseilExpert_sommaireRubrique" pattern="/{theme}/{rubrique}/conseils-experts">
         <default key="_controller">TDNConseilExpertBundle:Public:sommaire</default>
     </route>
 
