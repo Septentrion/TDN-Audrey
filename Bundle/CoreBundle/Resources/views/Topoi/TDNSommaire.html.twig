@@ -1,0 +1,43 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title TDNDocument.titre ~ " | Sommaire " ~ titreSommaire ~ nomRubrique  %}
+
+{% block contenuPrincipal %}
+<section id="" class="enveloppe-sommaire">
+  <h1 class="titre-contenu">{{ titreSommaire }}</h1>
+
+  <div class="bloc-bandeau">
+    <header class="bandeau fond-vert row">
+      <!-- Bloc pour l'affichage de la recherche sommaire -->
+      <div id="search" class="selecteur-tdn">
+        <form name="tri-video" id="tri-video" action="{{ path('Video_sommaire') }}" method="get">
+          <span class="select">Trier par&hellip;</span>
+          <select name="rubrique" id="critere-tri" class="styled">
+            <option value="tdn">Toutes</option>
+            {% for r in rubriques %}
+            <option value="{{ r.slug }}">{{ r.titre }}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+
+      <!-- Entête du sommaire -->
+      <div class="incipit-sommaire">
+        {% block incipitSommaire %}{% endblock %}
+      </div>  
+  
+    </header>
+    <div class="hot row">
+      <!-- Liste des contenus par type -->
+      <section class="corps-sommaire">
+      {% block sommaireContenu %}{% endblock %}   
+      </section>
+    </div>
+    <footer class="suite-contenus row">
+      {% if listeContenus|length > 42 %}
+      <span class="bouton-suite">Voir +</span>
+      {% endif %}
+    </footer>
+  </div>
+</section>
+{% endblock %}
