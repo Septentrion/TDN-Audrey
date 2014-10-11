@@ -1,0 +1,62 @@
+{% extends 'TDNCoreBundle:Topoi:TDNSommaire.html.twig' %}
+
+{% block title "Sommaire des vidéos " %}
+
+{% block incipitSommaire %}
+<span class="hot-number">{{ totalVideos }}</span> <strong>vidéos</strong> / Rubrique : {{ nomRubrique }}
+{% endblock %}
+
+{% block sommaireContenu %}
+<div id="sommaire" class="sommaire">
+  {% for contenu in listeContenus %}
+    <article class="carte coin_{{ rubriquePrincipale(contenu.lnThematique) }}">
+      <a href="{{ path('Video_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+        {% if contenu.vignette is not empty %}
+            <img class="snapshot vignette" src="{{ contenu.vignette }}" alt="{{ contenu.titre }}" title="{{ contenu.titre }}"  />
+        {% else %}
+            <img class="snapshot vignette" src="{{ illustration(contenu) }}" alt="{{ contenu.titre }}" title="{{ contenu.titre }}" />
+        {% endif %}
+      </a>
+      <p class="titre">
+        <a href="{{ path('Video_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+        {{ contenu.titre[0:240] }}
+        </a>
+      </p>
+      <footer class="metadata">
+        <span class="publication">
+          {{contenu.datePublication|date('d/m/Y')}}
+        </span>
+        <span class="vues">
+          {{ contenu.commentThread }} vues
+        </span>
+      </footer>
+      
+    </article>
+  {% endfor %}    
+</div>  
+<script type="text/javascript">
+  $(document).ready(function () {
+    var page = 1;
+    $('#tri-video #critere-tri').on('change', function () {
+      alert('OK');
+      $('#tri-video').submit();
+    });
+    $('.bouton-suite').on('click', function () {
+      page += 1;
+      alert('Submit AJAX');
+      $.ajax({
+        url: '{{ path("Video_sommaire") }}',
+        type: 'GET',
+        data: {channel: 'ajax', page: page},
+        dataType: 'html'
+      })
+      .success(function (html) {
+        $("#sommaire").append(html);
+      })
+      .fail(function( jqXHR, textStatus ) {
+        alert( "Request failed: " + textStatus )
+      });
+    })
+  })
+</script>
+{% endblock %}

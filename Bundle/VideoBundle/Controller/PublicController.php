@@ -3,6 +3,7 @@
 namespace TDN\Bundle\VideoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 use TDN\Bundle\VideoBundle\Form\Type\VideoType;
 use TDN\Bundle\VideoBundle\Entity\Video;
@@ -161,10 +162,10 @@ class PublicController extends DocumentController {
 		$rep = $em->getRepository('TDN\Bundle\VideoBundle\Entity\Video');
 	    // $listeVideos = $rep->findWithin($longueurPage);
 	    if ($rubrique == 'tdn' || empty($rubrique)) {
-	    	$variables['listeVideos'] = $rep->findBy(array('statut' => 'VIDEO_PUBLIEE'), array('idDocument' => 'DESC'), $longueurPage, 1+$page*($longueurPage-1));
+	    	$variables['listeContenus'] = $rep->findBy(array('statut' => 'VIDEO_PUBLIEE'), array('idDocument' => 'DESC'), $longueurPage, 1+$page*($longueurPage-1));
 		    $variables['totalVideos'] = $rep->count();
 	    } else {
-	    	$variables['listeVideos'] = $rep->findByRubrique($rubrique, $longueurPage, $page);
+	    	$variables['listeContenus'] = $rep->findByRubrique($rubrique, $longueurPage, $page);
 		    $variables['totalVideos'] = $rep->count($rubrique);
 	    }
 
@@ -175,12 +176,21 @@ class PublicController extends DocumentController {
 		$largeurSegment = 4;
 		$variables['rubrique'] = $rubrique;
 		$variables['nomRubrique'] = ($_objRubrique instanceof DocumentRubrique) ? $_objRubrique->getTitre() : 'Toutes';
-
+		$variables['titreSommaire'] = 'Videos';
 		$variables['page'] = $page + 1;
 		$variables['derniere'] = ceil($variables['totalVideos'] / $longueurPage);
 
-		// Affichage de la page
-		return $this->render('TDNVideoBundle:Page:videoSommaire.html.twig', $variables);
+		$channel = $request->query->get('channel');
+		if ($channel === 'ajax') {
+			$response = new Response($this->renderView('TDNVideoBundle:Partiels:videosListe.html.twig', $variables));
+	        $response->headers->set('Content-Type', 'text/html');
+	        $response->headers->set('Accept-Charset', 'utf-8');
+	        return $response;
+
+		} else {
+			// Affichage de la page
+			return $this->render('TDNVideoBundle:Pages:videoSommaire.html.twig', $variables);
+		}
 	}
 
 
