@@ -3,6 +3,7 @@
 namespace TDN\Bundle\CauseuseBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 use TDN\Bundle\CauseuseBundle\Entity\Question;
 use TDN\Bundle\CauseuseBundle\Form\Type\CauseuseSoumissionType;
