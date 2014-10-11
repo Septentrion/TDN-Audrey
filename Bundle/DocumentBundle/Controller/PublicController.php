@@ -183,4 +183,50 @@ class PublicController extends Controller
         return false;
     }
 
+    public function makeSommaire ($rubrique, $entite, $contrainte) {
+
+        $longueurPage = 42;
+        $em = $this->get('doctrine.orm.entity_manager');      
+        $session = $this->get('session');
+        $request = $this->get('request');
+        $page = $request->query->get('page');
+        $currentRubrique = $session->get('tri-rubrique');
+        if (empty($rubrique)) {
+            $rubrique = $request->query->get('rubrique');
+        }
+
+        if (!empty($rubrique)) {
+            $session->set('tri-rubrique', $rubrique);
+        } else {
+            if (empty($page)) {
+                $session->remove('tri-rubrique');
+            }
+            $rubrique = (!empty($currentRubrique)) ? $currentRubrique : 'tdn';
+        }
+        $page = ((int)$page === 0) ? 0 : (int)$page - 1;
+
+        $rep = $em->getRepository($entite);
+        // $listeVideos = $rep->findWithin($longueurPage);
+        if ($rubrique == 'tdn' || empty($rubrique)) {
+            $variables['listeContenus'] = $rep->findBy(array('statut' => $contrainte), array('idDocument' => 'DESC'), $longueurPage, 1+$page*($longueurPage-1));
+            $cardinal = $rep->count();
+        } else {
+            $variables['listeContenus'] = $rep->findByRubrique($rubrique, $longueurPage, $page, $contrainte);
+            $cardinal = $rep->count($rubrique);
+        }
+        $variables['totalContenus'] = (is_array($cardinal)) ? array_shift($cardinal) : $cardinal ;
+
+        $rep = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\DocumentRubrique');
+        $variables['rubriques'] = $rep->findBy(array('parent' => NULL));
+        $_objRubrique = $rep->findOneBySlug($rubrique);
+        
+        $largeurSegment = 4;
+        $variables['rubrique'] = $rubrique;
+        $variables['nomRubrique'] = ($_objRubrique instanceof DocumentRubrique) ? $_objRubrique->getTitre() : 'Toutes';
+        $variables['page'] = $page + 1;
+        $variables['derniere'] = ceil($variables['totalContenus'] / $longueurPage);
+
+        return $variables;
+    }
+
 }

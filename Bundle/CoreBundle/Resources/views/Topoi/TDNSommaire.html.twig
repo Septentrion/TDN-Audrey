@@ -10,7 +10,7 @@
     <header class="bandeau fond-vert row">
       <!-- Bloc pour l'affichage de la recherche sommaire -->
       <div id="search" class="selecteur-tdn">
-        <form name="tri-video" id="tri-video" action="{{ path('Video_sommaire') }}" method="get">
+        <form name="tri-rubrique" id="tri-rubrique" action="{{ path(routeSommaire) }}" method="get">
           <span class="select">Trier par&hellip;</span>
           <select name="rubrique" id="critere-tri" class="styled">
             <option value="tdn">Toutes</option>
@@ -34,7 +34,7 @@
       </section>
     </div>
     <footer class="suite-contenus row">
-      {% if listeContenus|length > 42 %}
+      {% if listeContenus|length >= 42 %}
       <span class="bouton-suite">Voir +</span>
       {% endif %}
     </footer>
