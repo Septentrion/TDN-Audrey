@@ -12,8 +12,8 @@
         <requirement key="slug">[0-9|a-z|-]+</requirement>
     </route>
 
-    <route id="Concours_sommaire" pattern="/concours/sommaire">
-        <default key="_controller">TDNConcoursBundle:Public:concoursSommaire</default>
+    <route id="Concours_sommaire" pattern="/concours">
+        <default key="_controller">TDNConcoursBundle:Public:sommaire</default>
     </route>
 
     <route id="Concours_participer" pattern="/concours/participer/{id}">

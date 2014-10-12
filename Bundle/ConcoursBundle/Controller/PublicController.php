@@ -16,24 +16,76 @@ use TDN\Bundle\NanaBundle\Entity\Nana;
 
 class PublicController extends DocumentController {
 
-    public function concoursSommaireAction()
+    public function sommaireAction($theme = '')
     {
-	    $variables['rubrique'] = 'tdn';
-	    // Récupération de l'entity manager qui va nous permettre de gérer les entités.
-	    $em = $this->get('doctrine.orm.entity_manager');      
+        $request = $this->get('request');
 
-		// Instanciation du Repository
-		$repository = $em->getRepository('TDN\Bundle\ConcoursBundle\Entity\Concours');
-		$variables['ouverts'] = $repository->findAllActive();
-		$variables['fermes'] = $repository->findStopped();
-
-		$repository = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\DocumentRubrique');
-	    $variables['r'] = $repository->findOneBySlug('beaute');
+		$variables = $this->makeSommaire($theme, 'TDN\Bundle\ConcoursBundle\Entity\Concours', 'CONCOURS_PUBLIE');
 	    $variables['typesJeu'] = array('TOS' => 'Tirage au sort', 'Q&R' => 'Question/Réponse', 'QCM' => 'QCM');
 
-        return $this->render('TDNConcoursBundle:Page:concoursSommaire.html.twig', $variables);
+		$channel = $request->query->get('channel');
+		if ($channel === 'ajax') {
+			$response = new Response($this->renderView('TDNConseilExpertBundle:Partiels:conseilsListe.html.twig', $variables));
+	        $response->headers->set('Content-Type', 'text/html');
+	        $response->headers->set('Accept-Charset', 'utf-8');
+	        return $response;
+
+		} else {
+			// Affichage de la page
+	        $variables['titreSommaire'] = 'Concours';
+			$variables['routeSommaire'] = 'Concours_sommaire';
+			$variables['featuredContenus'] = 
+				array_filter(
+					$variables['listeContenus'],
+					function ($c) { $s = $c->getDateArret(); return $s > new \DateTime;});
+			return $this->render('TDNConcoursBundle:Pages:concoursSommaire.html.twig', $variables);
+		}
     }
 
+    public function makeSommaire ($rubrique, $entite, $contrainte) {
+
+        $longueurPage = 42;
+        $em = $this->get('doctrine.orm.entity_manager');      
+        $session = $this->get('session');
+        $request = $this->get('request');
+        $page = $request->query->get('page');
+        $currentRubrique = $session->get('tri-rubrique');
+        if (empty($rubrique)) {
+            $rubrique = $request->query->get('rubrique');
+        }
+
+        if (!empty($rubrique)) {
+            $session->set('tri-rubrique', $rubrique);
+        } else {
+            if (empty($page)) {
+                $session->remove('tri-rubrique');
+            }
+            $rubrique = (!empty($currentRubrique)) ? $currentRubrique : 'tdn';
+        }
+        $page = ((int)$page === 0) ? 0 : (int)$page - 1;
+
+        $rep = $em->getRepository($entite);
+        if ($rubrique == 'tdn' || empty($rubrique)) {
+            $variables['listeContenus'] = $rep->findBy(array('statut' => $contrainte), array('idDocument' => 'DESC'), $longueurPage, 1+$page*($longueurPage-1));
+            $cardinal = $rep->count();
+        } else {
+            $variables['listeContenus'] = $rep->findByRubrique($rubrique, $longueurPage, $page, $contrainte);
+            $cardinal = $rep->count($rubrique);
+        }
+        $variables['totalContenus'] = (is_array($cardinal)) ? array_shift($cardinal) : $cardinal ;
+
+        $rep = $em->getRepository('TDN\Bundle\DocumentBundle\Entity\DocumentRubrique');
+        $variables['rubriques'] = $rep->findBy(array('parent' => NULL));
+        $_objRubrique = $rep->findOneBySlug($rubrique);
+        
+        $largeurSegment = 4;
+        $variables['rubrique'] = $rubrique;
+        $variables['nomRubrique'] = ($_objRubrique instanceof DocumentRubrique) ? $_objRubrique->getTitre() : 'Toutes';
+        $variables['page'] = $page + 1;
+        $variables['derniere'] = ceil($variables['totalContenus'] / $longueurPage);
+
+        return $variables;
+    }
     public function concoursAction ($id, $slug) {
 
 		/* Tableau qui va stocker toutes les données à remplacer dans le template twig */
