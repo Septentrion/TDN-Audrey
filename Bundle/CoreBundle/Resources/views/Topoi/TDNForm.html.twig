@@ -1,0 +1,34 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title TDNDocument.titre ~ " | " ~ titreFormulaire  %}
+
+{% block contenuPrincipal %}
+<section id="" class="enveloppe-contenu">
+     <h1 class="titre-formulaire">{{ titreFormulaire }}</h1>
+
+  <!-- Contenu de l'article -->
+     <article class="corps-formulaire">
+      {% block corpsFormulaire %}{% endblock %}   
+     </article>
+
+  <!-- Publications en rapport avec ce sujet -->
+  {% if similaires is defined and similaires is not empty %}
+  <section id="more">
+    {#% include 'TDNDocumentBundle:Bloc:documentsSimilaires.html.twig' with {'similaires': similaires, 'type': 'Article'} %#}
+  </section>
+  {% endif %}
+
+</article>
+<script type="text/javascript">
+  $(document).ready(function() {
+    console.log('Traitement des URL images');
+    $('#article-wrapper img').each(function() {
+      var source = $(this).attr('src');
+      var radix = source.substr(0,7);
+      if (radix == '/photos') {
+        $(this).attr('src', 'http://www.trucsdenana.com'+source);
+      }
+    })
+  })
+</script>
+{% endblock %}

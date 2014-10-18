@@ -1,0 +1,79 @@
+{% extends 'TDNCoreBundle:Topoi:TDNSommaire.html.twig' %}
+
+{% block title "Sommaire des dossiers de la rédaction" %}
+
+{% block incipitSommaire %}
+<span class="hot-number">{{ totalContenus }}</span> <strong>dossiers</strong> / Rubrique : {{ nomRubrique }}
+{% endblock %}
+
+{% block sommaireContenu %}
+<div id="sommaire" class="sommaire liste-dossiers">
+  <div class="featured">
+  {% for featured in featuredContenus %}
+    <article class="carte dossier coin_{{ rubriquePrincipale(featured.lnThematique) }} par-3">
+      <div class="illustration">
+      <a href="{{ path('DossierRedaction_page', {'theme': featured.lnThematique.slug, 'rubrique': featured.lnThematique.slug, 'slug': featured.slug, 'id':featured.idDocument}) }}">
+    {% if featured.lnIllustration is not null%}
+        <img class="vignette vignette-illustration" src="{{ illustration(featured, 'SQUARE') }}" alt="{{ featured.lnIllustration.alt }}" />
+    {% endif %}
+      </a>
+      </div>
+      <div class="presentation">
+        <p class="titre">
+          <a href="{{ path('DossierRedaction_page', {'theme': featured.lnThematique.slug, 'rubrique': featured.lnThematique.slug, 'slug': featured.slug, 'id':featured.idDocument}) }}">
+          {{ featured.titre[0:240] }}
+          </a>
+        </p>
+        <p class="metadata">
+          <span class="etiquette publication">{{ featured.datePublication|laps }}</span>
+        </p>
+      </div>
+    </article>
+  {% endfor %}
+  </div>
+
+  {% for contenu in listeContenus %}
+    <article class="carte verticale coin_{{ rubriquePrincipale(contenu.lnThematique) }} dossier par-2">
+      <div class="illustration col-lg-3 col-md-3 col-sm-3 col-xs-12">
+      <a href="{{ path('DossierRedaction_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+    {% if contenu.lnIllustration is not null%}
+        <img class="vignette vignette-illustration" src="{{ illustration(contenu, 'SQUARE') }}" alt="{{ contenu.lnIllustration.alt }}" />
+    {% endif %}
+      </a>
+      </div>
+      <div class="presentation col-lg-9 col-md-9 col-sm-9 col-xs-12">
+        <p class="titre">
+          <a href="{{ path('DossierRedaction_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+          {{ contenu.titre[0:240] }}
+          </a>
+        </p>
+        <p class="metadata">
+          <span class="etiquette publication">{{ contenu.datePublication|laps }}</span></p>
+      </div>
+    </article>
+  {% endfor %}    
+</div>  
+<script type="text/javascript">
+  $(document).ready(function () {
+    var page = 1;
+    $('#tri-rubrique #critere-tri').on('change', function () {
+      $('#tri-rubrique').submit();
+    });
+    $('.bouton-suite').on('click', function () {
+      page += 1;
+      $.ajax({
+        url: '{{ path(routeSommaire) }}',
+        type: 'GET',
+        data: {channel: 'ajax', page: page},
+        dataType: 'html'
+      })
+      .success(function (html) {
+        $("#sommaire").append(html);
+      })
+      .fail(function( jqXHR, textStatus ) {
+        alert( "Request failed: " + textStatus )
+      });
+    })
+  })
+</script>
+{% endblock %}

@@ -132,6 +132,9 @@ class PublicController extends MainPublicController {
 	    $em = $this->get('doctrine.orm.entity_manager');      
 		$URLmanager = $this->get('tdn.document.url');
 
+	    $rep_nanas = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+		$usr = $rep_nanas->find(1);
+
 	    if (!($usr instanceof Nana)) {
 			$this->get('session')->getFlashBag()->add('access', 'Connecte-toi pour poser une question');
 	 		return $this->redirect($URLmanager->refererURL($request->headers->get('referer')));
@@ -227,10 +230,13 @@ class PublicController extends MainPublicController {
 			$this->get('session')->getFlashBag()->add('success', 'Merci. Ta question va être examinée par la rédaction');
 			return $this->redirect($URLmanager->refererURL($request->headers->get('referer')));
 		}
+
+		$variables['nana'] = $usr;
+		$variables['titreFormulaire'] = 'Questionne les nanas';
 		// Affichage de la page
 		$variables['form'] = $form->createView();
 		$variables['formRubrique'] = $formRubrique->createView();
-		return $this->render('CauseuseBundle:Page:questionDemandeForm.html.twig', $variables);
+		return $this->render('TDNCauseuseBundle:Pages:questionDemandeForm.html.twig', $variables);
 	}
 
 	public function reponsePosterAction () {
