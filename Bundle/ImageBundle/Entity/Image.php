@@ -10,6 +10,7 @@ use TDN\Bundle\DocumentBundle\Entity\Document;
  * TDN\Bundle\ImageBundle\Entity\Image
  */
 class Image extends Document {
+
     /**
      * @var string $fichier
      */
@@ -209,15 +210,14 @@ class Image extends Document {
         return 'uploads/documents';
     }
 
-    public function init ($storage, $owner = NULL, $auteur = NULL) {
-        $this->setIdOwner($owner);
-        $auteur = (!is_null($auteur)) ? $auteur : $owner;
+    public function init ($owner = NULL, $dossier) {
         $titre = $this->getTitre();
         if (is_null($titre)) {
             $this->setTitre('Image sans titre');
         }
-        $this->setlnAuteur($auteur);
-        $this->storeUploadCustom($storage);
+        $this->setIdOwner($owner);
+        $this->setlnAuteur($owner);
+        $this->storeUploadCustom($dossier);
         $this->setLikes(0);
         $this->setHits(0);
         $this->makeSlug();
@@ -235,7 +235,7 @@ class Image extends Document {
         $fileImage = $this->getAbsolutePath();
 // print_r($fileImage);
         $processImage = new \Imagick($fileImage);
-        $processImage->scale($width, $height, $fit);
+        $processImage->scaleImage($width, $height, $fit);
         $processImage->writeImage($fileImage);
         $processImage->destroy();
         return $this;

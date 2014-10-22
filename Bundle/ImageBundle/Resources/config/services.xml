@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="image.remplacement.class">TDN\Bundle\ImageBundle\Twig\RemplacementExtension</parameter>
-        <parameter key="image.processor.class">TDN\Bundle\ImageBundle\Processing\imageProcessor</parameter>
+        <parameter key="image.processor.class">TDN\Bundle\ImageBundle\Processing\ImageProcessor</parameter>
     </parameters>
 
     <services>
@@ -15,7 +15,9 @@
             <tag name="twig.extension" />
         </service>
 
-        <service id="tdn.image_processor" class="%image.processor.class%"></service>
+        <service id="tdn.image_processor" class="%image.processor.class%">
+            <argument>%media_root%</argument>
+        </service>
 
     </services>
 </container>

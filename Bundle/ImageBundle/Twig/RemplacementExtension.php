@@ -151,11 +151,19 @@ class RemplacementExtension extends \Twig_Extension {
                         default:
                             $prefix = "";
                     }
-                    if (is_file($_SERVER['DOCUMENT_ROOT'].$dir.$prefix.$fichier)) {
+                    $staticDir = $_SERVER['DOCUMENT_ROOT'].$dir.$prefix.$fichier; 
+                    if (is_file($staticDir)) {
                         return '/'.$dir.'/'.$prefix.$fichier;
-                    } elseif ($format != '' && (is_file($_SERVER['DOCUMENT_ROOT'].$dir.$fichier))) {
+                    } elseif ($format != '' && (is_file($staticDir))) {
                         return '/'.$dir.'/'.$fichier;
-                    } else { }
+                    } else {
+                        $staticDir = str_replace('audrey/www', 'v3', $staticDir);
+                        if (is_file($staticDir)) {
+                            return '/'.$dir.'/'.$prefix.$fichier;
+                        } elseif ($format != '' && (is_file($staticDir))) {
+                            return '/'.$dir.'/'.$fichier;
+                        } else {}
+                    }
                 }                
             }
         } 

@@ -1,8 +1,78 @@
 <?php
 
 namespace TDN\Bundle\ImageBundle\Processing;
- 
-class imageProcessor {
+
+use TDN\Bundle\ImageBundle\Entity\Image;
+
+use TDN\Bundle\NanaBundle\Entity\Nana;
+use TDN\Bundle\NanaBundle\Entity\NanaRoles;
+
+class ImageProcessor {
+
+    const USER_DOCUMENT =  "/public/%s/%s/n_/%d/";
+    const REDACTION_DOCUMENT =  "/public/%s/%s/";
+    const USER_PRIVE =  "/public/profils/%d/";
+
+	private $root;
+
+	public function __construct ($root) {
+
+		$this->media_root = $root;
+	}
+
+	private function selectionDossier ($tag = 'docs', $nana) {
+        $now = new \DateTime;
+        $isUser = $nana->isA('user');
+
+        if ($tag === 'docs') {
+            $squelette = $isUser ? self::USER_DOCUMENT : self::REDACTION_DOCUMENT;
+            $dossier = sprintf($squelette,$now->format('Y'),$now->format('m'),$nana->getIdNana());            
+        } else {
+	            $squelette = self::USER_PRIVE;
+	            $dossier = sprintf($squelette,$nana->getIdNana());            
+        }
+
+        return $dossier;
+	}
+
+	public function make (Image $image, Nana $nana, $type = 'docs', array $formats) {
+		$dossier = $this->selectionDossier($type, $nana);
+		$image->init($nana, $dossier);
+        $fichierImage = $image->getFichier();
+        $source = '/'.$this->media_root.$dossier.$fichierImage;
+		foreach ($formats as $contrainte => $taille) {
+        	switch ($contrainte) {
+        		case 'portrait':
+        			switch ($taille) {
+        				default :
+        					$hauteur = (intval($taille) > 0) ? intval($taille) : 500;
+        					$prefixe = 'y'.$hauteur.'_';
+        			}
+			        $err = $imageProcessor->downScale($source, $hauteur, 'height', $prefixe);
+        			break;
+        		
+        		case 'paysage':
+        			switch ($taille) {
+        				case 'slider' :
+        					$largeur = 700;
+        					$prefixe = 'x7_';
+        					break;
+
+        				default :
+        					$largeur = ((intval($taille) > 0) ? intval($taille) : 500);
+        					$prefixe = 'x'.$largeur.'_';
+        			}
+			        $err = $imageProcessor->downScale($source, $largeur, 'width', $prefixe);
+        			break;
+
+        		case 'square':
+        		default:
+        			$cote = ($taille !== 'default') ? intval($taille): 300;
+        			$err = $this->square($source, $cote, '$sqr'.(($taille !== 'default') ? intval($taille): '').'_' );
+    		}
+        }
+	}
+
 
 	public function downScale($source, $taille, $sens = 'height', $prefixe = 'x7_')
 	{
@@ -24,11 +94,7 @@ class imageProcessor {
             } elseif (($sens == 'width') && ($geo['width'] > $taille)) {
             	$imSource->scaleImage($taille,0);
             } 
-            $imSource->setImageFormat('jpeg');
-            $imSource->setCompression(Imagick::COMPRESSION_JPEG);
-			$imSource->setCompressionQuality(80);
-        	$imSource->setInterlaceScheme(Imagick::INTERLACE_PLANE);
-        	$imSource->stripImage();
+	        $this->normalizeJPEG($imSource);
         	$imSource->writeImage($cible);
             $imSource->destroy();           
 
@@ -38,24 +104,24 @@ class imageProcessor {
 		}
 	}
 
-	 public function square ($fichier, $cote, $prefixe = NULL) 
-    {
+	 public function square ($fichier, $cote, $prefixe = NULL) {
+
 		$source = $_SERVER['DOCUMENT_ROOT'].$fichier;
 		if (is_file($source)) {
-	        $squared = new \Imagick($source);
-	        $geo = $squared->getImageGeometry();
+	        $imsource = new \Imagick($source);
+	        $geo = $imsource->getImageGeometry();
 	        if ($geo['width'] > $geo['height']) {
-	            $squared->scaleImage(0, $cote);
-	            $geoS = $squared->getImageGeometry();
+	            $imsource->scaleImage(0, $cote);
+	            $geoS = $imsource->getImageGeometry();
 	            $offsetX = floor(($geoS['width'] - $cote)/2);
 	            $offsetY = 0;
 	        } else {
-	            $squared->scaleImage($cote,0);
-	            $geoS = $squared->getImageGeometry();
+	            $imsource->scaleImage($cote,0);
+	            $geoS = $imsource->getImageGeometry();
 	            $offsetX = 0;
 	            $offsetY = floor(($geoS['height'] - $cote)/2);
 	        }
-	        $squared->cropImage($cote, $cote, $offsetX, $offsetY);
+	        $imsource->cropImage($cote, $cote, $offsetX, $offsetY);
 	        if (!is_null($prefixe)) {
 	        	$path = explode('/', $source);
 	        	$fichier = $prefixe.array_pop($path);
@@ -64,17 +130,22 @@ class imageProcessor {
 	        } else {
 	        	$cible = $source;
 	        }
-	        $squared->stripImage();
-		    $squared->setImageCompression(\Imagick::COMPRESSION_JPEG);
-		    $squared->setImageCompressionQuality(70);
-		    $squared->stripImage();
-	        $squared->writeImage($cible);
-	        $squared->destroy();  
+	        $this->normalizeJPEG($imSource);
+	        $imsource->writeImage($cible);
+	        $imsource->destroy();  
 
 	        return true;                             
 		} else {
 			return false;
 		}
+    }
+
+    private function normalizeJPEG (\Imagick $source) {
+        $imSource->setImageFormat('jpeg');
+	    $source->setImageCompression(\Imagick::COMPRESSION_JPEG);
+	    $source->setImageCompressionQuality(70);
+    	$imSource->setInterlaceScheme(Imagick::INTERLACE_PLANE);
+	    $source->stripImage();
     }
 
 }
