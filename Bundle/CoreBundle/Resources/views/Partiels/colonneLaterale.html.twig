@@ -1,24 +1,5 @@
-<!-- Moteur de recherche -->
-<div class="recherche-rapide">
-	<form name="recherche" id="recherche" action="{#{ path('Document_rechercheForm') }#}" method="get" enctype="">
-		<input type="text" size="15" name="seed" />
-		<input type="submit" name="quicksearch" class="submitter" value=">" />
-	</form>
-</div>
-
-<!-- Icônes de liens vers les réseaux sociaux -->
-<div class="reseaux-sociaux">
-	<img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones fb "/> 
-    <img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones tw"/>  
-    <img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones ig"/> 
-    <img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones pi"/> 
-    <img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones yt"/> 
-    <img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones gplus"/> 
-    <img src="{{ asset('assets/img/1x1.png') }}" class="sprite rs_icones app"/>
-</div>
-
 <!-- Publicité -->
-<div id="side-pub" class="centre">
+<div id="side-pub" class="centre hidden-sm">
 	<script type="text/javascript">
 		sas_pageid='26310/175244'; // Page : Blog_Trucsdenana/toutes-les-pages
 		sas_formatid=3658;  // Format : Blogs_Placement_300Droite 300x600

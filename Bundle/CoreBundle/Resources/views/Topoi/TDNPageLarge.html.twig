@@ -69,6 +69,8 @@
 			{% include "TDNCoreBundle:Partiels:menuRubriques.html.twig" %}
 		</div>
 
+		{% include "TDNCoreBundle:Partiels:blocRecherche.html.twig" %}
+
 		<!--  -->
 		<main id="contenuPrincipal" class="row">
 			
@@ -93,5 +95,18 @@
 			{% include "TDNCoreBundle:Partiels:piedPage.html.twig" %}
 		</footer>
 	</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    console.log('Traitement des URL images');
+    $('img').each(function() {
+      var source = $(this).attr('src');
+      var radix = source.substr(0,7);
+      if (radix == '/photos'|| radix == '/upload') {
+        $(this).attr('src', 'http://www.trucdenana.com'+source);
+      }
+    })
+  })
+</script>
 </body>
 </html>
