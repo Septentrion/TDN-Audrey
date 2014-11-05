@@ -1,0 +1,98 @@
+{% if slider is not empty%}
+<div id="scene" class="scene">
+	<div class="slide-container step_1">
+		<!--div class="c_slider"></div-->
+		{% set i = 0 %}
+		{% for slide in slider %}
+		<figure class="slideEnveloppe">
+			{% set y = slide.lnCover.datePublication|date('Y') %}
+			{% set m = slide.lnCover.datePublication|date('m') %}
+			<a href="{{ slide.lnSource|targetURL }}">
+				<img  class="slideImage" src="/uploads/documents/public/{{y}}/{{m}}/{{slide.lnCover.fichier}}" />
+			</a>
+			<figcaption class="slide-caption">
+				<div class="enveloppe-titre">
+					<p class="titre">{{ slide.lnSource.titre|slice(0,140) }}</p>
+					<p class="pitch">{{ slide.pitch }}</p>
+				</div>
+				<div class="enveloppe-rubrique">
+				{% if slide.lnSource.lnThematique is not null %}
+	            <a href="{#{path('Core_sommaire', {'slug': slide.lnSource.lnThematique.slug})}#}">
+	              <span class="meta rubrique-{{ rubriquePrincipale(slide.lnSource.lnThematique) }}">{{ slide.lnSource.lnThematique.titre }}
+	            </a>
+		        {% endif %}
+				</div>
+			</figcation>
+		</figure>
+		{% set i = i + 1 %}
+		{% endfor %}
+	</div>
+</div>
+<div id="commande" class="commande"> 
+	<div class="controles">
+		{% set debut = true %}
+		{% set i = 1%}
+		{% set etat = "controleActif" %}
+		{% for slide in slider %}
+		<div class="slideSwitchEnveloppe">
+			<button id="bs_push_{{ i }}" class="{{ etat }} slideSwitch" type="button"></button>
+			<span class="slideCartouche hiddenCartouche">{{ slide.lnSource.titre }}</span>
+		</div>
+		{% if etat == "controleActif" %}
+		{% set etat = "controleInactif" %}
+		{% endif %}
+		{% set i = i + 1 %}
+		{% endfor %}
+	</div>
+</div>
+<!--div id="nextSlide" class="nextSlide">
+	<img class="slideNextButton" src="/assets/images/theme/sommaire/slider/bt_play.png" />
+</div-->
+<script type="text/javascript">
+
+$(document).ready(function () {
+	$('.slideNextButton').on('click', function (event) {
+		event.stopPropagation();
+		var presentId = $('.controleActif').prop('id');
+		var elements = presentId.split('_');
+		if (elements[2] == 6) {
+			next = 1;
+		} else {
+			next = parseInt(elements[2]) + 1;
+		}
+		var id = '#bs_push_'+next;
+		$(id).click();
+	});
+	$('.slideSwitch').on('click', function () {
+		var $scene = $('#scene .slide-container');
+		var id = $(this).prop('id');
+		var elements = id.split('_');
+		var classe = 'step_'+elements[2];
+		for (var i = 1; i <= 6; i++) {
+			if ($scene.hasClass('step_'+i)) {
+				$scene.removeClass('step_'+i)
+			}
+		}
+		$scene.addClass(classe);
+		$('.controleActif').toggleClass('controleActif controleInactif');
+		$(this).toggleClass('controleActif controleInactif');
+	});
+	$('.slideSwitch').on('mouseenter mouseleave', function () {
+		$(this).parent().children('.slideCartouche').toggleClass('visibleCartouche hiddenCartouche');
+	});
+	var refreshSlider = setInterval(function () {
+		var presentId = $('.controleActif').prop('id');
+		var elements = presentId.split('_');
+		if (elements[2] == 6) {
+			next = 1;
+		} else {
+			next = parseInt(elements[2]) + 1;
+		}
+		var id = '#bs_push_'+next;
+		$(id).click();
+		}, 5000);
+})
+
+</script>
+{% else %}
+{% endif %}

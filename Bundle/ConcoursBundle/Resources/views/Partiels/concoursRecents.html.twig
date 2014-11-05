@@ -3,7 +3,7 @@
 {% block corpsPublicationsRecentes %}
 {% for rd in recents %}
 <article class="bloc-conseil col-lg-12">
-	<a href="{#{ c|targetURL }#}">
+	<a href="{{ rd|targetURL }}">
 		<div class="rubriqueMarqueur iconex60 coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3">
 			<img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
 		</div>

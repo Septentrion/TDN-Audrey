@@ -1,0 +1,22 @@
+<div class="bloc-bandeau">
+	<div class="widget-liste-{{ typeEntite }} bandeau fond-vert row">
+		{% if activeParticipe is defined %}
+		<a href="{#{ path() }#}" class="lien-propos">{{ activeParticipe }}</a>
+		{% endif %}
+		<h3 class="titre-icone">{{ titreEntite }}</h3>
+	</div>
+	<div class="row flex-questions">
+	{% if recents is empty %}
+		<p class="warning">{{ messageEmpty }}</p>
+	{% else %}
+		<div class="questions-recentes">
+			<h4>Les + récentes</h4>
+		{% block corpsQuestionsRecentes %}{% endblock %}
+		</div>
+		<div class="questions-aimees">
+			<h4>Les + populaires</h4>
+		{% block corpsQuestionsAimees %}{% endblock %}
+		</div>
+	{% endif %}
+	</div>
+</div>

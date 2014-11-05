@@ -1,6 +1,6 @@
 {% extends 'TDNCoreBundle:Topoi:TDNForm.html.twig' %}
 
-{% block title "Pose une question à la communauté des nanas" %}
+{% block title "Pose une question à un expert" %}
 
 {% block flashMessages %}
   {% for flashMessage in app.session.flashbag.get('success') %}
@@ -14,13 +14,14 @@
 <article id="article-wrapper" class="main article-redaction">
 
   <div id="avertissement">
-    <p>Les questions de nanas te permettent de demander l'avis des autres lectrices/~teurs sur un problème, une question que tu te poses, sur la thématique de ton choix : beauté, mode, minceur, couple, sexualité... Fais attention aux fautes d'orthographe et n'utilise pas le langage sms. Ta question sera validée par la rédaction avant d'être publiée.</p>
-    <p>N'hésite pas à poster un visuel pour illustrer ta question.</p>
+    <p>Le but de TrucdeNana est de conseiller, aiguiller les internautes et livrer des astuces aux lectrices, des bons plans.</p>
+    <p>Tu peux poser une question à un expert dans la rubrique de ton choix et lui parler de ton problème avec sincérité, quel qu'il soit. Veille à ne pas faire de fautes d'orthographe ni à parler en langage sms. Tu obtiendras ta réponse dans les meilleurs délais.</p>
+</p>
   </div>
 
   <div id="form-demande fond-vert">
-    <h2 class="titreFormContribution">Pose ta question</h2>
-    <form name="demande-question-de-nanas" id="formQuestion" class="form-utilisateur constraintFile table-content" action="{{ path('Causeuse_creer') }}" method="post"  {{ form_enctype(form) }}>
+    <h2 class="titreFormContribution">Quelle est ta question ?</h2>
+    <form name="demande-conseil-expert" id="formConseil" class="form-utilisateur constraintFile table-content" action="{{ path('ConseilExpert_creer_process') }}" method="post"  {{ form_enctype(form) }}>
       <figure class="avatar col-lg-3">
         <a href="{#{ path('NanaBundle_profil', {'id': TDNDocument.idNana}) }#}">
           <img src="{{ avatar(nana) }}" alt="{{ nana.username }}" />
@@ -40,12 +41,12 @@
         <div class="form-element">{{ form_widget(form.question, {'attr' : {'class': 'contribution'}}) }} </div>
         <div class="form-element">
           <div class="selecteur-fichier">
-            {{ form_row(form.lnIllustration.upload, {'attr' : {'class': 'bouton-upload'}}) }}
+            {{ form_row(form.lnImage.upload, {'attr' : {'class': 'bouton-upload'}}) }}
           </div>
           <span class="nom-fichier">Aucun fichier choisi</span>
         </div>
         <div class="form-element input-texte">
-          {{ form_row(form.lnIllustration.titre) }}
+          {{ form_row(form.lnImage.titre) }}
         </div>
         <div class="form-element selecteur">
           {{ form_widget(formRubrique, {'attr' : {'class': ''}}) }}
@@ -58,7 +59,7 @@
     </form>
   </div>
 
-  <p>Tu peux aussi <a href="{{ path('ConseilExpert_creer') }}">t'adresser à un expert</a> pour lui poser ta question, si tu préfères.</p>
+  <p>Tu peux aussi <a href="{{ path('Causeuse_creer') }}">t'adresser à à la communauté des nanas</a> pour lui poser ta question, si tu préfères.</p>
 </section>
 </article>
 <script type="text/javascript">

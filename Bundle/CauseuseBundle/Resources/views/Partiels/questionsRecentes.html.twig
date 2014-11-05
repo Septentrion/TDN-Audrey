@@ -19,7 +19,7 @@
 				</a> 
 			{% endif %}
 			<p class="datePublication credits">{{ q.datePublication|date('d/m/Y') }}</p>
-			<a href="{#{ q|targetURL }#}">
+			<a href="{{ q|targetURL }}">
 				<h4 class="apercuTexte">{{ q.titre|raw }}</h4>
 			</a>			
 		</article>

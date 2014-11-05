@@ -10,7 +10,7 @@
     </div>
     <div class="presentation">
       <p class="titre">
-        <a href="{{ path('Causeuse_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+        <a href="{{ contenu|targetURL }}">
         {{ contenu.titre[0:240] }}
         </a>
       </p>

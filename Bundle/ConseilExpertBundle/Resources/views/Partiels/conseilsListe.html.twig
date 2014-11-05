@@ -10,7 +10,7 @@
       <p class="auteur">de {{ contenu.lnAuteur.username }}</p>
       <p class="publication">{{contenu.datePublication|date('d/m/Y')}}</p>
       <p class="titre">
-        <a href="{{ path('ConseilExpert_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+        <a href="{{ contenu|targetURL }}">
         {{ contenu.titre[0:240] }}
         </a>
       </p>

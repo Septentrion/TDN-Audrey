@@ -23,6 +23,31 @@ class PublicController extends MainPublicController {
 	
 	public function conseilDemandeAction () {
 
+		$request = $this->get('request');
+	    $em = $this->get('doctrine.orm.entity_manager');      
+
+	    // Utilisateur connecté
+		// $usr= $this->get('security.context')->getToken()->getUser();
+	    $rep_nanas = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+		$usr = $rep_nanas->find(1);
+
+		// Instanciation du formulaire
+		$form = $this->createForm(new ConseilExpertSoumissionType, new ConseilExpert);
+		// Menu déroulant pour la rubrique
+		$formRubrique = $this->createForm(new ThematiqueType, new Thematique);
+
+		$variables['nana'] = $usr;
+		$variables['titreFormulaire'] = 'Questionne les nanas';
+		$variables['rubrique'] = 'tdn';
+		$variables['form'] = $form->createView();
+		$variables['formRubrique'] = $formRubrique->createView();
+
+		// Affichage de la page
+		return $this->render('TDNConseilExpertBundle:Pages:conseilExpertDemandeForm.html.twig', $variables);
+	}
+
+	public function conseilDemandeProcessAction () {
+
 		$variables['rubrique'] = 'tdn';
 
 		$request = $this->get('request');
@@ -32,92 +57,64 @@ class PublicController extends MainPublicController {
 		// Instanciation du formulaire
 		$_TDNDocument = new ConseilExpert;
 		$form = $this->createForm(new ConseilExpertSoumissionType, $_TDNDocument);
-
 		// Menu déroulant pour la rubrique
 		$_rubrique =  new Thematique;
 		$formRubrique = $this->createForm(new ThematiqueType, $_rubrique);
 
-		if ($request->getMethod() == "POST") {
-			$form->bind($request);
-			if ($form->isValid()) {
-				$_TDNDocument->setTitre("");
-				$_TDNDocument->setSlug("");
-				$_TDNDocument->setLikes(0);
-				$_TDNDocument->setHits(0);
-				$_TDNDocument->setAuteur(0);
-				$_TDNDocument->setReponse('');
-				$_TDNDocument->setStatut('CONSEIL_ENREGISTRE');
-				$_TDNDocument->setVersion("1.0");
-				$_TDNDocument->setTags("");
-				$_TDNDocument->setDateSoumission(new \DateTime);
-				$_TDNDocument->setDatePublication(new \DateTime);
-				$_TDNDocument->setDateModification(new \DateTime);
-				$_TDNDocument->setCommentThread(new \Doctrine\Common\Collections\ArrayCollection());
-
-				$usr= $this->get('security.context')->getToken()->getUser();
-				$_TDNDocument->setLnAuteur($usr);
-								
-				$imageNana = $_TDNDocument->getLnImage();
-				if ($imageNana instanceof Image) {
-					$now = new \DateTime;
-					$dossier = '/public/'.$now->format('Y').'/'.$now->format('m').'/n_/'.$usr->getIdNana();
-					$imageNana->init($dossier, $usr);
-				}	
-
-				// Gestion du rubriquage des contenus
-				$formRubrique->bindRequest($request);
-				$_TDNDocument->addRubrique($_rubrique->getRubrique());
-
-				$em = $this->get('doctrine.orm.entity_manager');
-				$em->persist($_TDNDocument);
-				$em->flush();
-
-				// Post-traitement de l'image
-				$imageNana = $_TDNDocument->getLnImage();
-				if ($imageNana instanceof Image) {
-					$imageProcessor = $this->get('tdn.image_processor');
-			        $fichierImage = $imageNana->getFichier();
-			        $source = '/'.$this->container->getParameter('media_root').$dossier.$fichierImage;
-			        $err = $imageProcessor->square($source, 300, 'sqr_');
-			        $err = $imageProcessor->downScale($source, 700, 'height');
-				}
-
-				// Notification
-				$admins = $this->container->getParameter('admin_notifications');
-				$expediteurs = $this->container->getParameter('mail_expediteur');				
-				$message = \Swift_Message::newInstance();
-				$corps['expediteur'] = "Administrateur";
-				$corps['role'] = "Système";
-				$corps['destinataire'] = "Justine";
-				$corps['dateEnvoi'] = date(' d m Y - H:i:s');
-				$corps['pseudo'] = $usr->getUsername();
-				$corps['question'] = $_TDNDocument->getQuestion();
-
-				$message->setSubject('[TDN] Demande de conseil')
-						->setContentType('text/html')
-	        			->setFrom($expediteurs['admin'])
-  	        			->setBody(
-	            			$this->renderView('ConseilExpertBundle:Mail:demandeConseil.html.twig', $corps),
-	            			'text/html'
-	            		);
-				foreach($admins['redaction'] as $destinataire) {
-					$message->addTo($destinataire);
-				}
-			    $this->get('mailer')->send($message);
-
-				$this->get('session')->getFlashBag()->add('success', 'Merci. Ta question va être envoyée à un de nos experts qui te répondra au plus vite');
-				return $this->redirect($this->generateURL('Core_home'));
-			} else {
-
-			}
-
+		$form->bind($request);
+		if (!$form->isValid()) {
+			$this->get('session')->getFlashBag()->add('error', 'Il y a une erreur dans ta demande');
+			return $this->render('TDNConseilExpertBundle:Pages:conseilExpertDemandeForm.html.twig', $variables);
 		}
+		$usr= $this->get('security.context')->getToken()->getUser();
+	    $rep_nanas = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+		$usr = $rep_nanas->find(1);
+		$_TDNDocument->init();
+		$_TDNDocument->setLnAuteur($usr);
 
-		$variables['form'] = $form->createView();
-		$variables['formRubrique'] = $formRubrique->createView();
+		// Traitement de l'image envoyée							
+		$imageNana = $_TDNDocument->getLnImage();
+		if ($imageNana instanceof Image) {
+			$imageProcessor = $this->get('tdn.image_processor');
+			$formats = array('square' => 'default','paysage' => 'slider');
+			$imageProcessor->make($imageNana, $usr, 'docs', $formats);
+		}	
 
-		// Affichage de la page
-		return $this->render('ConseilExpertBundle:Pages:conseilDemandeForm.html.twig', $variables);
+		// Gestion du rubriquage des contenus
+		$formRubrique->bindRequest($request);
+		$_TDNDocument->addRubrique($_rubrique->getRubrique());
+
+		$em = $this->get('doctrine.orm.entity_manager');
+		// $em->persist($_TDNDocument);
+		// $em->flush();
+
+		// Notification
+		// $higgins = $this->get('tdn.notifieur');
+		// $err = $higgins->notification_admin($corps, 'TDNConseilExpertBundle:Mail:demandeConseil.html.twig');
+		$admins = $this->container->getParameter('admin_notifications');
+		$expediteurs = $this->container->getParameter('mail_expediteur');				
+		$message = \Swift_Message::newInstance();
+		$corps['expediteur'] = "Administrateur";
+		$corps['role'] = "Système";
+		$corps['destinataire'] = "Justine";
+		$corps['dateEnvoi'] = date(' d m Y - H:i:s');
+		$corps['pseudo'] = $usr->getUsername();
+		$corps['question'] = $_TDNDocument->getQuestion();
+
+		$message->setSubject('[TDN] Demande de conseil')
+				->setContentType('text/html')
+    			->setFrom($expediteurs['admin'])
+        			->setBody(
+        			$this->renderView('TDNConseilExpertBundle:Mail:demandeConseil.html.twig', $corps),
+        			'text/html'
+        		);
+		foreach($admins['redaction'] as $destinataire) {
+			$message->addTo($destinataire);
+		}
+	    $this->get('mailer')->send($message);
+
+		$this->get('session')->getFlashBag()->add('success', 'Merci. Ta question va être envoyée à un de nos experts qui te répondra au plus vite');
+		return $this->redirect($this->generateURL('Core_home'));
 	}
 
 	public function conseilAction ($rubrique, $id, $slug = NULL) {

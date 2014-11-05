@@ -10,7 +10,7 @@
 <div id="sommaire" class="sommaire">
   {% for contenu in listeContenus %}
     <article class="carte coin_{{ rubriquePrincipale(contenu.lnThematique) }} par-videos">
-      <a href="{{ path('Video_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+      <a href="{{ contenu|targetURL }}">
         {% if contenu.vignette is not empty %}
             <img class="snapshot vignette" src="{{ contenu.vignette }}" alt="{{ contenu.titre }}" title="{{ contenu.titre }}"  />
         {% else %}
@@ -18,7 +18,7 @@
         {% endif %}
       </a>
       <p class="titre">
-        <a href="{{ path('Video_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+        <a href="{{ contenu|targetURL }}">
         {{ contenu.titre[0:240] }}
         </a>
       </p>

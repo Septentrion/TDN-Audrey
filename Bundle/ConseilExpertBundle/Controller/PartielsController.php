@@ -3,6 +3,8 @@
 namespace TDN\Bundle\ConseilExpertBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+
 use TDN\Bundle\ConseilExpertBundle\Entity\ConseilExpert;
 
 class PartielsController extends Controller {

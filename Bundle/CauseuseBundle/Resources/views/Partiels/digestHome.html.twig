@@ -1,0 +1,55 @@
+{% extends 'TDNDocumentBundle:Squelettes:blocQuestionsHome.html.twig' %}
+
+{% block corpsQuestionsRecentes %}
+{% for rd in recents %}
+{% set princeps = rubriquePrincipale(rd.lnThematique) %}
+{% set qlikes = 0 %}
+{% for r in rd.filReponses %}
+{% set qlikes = qlikes + r.likes %}
+{% endfor %}
+<article class="question-de-nana plus-recentes {{ rubriquePrincipale(rd.lnThematique) }}_secondaire">
+	<p class="{{ rubriquePrincipale(rd.lnThematique) }} etiquette-rubrique">{{ rd.lnThematique|titrePrincipal }}</p>
+	<div class="row">
+		<div class="stats col-lg-3 col-md-3 col-extended">
+			<span class="n-reponses">{{ rd.filReponses|length }}</span>
+			<span class="n-votes">{{ qlikes }}</span>
+		</div>
+		<div class="col-lg-9 col-md-9">
+			<h4 class="soude" style="margin:0">
+				<a href="{{ rd|targetURL }}">{{ rd.titre }}</a>
+			</h4>
+			<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(rd.lnThematique) }}">{{ rd.lnAuteur.prenom~' '~rd.lnAuteur.nom }}</a></p>
+			<p class="credits datePublication soude">{{ rd.datePublication|laps }}</p>
+		</div>
+	</div>
+
+</article>
+{% endfor %}
+{% endblock %}
+
+{% block corpsQuestionsAimees %}
+{% for rd in aimees %}
+{% set princeps = rubriquePrincipale(rd.lnThematique) %}
+{% set qlikes = 0 %}
+{% for r in rd.filReponses %}
+{% set qlikes = qlikes + r.likes %}
+{% endfor %}
+<article class="question-de-nana plus-aimees {{ rubriquePrincipale(rd.lnThematique) }}_secondaire">
+	<p class="{{ rubriquePrincipale(rd.lnThematique) }} etiquette-rubrique">{{ rd.lnThematique|titrePrincipal }}</p>
+	<div class="row">
+		<div class="stats col-lg-3 col-md-3 col-extended">
+			<span class="n-reponses">{{ rd.filReponses|length }}</span>
+			<span class="n-votes">{{ qlikes }}</span>
+		</div>
+		<div class="col-lg-9 col-md-9">
+			<h4 class="soude" style="margin:0">
+				<a href="{{ rd|targetURL }}">{{ rd.titre }}</a>
+			</h4>
+			<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(rd.lnThematique) }}">{{ rd.lnAuteur.prenom~' '~rd.lnAuteur.nom }}</a></p>
+			<p class="credits datePublication soude">{{ rd.datePublication|laps }}</p>
+		</div>
+	</div>
+
+</article>
+{% endfor %}
+{% endblock %}

@@ -11,13 +11,13 @@
 		<article class="plus-lus {{ rubriquePrincipale(a.lnThematique) }}_secondaire row">
 	 		{% set r = a.rubriques %}
 			<div class="rubriqueMarqueur iconex80 coin_{{ rubriquePrincipale(a.lnThematique) }} col-lg-4">
-				<a href="{#{ a|targetURL }#}">
+				<a href="{{ a|targetURL }}">
 		 			<img class="" src="{{ illustration(a) }}" alt="{#{ alt }#}" />
 	 			</a>
 	 		</div>
 	 		<div class="notice col-lg-8 col-extended">
 				<h4 class="soude" style="margin:0">
-					<a href="{#{ a|targetURL }#}">{{ a.titre }}</a>
+					<a href="{{ a|targetURL }}">{{ a.titre }}</a>
 				</h4>
 				<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': a.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(a.lnThematique) }}">{{ a.lnAuteur.prenom~' '~a.lnAuteur.nom }}</a></p>
 				<p class="credits datePublication">{{ a.datePublication|laps }}</p>

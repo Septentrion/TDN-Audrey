@@ -807,54 +807,18 @@ abstract class Document
 
         $classe = explode('\\', get_class($this));
         $type = array_pop($classe);
-        switch ($type) {
-            case 'Article':
-                $route = 'RedactionBundle_article';
-                break;
-            case 'SelectionShopping':
-                $route = 'Redaction_showSelection';
-                break;
-            case 'ConseilExpert':
-                $route = 'ConseilExpert_conseil';
-                break;
-            case 'Question':
-                $route = 'CauseuseBundle_conversation';
-                break;
-            case 'Concours':
-                $route = 'Concours_show';
-                 break;
-            case 'Dossier':
-                $route = 'DossierRedaction_dossier';
-                break;
-            case 'Image':
-                $route = 'RedactionBundle_article';
-                break;
-            case 'Produit':
-                $route = 'Produit_showProduit';
-                break;
-            case 'Quiz':
-                $route = 'Quiz_quiz';
-                break;
-            case 'Video':
-                $route = 'VideoBundle_video';
-                break;
-            default:
-                $route = "_welcome";
-        }
+        $route = $type.'_page';
         $params['slug'] = $this->slug;
         $params['id'] = $this->idDocument;
         $rubrique = $this->getLnThematique();
         // $is_Document = is_subclass_of(get_class($rubrique), 'TDN\Bundle\DocumentBundle\Entity\Document');
-        if ($rubrique instanceof DocumentRubrique) {
-            $params['rubrique'] = $rubrique->getSlug();
+        $params['rubrique'] = $rubrique->getSlug();
+        $theme = $rubrique->getRubriqueParente();        
+        if ($theme instanceof DocumentRubrique) {
+            $params['theme'] = $theme->getSlug();
         } else {
-            $rubrique = $this->rubriques[0];
-            if ($rubrique instanceof DocumentRubrique) {
-                $params['rubrique'] = $rubrique->getSlug();
-            } else {
-                $params['rubrique'] = 'tdn';
-            }            
-        }
+            $params['theme'] = 'tdn';
+        }            
         return array($route, $rubrique, $params);
     }
 

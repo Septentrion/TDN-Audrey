@@ -179,4 +179,23 @@ class ConseilExpert extends Document {
     {
         return $this->lnImage;
     }
+
+    public function init() {
+
+        $this->setTitre("");
+        $this->setSlug("");
+        $this->setLikes(0);
+        $this->setHits(0);
+        $this->setAuteur(0);
+        $this->setReponse('');
+        $this->setStatut('CONSEIL_ENREGISTRE');
+        $this->setVersion("1.0");
+        $this->setTags("");
+        $this->setDateSoumission(new \DateTime);
+        $this->setDatePublication(new \DateTime);
+        $this->setDateModification(new \DateTime);
+        $this->setCommentThread(new \Doctrine\Common\Collections\ArrayCollection());
+
+        return $this;
+    }
 }

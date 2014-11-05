@@ -4,8 +4,8 @@
 
 {%block contenuPrincipal %}
 <div id="sommaire-home">
-  <div id="slider">
-    {#% render "DocumentBundle:Slider:show" with {'limite': 6} %#}
+  <div id="slider" class="tdn-slider">
+    {% render(controller("TDNDocumentBundle:Slider:show", {'limite': 6})) %}
   </div>
 
   <div id="conseils-recents">
@@ -34,7 +34,7 @@
   </div>
 
   <div id="questions-recentes">
-    {% render(controller("TDNCauseuseBundle:Partiels:questionsPopulaires", {'limite': 6})) %}
+    {% render(controller("TDNCauseuseBundle:Partiels:digestHome", {'limite': 6})) %}
   </div>
 
 </div>

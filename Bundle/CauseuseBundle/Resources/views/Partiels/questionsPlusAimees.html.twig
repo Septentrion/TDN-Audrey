@@ -16,7 +16,7 @@
 		</div>
 		<div class="col-lg-10">
 			<h4 class="soude" style="margin:0">
-				<a href="{#{ a|targetURL }#}">{{ rd.titre }}</a>
+				<a href="{{ rd|targetURL }}">{{ rd.titre }}</a>
 			</h4>
 			<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(rd.lnThematique) }}">{{ rd.lnAuteur.prenom~' '~rd.lnAuteur.nom }}</a></p>
 			<p class="credits datePublication soude">{{ rd.datePublication|laps }}</p>

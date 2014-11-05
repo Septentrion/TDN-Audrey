@@ -34,8 +34,12 @@
         <default key="_controller">TDNConseilExpertBundle:Public:conseil</default>
     </route>
 
-    <route id="ConseilExpert_creer" pattern="/conseil-expert/demande">
+    <route id="ConseilExpert_creer" pattern="/conseil-expert/demande" methods="get">
         <default key="_controller">TDNConseilExpertBundle:Public:conseilDemande</default>
+    </route>
+
+    <route id="ConseilExpert_creer_process" pattern="/conseil-expert/demande" methods="post">
+        <default key="_controller">TDNConseilExpertBundle:Public:conseilDemandeProcess</default>
     </route>
 
     <route id="ConseilExpert_filPerso" pattern="/conseil-expert/liste-personnelle/{id}">

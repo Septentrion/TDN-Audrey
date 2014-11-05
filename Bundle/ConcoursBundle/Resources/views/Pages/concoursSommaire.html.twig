@@ -12,7 +12,7 @@
   {% for featured in featuredContenus %}
     <article class="carte concours coin_{{ rubriquePrincipale(featured.lnThematique) }} col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div class="illustration col-lg-4 col-md-4 col-sm-4 col-xs-12">
-      <a href="{{ path('Concours_page', {'theme': featured.lnThematique.slug, 'rubrique': featured.lnThematique.slug, 'slug': featured.slug, 'id':featured.idDocument}) }}">
+      <a href="{{ featured|targetURL }}">
     {% if featured.lnIllustration is not null%}
         <img class="vignette vignette-illustration" src="{{ illustration(featured, 'SQUARE') }}" alt="{{ featured.lnIllustration.alt }}" />
     {% endif %}
@@ -20,7 +20,7 @@
       </div>
       <div class="presentation col-lg-8 col-md-8 col-sm-8 col-xs-12">
         <p class="titre">
-          <a href="{{ path('Concours_page', {'theme': featured.lnThematique.slug, 'rubrique': featured.lnThematique.slug, 'slug': featured.slug, 'id':featured.idDocument}) }}">
+          <a href="{{ featured|targetURL }}">
           {{ featured.titre[0:240] }}
           </a>
         </p>
@@ -40,7 +40,7 @@
   {% for contenu in listeContenus %}
     <article class="carte coin_{{ rubriquePrincipale(contenu.lnThematique) }} concours par-concours">
       <div class="illustration">
-      <a href="{{ path('Concours_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+      <a href="{{ contenu|targetURL }}">
     {% if contenu.lnIllustration is not null%}
         <img class="vignette vignette-illustration" src="{{ illustration(contenu, 'SQUARE') }}" alt="{{ contenu.lnIllustration.alt }}" />
     {% endif %}
@@ -48,7 +48,7 @@
       </div>
       <div class="presentation">
         <p class="titre">
-          <a href="{{ path('Concours_page', {'theme': contenu.lnThematique.slug, 'rubrique': contenu.lnThematique.slug, 'slug': contenu.slug, 'id':contenu.idDocument}) }}">
+          <a href="{{ contenu|targetURL }}">
           {{ contenu.titre[0:240] }}
           </a>
         </p>

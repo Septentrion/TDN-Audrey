@@ -1468,4 +1468,12 @@ class Nana implements AdvancedUserInterface, \Serializable
     {
         return $this->semainePromue;
     }
+
+    public function isA($role) {
+
+        $roles = $this->getRoles();
+        $asUser =  array_filter($roles, function ($r) use ($role) {return ($r->getRole() == 'ROLE_'.strtoupper($role));});
+        return !empty($asUser);
+
+    }
 }
