@@ -1,0 +1,41 @@
+<div id="en-direct">
+	<h4>TDN en direct</h4>
+	{% if entrees is empty %}
+	<p>Aucune activité sur TDN</p>
+	{% else %}
+	<div style="display:block">
+	<div class="nano" style="height:520px">
+		<div class="content journal">
+			{% for e in entrees%}
+			<div class="entreeJournal">
+				<div class="avatarEntree partEntreeDirect">
+				{% if e.lnActeur is null or e.lnActeur.lnAvatar is null %}
+		         <img src="http://trucsdenana.com/{{ asset('assets/images/theme/centre/avatar_profil/avatar5%2080x95.png')}}" style="width:30px" />
+				{% else %}
+		         <img src="http://trucsdenana.com/{{ asset('/uploads/documents/profils/'~ e.lnActeur.idNana ~'/sqr_'~ e.lnActeur.lnAvatar.fichier)}}" style="width:30px" />
+				{% endif %}
+				</div>
+				<div class="dateEntree">
+				{{ e.dateEntree|date('d/m/Y H:i:s') }}
+				</div>
+				<div class="texteEntree partEntreeDirect">
+				{% if e.url is not empty %}
+				{% set url = '<a class="url" href="'~ e.url ~'">'~ e.titre[0:100] ~'</a>'%}
+				{% else %}
+				{% set url = e.titre[0:100] %}
+				{% endif %}
+				{% if e.lnActeur is null %}
+				{% set who = 'anonyme' %}
+				{% else %}
+				{#% set who = '<a class="acteur" href='~ path('NanaBundle_profil', {'id': e.lnActeur.idNana}) ~'>'~ e.lnActeur.username ~'</a>' %#}
+				{% set who = ''%}
+				{% endif %}
+				{{ who|raw }} {{ e.texte }} {{ url|raw }}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		</div>
+	</div>
+	{% endif %}
+</div>
