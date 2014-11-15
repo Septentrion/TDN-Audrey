@@ -4,16 +4,12 @@
 
 {%block contenuPrincipal %}
 <div id="sommaire-home">
-  <div id="slider" class="tdn-slider">
-    {% render(controller("TDNDocumentBundle:Slider:show", {'limite': 6})) %}
-  </div>
-
   <div id="conseils-recents">
-    {% render(controller("TDNConseilExpertBundle:Partiels:conseilsRecents", {'limite': 2})) %}
+    {% render(controller("TDNConseilExpertBundle:Partiels:conseilsRecents", {'limite': 2, 'panel': panel})) %}
   </div>
 
   <div id="dernieres-questions" class="bloc-questions">
-    {% render(controller("TDNCauseuseBundle:Partiels:questionsRecentes", {'limite': 2})) %}
+    {% render(controller("TDNCauseuseBundle:Partiels:questionsRecentes", {'limite': 2, 'panel': panel})) %}
   </div>
 
   <div id="articles-recents" class="bloc-bandeau">

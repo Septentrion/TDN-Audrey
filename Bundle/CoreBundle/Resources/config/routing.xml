@@ -32,7 +32,7 @@
         <default key="_controller">TDNCoreBundle:Default:home</default>
     </route>
 
-    <route id="Core_sommaire" pattern="/{slug}/sommaire">
+    <route id="Core_sommaire_standard" pattern="/{slug}/sommaire">
         <default key="_controller">TDNCoreBundle:Core:sommaireRubrique</default>
         <requirement key="slug">a-la-une|beaute|bien-etre|deco|geekette|mode|recettes|sexo-psycho</requirement>
     </route>
