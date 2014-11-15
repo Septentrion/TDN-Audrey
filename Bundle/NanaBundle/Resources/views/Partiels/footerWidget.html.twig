@@ -1,0 +1,39 @@
+<div id="membres" class="row">
+	<div class="col-lg-3">
+		<figure class="nana-semaine">
+			<a href="{#{ path('NanaBundle_profil', {'id': nanaDeLaSemaine.idNana}) }#}">
+				<img src="http://trucsdenana.com/{{ avatar(nanaDeLaSemaine) }}" class="" alt="Avatar de {{ nanaDeLaSemaine.username }}" />
+			</a>
+			<figcaption class="idNanaSemaine">
+				<p class="nana-pseudo">{{ nanaDeLaSemaine.username }}</p>
+				<p class="nana-caption">Nana de la semaine</p>
+			</figcaption>		
+		</figure>
+	</div>
+	<div class="nouvelles-nanas col-lg-9">
+		<div class="nana-stamp">
+			<p class="cardinal">Les Nanas</p>
+		</div>
+		<form name="recherche-membre" id="recherche-membre" class="recherche-membre" action="{#{ path('NanaBundle_rechercheNanas') }#}">
+            <input type="text" name="seed" id="seed" placeholder="Nom, mail ou pseudo à rechercher">
+            <input type="submit" name="quicksearch" class="submitter" value=">">
+		</form>
+		<div class="intertitre-selection">
+			<h4>NOUVEAUX MEMBRES</h4>
+		</div>		
+		<div class="selectionNanas">
+			{% if selectionNanas is empty %}
+			<p class="warning">Aucune nana inscrite</p>
+			{% else %}
+			<div class="avatarWrapper">
+			{% for nana in selectionNanas %}
+				<a class="scotchee" href="{#{ path('NanaBundle_profil', {'id': nana.idNana})}#}" title="{{ nana.username }}">
+					<img src="http://trucsdenana.com/{{ avatar(nana) }}" class="vignetteScotchee" alt="Avatar de {{ nana.username }}" />
+				</a>
+			{% endfor %}
+			</div>
+			{% endif %}
+		</div>
+		<a href="{#{ path('NanaBundle_registerForm') }#}" class="lienFleche popin tdn-link-solide">Deviens membre</a>
+	</div>
+</div>

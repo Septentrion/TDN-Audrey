@@ -1,5 +1,6 @@
 <div id="mytdn-dashboard" class="row">
-	<div class="avatar col-lg-2 col-md-2 col-sm-2 col-xs-2">
+	<div class="picto-mytdn col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+	<div class="avatar col-lg-2 col-md-2 col-sm-2 col-xs-2 avatar-scotche-defaut">
 	 {% if me is defined and me.lnAvatar is not null %}
      {% set sourceAvatar = '/uploads/documents/profils/'~me.idNana~'/'~me.lnAvatar.fichier %}
      {% else %}
@@ -10,20 +11,23 @@
 	<div class="identite col-lg-2 col-md-2 col-sm-2 col-xs-10">
 		{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 		<p class="pseudo">
-			<a class='headerLink' href="{#{ path('NanaBundle_myProfil') }#}">
-				{#{ username }#}
+			<a class='headerLink' href="{{ path('NanaBundle_myProfil') }}">
+				{{ username }}
 			</a>
 		</p>
-		<p class="role">{#{ statut }#}</p>
+		<p class="role">{{ statut }}</p>
+		<p class="bouton_profil">
+			<a class='deconnexion' href="{{ path('NanaBundle_myProfil') }}">Accéder à mon profil</a>
+		</p>
 		<p>
-			<a class='deconnexion' href="{#{ path('NanaBundle_logout') }#}">Me déconnecter</a>
+			<a class='deconnexion' href="{{ path('NanaBundle_logout') }}">Me déconnecter</a>
 		</p>
 		{% endif %}
 	</div>
-	<div class="options col-lg-8 col-md-8 col-sm-8 col-xs-12">		
+	<div class="options col-lg-6 col-md-6 col-sm-6 col-xs-12">		
 	{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 		<h3> Communauté </h3>
-			<ul class="groupe-options" class="col-lg-4">
+			<ul class="groupe-options col-lg-6">
 				{% if is_granted('ROLE_USER') %}
 				<li class="granted-options">
 					<a class='headerLink' href="{#{ path('ConseilExpert_creer') }#}">Poser une question à un expert</a>
@@ -34,20 +38,16 @@
 				<li class="granted-options">
 					<a class='headerLink' href="{#{ path('Video_proposer') }#}">Proposer une vidéo</a>
 				</li>
+				<!--li class="granted-options">Jouer à un quiz</li-->
+				<li class="granted-options">
+					<a href="{#{ path('Concours_sommaire') }#}">Voir les jeux-concours</a>
+				</li>
 				<li class="granted-options">
 					<a class='headerLink' href="{#{ path('NanaBundle_myProfil') }#}">Accéder à mon profil</a>
 				</li>
 				{% endif %}
 			</ul>
-			<ul class="groupe-options" class="col-lg-4">
-				{% if is_granted('ROLE_USER') %}
-				<!--li class="granted-options">Jouer à un quiz</li-->
-				{% endif %}
-				{% if is_granted('ROLE_USER') %}
-				<li class="granted-options"><a href="{#{ path('Concours_sommaire') }#}">Voir les jeux-concours</a></li>
-				{% endif %}
-			</ul>
-			<ul class="groupe-options" class="col-lg-4">
+			<ul class="groupe-options col-lg-6">
 				{% if is_granted('ROLE_JOURNALISTE') %}
 				<li class="granted-options">
 					<a class='headerLink' href="{#{ path('RedactionBundle_articleAdd') }#}">Ecrire un article</a>
@@ -66,7 +66,8 @@
 			</ul>
 	{% else %}
 		<h3>Connecte-toi sur TDN</h3>
-		{#% render(controller("NanaBundle:Security:blockLogin", {'redirect_url': path('NanaBundle_myProfil')})) %#}
+		{#% render(controller("TDNNanaBundle:Security:blockLogin", {'redirect_url': path('NanaBundle_myProfil')})) %#}
+		{% render(controller("TDNNanaBundle:Security:blockLogin", {'redirect_url': '#'})) %}
 		<p class="inviteInscription">
 			<a href="{#{ path('Nana_passwordResetS1') }#}" class="lienFleche">J'ai perdu mes identifiants ?</a> 
 			<a href="{#{ path('NanaBundle_registerForm') }#}" class="lienFleche popin">Inscris-toi sur Trucdenana.com</a>
@@ -74,11 +75,11 @@
 	{% endif %}
 	</div>
 </div>
-<div id="mytdn-grip">
+<div id="mytdn-grip" class="">
 	<div id="bienvenue" class="bienvenue">
 	{% if username is defined %}
-	    Bienvenue {#{ username }#}
-	    <img class="avatar-minuscule" src="{#{ asset(sourceAvatar)}#}" />
+	    Bienvenue {{ username }}
+	    <img class="avatar-minuscule" src="{{ asset(sourceAvatar)}}" />
 	{% else %}
 		Me connecter à
 	{% endif %}
@@ -94,46 +95,98 @@
 			{% endif %}
 			{% if messages is defined and messages is not empty %}
 	    	<div class="messagesFeed digest-off">
-				{% include 'CoreBundle:Bloc:dashboardNotification.html.twig' with {'entrees': messages, 'me': me, 'actions': 'messages'} %}
+				{% include 'TDNCoreBundle:Partiels:dashboardNotification.html.twig' with {'entrees': messages, 'me': me, 'actions': 'messages'} %}
 	    	</div>
 			{% endif %}
 			{% if likes is defined and likes is not empty %}
 	    	<div class="likesFeed digest-off">
-				{% include 'CoreBundle:Bloc:dashboardNotification.html.twig' with {'entrees': likes, 'me': me, 'actions': 'likes'} %}
+				{% include 'TDNCoreBundle:Partiels:dashboardNotification.html.twig' with {'entrees': likes, 'me': me, 'actions': 'likes'} %}
 	    	</div>
 			{% endif %}
 			{% if follows is defined and follows is not empty %}
 	    	<div class="likesFeed digest-off">
-				{% include 'CoreBundle:Bloc:dashboardNotification.html.twig' with {'entrees': follows, 'me': me, 'actions': 'follows'} %}
+				{% include 'TDNCoreBundle:Partiels:dashboardNotification.html.twig' with {'entrees': follows, 'me': me, 'actions': 'follows'} %}
 	    	</div>
 			{% endif %}
 		</div>
 	<!-- En cas de gain de « points » -->
 	{% if gain is defined and gain > 0 %}
-	    <a href="#" class="element-on hasGain-on">{{ gain }}</a>
+		<div class="lighter hasGain-on">
+			<span class="hasGain"></span>
+		    <a href="#" class="pastille-rose">{{ gain }}</a>
+		</div>
 	{% else %}
-		<span class="element-on hasGain-off"></span>
+		<div class="lighter hasGain-off">
+			<span class="hasGain"></span>
+		</div>
 	{% endif %}
 	<!-- En cas de nouvelles relations -->
 	{% if likes is defined and likes is not empty %}
-	    <span class="element-on hasLikes-on">{{ likes|length }}</span>
+		<div class="lighter hasLikes-on">
+			<span class="hasLikes"></span>
+		    <span class="pastille-rose">{{ likes|length }}</span>
+		</div>
 	{% else %}
-		<span class="element-on hasLikes-off"></span>
+		<div class="lighter hasLikes-off">
+			<span class="hasLikes"></span>
+		</div>
 	{% endif %}
 	<!-- En cas d'activité sur le site -->
 	{% if messages is defined and messages is not empty %}
-	    <a class="element-on hasActivite-on">{{ messages|length }}</a>
+		<div class="lighter hasMessages-on">
+			<span class="hasMessages"></span>
+		    <a class="pastille-rose">{{ messages|length }}</a>
+		</div>
 	{% else %}
-		<span class="element-on hasActivite-off"></span>
+		<div class="lighter hasMessages-off">
+			<span class="hasMessages"></span>
+		</div>
 	{% endif %}
 	<!-- En cas de d'activié personnelle -->
 	{% if follows is defined and follows is not empty %}
-	    <span class="element-on hasFollowers-off">{{ follows|length }}</span>
+		<div class="lighter hasFollowers-on">
+			<span class="hasFollowers"></span>
+		    <span class="pastille-rose">{{ follows|length }}</span>
+		</div>
 	{% else %}
-		<span class="element-on hasFollowers-off"></span>
+		<div class="lighter hasFollowers-off">
+			<span class="hasFollowers"></span>
+		</div>
 	{% endif %}
 	</div>
-	<div id="tiroir" class="tiroir">
-		<img src="{{ asset('assets/images/theme/tetiere/mytdn/logo_MyTDN.png')}}" />
-	</div>
+	<div id="logo-grip" class="logo-grip"></div>
+	<div id="indicateur-etat-tiroir" class="indicateur-etat-tiroir"></div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#mytdn-grip').on('click', function () {
+			$(this).closest('#mytdn').toggleClass('mytdn-closed mytdn-open');
+		});
+		$('.hasGain-on').click(function (event) {
+			event.preventDefault();
+			$("#digest .upgradeEscarpin").toggleClass('digest-on digest-off');
+			event.stopPropagation();
+		});
+		$('.hasActivite-on').click(function (event) {
+			event.preventDefault();
+			$("#digest .messagesFeed").toggleClass('digest-on digest-off');
+			event.stopPropagation();
+		});
+		$('.hasLikes-on').click(function (event) {
+			event.preventDefault();
+			$("#digest .likesFeed").toggleClass('digest-on digest-off');
+			event.stopPropagation();
+		});
+		$('.hasFollowers-on').click(function (event) {
+			event.preventDefault();
+			$("#digest .followersFeed").toggleClass('digest-on digest-off');
+			event.stopPropagation();
+		});
+		$('.notifCallback').click(function (event) {
+			event.stopPropagation();
+		})
+		$('#digest').click(function (event) {
+			event.stopPropagation();
+		})
+	})
+</script>

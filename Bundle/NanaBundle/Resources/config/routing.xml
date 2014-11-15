@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!-- CRON -->
+
+    <route id="Nana_choixNanaDeLaSemaine" pattern="/cron/nana-de-la-semaine/choisir">
+        <default key="_controller">TDNNanaBundle:Admin:choixNanaDeLaSemaine</default>
+    </route>
+
+    <route id="Nana_choixNanaEscarpins" pattern="/cron/tirage-escarpins">
+        <default key="_controller">TDNNanaBundle:Admin:choixEscarpinsMensuel</default>
+    </route>
+
+    <route id="Nana_preChoixNanaEscarpins" pattern="/cron/pre-tirage-escarpins">
+        <default key="_controller">TDNNanaBundle:Admin:preEscarpinsMensuel</default>
+    </route>
+
+    <route id="Nana_resetPopularite" pattern="/cron/reset-popularite/{debut}">
+        <default key="_controller">TDNNanaBundle:Migration:resetPopularite</default>
+    </route>
+
+    <!-- Routes publiques (Pages) -->
+
+    <route id="NanaBundle_login" pattern="/login">
+        <default key="_controller">TDNNanaBundle:Public:login</default>
+    </route>
+
+    <route id="NanaBundle_popinLogin" pattern="/popinlogin">
+        <default key="_controller">TDNNanaBundle:Security:popinLogin</default>
+    </route>
+
+    <route id="NanaBundle_loginCheck" pattern="/login_check"></route>
+
+    <route id="NanaBundle_logout" pattern="/logout">
+        <default key="_controller">TDNNanaBundle:Public:login</default>
+    </route>
+
+    <route id="NanaBundle_registerForm" pattern="/inscription">
+        <default key="_controller">TDNNanaBundle:Public:register</default>
+    </route>
+
+    <route id="NanaBundle_registerFormConcours" pattern="/inscription/concours">
+        <default key="_controller">TDNNanaBundle:Public:registerConcours</default>
+    </route>
+
+    <route id="NanaBundle_registerCheck" pattern="/registerCheck">
+        <default key="_controller">TDNNanaBundle:Public:registerCheck</default>
+    </route>
+
+    <route id="NanaBundle_myProfil" pattern="/my-tdn/profil">
+        <default key="_controller">TDNNanaBundle:Public:showMyProfil</default>
+    </route>
+
+    <route id="NanaBundle_myProfilUpdate" pattern="/my-tdn/profil/update">
+        <default key="_controller">TDNNanaBundle:Public:updateProfil</default>
+    </route>
+
+    <route id="NanaBundle_myAvatarUpdate" pattern="/my-tdn/profil/update-avatar">
+        <default key="_controller">TDNNanaBundle:Public:updateAvatar</default>
+    </route>
+
+    <route id="NanaBundle_myGalerieUpdate" pattern="/my-tdn/profil/update-galerie">
+        <default key="_controller">TDNNanaBundle:Public:updateGalerie</default>
+    </route>
+
+    <route id="Nana_supprimerElementGalerie" pattern="/my-tdn/profil/galerie/enlever-image/{id}">
+        <default key="_controller">TDNNanaBundle:Public:supprimerElementGalerie</default>
+    </route>
+
+    <route id="NanaBundle_myProfilClose" pattern="/my-tdn/profil/close">
+        <default key="_controller">TDNNanaBundle:Public:closeProfil</default>
+    </route>
+
+    <route id="NanaBundle_profil" pattern="/profil/{id}">
+        <default key="_controller">TDNNanaBundle:Public:showProfil</default>
+    </route>
+
+    <route id="NanaBundle_follow" pattern="/follow/{nana}">
+        <default key="_controller">TDNNanaBundle:Public:follow</default>
+    </route>
+
+    <route id="NanaBundle_rechercheNanas" pattern="/recherche/nanas">
+        <default key="_controller">TDNNanaBundle:Public:rechercheNanas</default>
+    </route>
+
+    <route id="Nana_messagePriveShow" pattern="/message-prive/{id}">
+        <default key="_controller">TDNNanaBundle:Public:messagePrive</default>
+    </route>
+
+    <route id="Nana_messagePriveSend" pattern="/message-prive">
+        <default key="_controller">TDNNanaBundle:Public:messagePrive</default>
+    </route>
+
+    <route id="Nana_partage" pattern="/partage/contenu/{id}">
+        <default key="_controller">TDNNanaBundle:Public:partage</default>
+    </route>
+
+    <route id="Nana_partageSend" pattern="/partage/envoi">
+        <default key="_controller">TDNNanaBundle:Public:partage</default>
+    </route>
+
+    <!-- Hobbies -->
+
+    <route id="NanaBundle_myHobbyAdd" pattern="/my-tdn/profil/hobby/add">
+        <default key="_controller">TDNNanaBundle:Hobby:add</default>
+    </route>
+
+    <route id="NanaBundle_myHobbyModifier" pattern="/my-tdn/profil/hobby/modifier">
+        <default key="_controller">TDNNanaBundle:Hobby:modifier</default>
+    </route>
+
+    <route id="Nana_ajouterImageHobby" pattern="/my-tdn/profil/hobby/ajouter-image">
+        <default key="_controller">TDNNanaBundle:Hobby:ajouterImage</default>
+    </route>
+
+    <route id="Nana_supprimerImageHobby" pattern="/my-tdn/profil/hobby/supprimer-image/{id}">
+        <default key="_controller">TDNNanaBundle:Hobby:supprimerImage</default>
+    </route>
+    <!-- Routes publiques (Blocs) -->
+
+   <route id="Nana_passwordResetS1" pattern="/mot-de-passe-oublie">
+        <default key="_controller">TDNNanaBundle:Security:passwordResetS1</default>
+    </route>
+
+   <route id="Nana_passwordResetS2" pattern="/mot-de-passe/confirmer">
+        <default key="_controller">TDNNanaBundle:Security:passwordResetS2</default>
+    </route>
+
+   <route id="Nana_passwordResetS3" pattern="/mot-de-passe/restaurer">
+        <default key="_controller">TDNNanaBundle:Security:passwordResetS3</default>
+    </route>
+
+   <route id="Nana_passwordResetFinal" pattern="/mot-de-passe/valider">
+        <default key="_controller">TDNNanaBundle:Security:passwordResetFinal</default>
+    </route>
+
+   <!-- Routes d'administration -->
+
+    <route id="NanaBundle_log" pattern="/admin/profils/log">
+        <default key="_controller">TDNNanaBundle:Admin:log</default>
+    </route>
+
+    <route id="NanaBundle_creer" pattern="/admin/profil/new">
+        <default key="_controller">TDNNanaBundle:Admin:newProfil</default>
+    </route>
+
+    <route id="NanaBundle_editer" pattern="/admin/profil/editer/{id}">
+        <default key="_controller">TDNNanaBundle:Admin:editer</default>
+    </route>
+
+    <route id="NanaBundle_manage" pattern="/admin/profil/manage/{id}">
+        <default key="_controller">TDNNanaBundle:Admin:manage</default>
+    </route>
+
+    <route id="NanaBundle_supprimer" pattern="/admin/profil/supprimer/{id}">
+        <default key="_controller">TDNNanaBundle:Admin:supprimer</default>
+    </route>
+
+    <route id="NanaBundle_addBlacklist" pattern="/admin/profil/blacklist/add/{id}">
+        <default key="_controller">TDNNanaBundle:Admin:blacklistAdd</default>
+    </route>
+
+    <route id="NanaBundle_regsiterNewsletter" pattern="/admin/profil/newsletter/register">
+        <default key="_controller">TDNNanaBundle:Admin:newsletterRegister</default>
+    </route>
+
+    <route id="NanaBundle_unregisterNewsletter" pattern="/admin/profil/newsletter/unregister">
+        <default key="_controller">TDNNanaBundle:Admin:newsletterUnregister</default>
+    </route>
+
+   <!-- Administration des rôles -->
+
+    <route id="NanaBundle_rolesIndex" pattern="/admin/roles/index">
+        <default key="_controller">TDNNanaBundle:AdminRoles:rolesIndex</default>
+    </route>
+
+    <route id="NanaBundle_roleAccredites" pattern="/admin/roles/{role}/accredites">
+        <default key="_controller">TDNNanaBundle:AdminRoles:roleAccredites</default>
+    </route>
+
+    <route id="NanaBundle_roleAdd" pattern="/admin/role/creer">
+        <default key="_controller">TDNNanaBundle:AdminRoles:roleAdd</default>
+    </route>
+
+    <route id="NanaBundle_roleSupprimer" pattern="/admin/role/supprimer/{id}">
+        <default key="_controller">TDNNanaBundle:AdminRoles:roleSupprimer</default>
+    </route>
+
+    <route id="NanaRole_ajouterCredit" pattern="/admin/credit/ajouter">
+        <default key="_controller">TDNNanaBundle:AdminRoles:ajouteCreditr</default>
+    </route>
+
+    <route id="NanaRole_supprimerCredit" pattern="/admin/credit/{role_id}/supprimer/{nana_id}">
+        <default key="_controller">TDNNanaBundle:AdminRoles:supprimerCredit</default>
+    </route>
+
+    <!-- Migration -->
+
+    <route id="Nana_migration" pattern="/migration/nanas/{fichier}">
+        <default key="_controller">TDNNanaBundle:Migration:migration</default>
+    </route>
+
+    <route id="Nana_makeAvatars" pattern="/migration/make-avatars/{fichier}">
+        <default key="_controller">TDNNanaBundle:Migration:makeAvatars</default>
+    </route>
+
+    <!-- AJAX -->
+
+    <route id="Nana_usernamechecker" pattern="/usernamechecker.{_format}">
+        <default key="_controller">TDNNanaBundle:Ajax:usernameChecker</default>
+        <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Nana_mailchecker" pattern="/mailchecker.{_format}">
+        <default key="_controller">TDNNanaBundle:Ajax:mailChecker</default>
+        <requirement key="_format">json</requirement>
+    </route>
+
+    <!-- iOS -->
+
+    <route id="Nana_iOSTestRegister" pattern="/ios/test/inscription">
+        <default key="_controller">TDNNanaBundle:IOS:testRegister</default>
+    </route>
+
+    <route id="Nana_iOSRegister" pattern="/ios/my-tdn/profil/creer">
+        <default key="_controller">TDNNanaBundle:IOS:registerCheck</default>
+    </route>
+
+    <route id="Nana_iOSMyProfilUpdate" pattern="/ios/my-tdn/profil/update">
+        <default key="_controller">TDNNanaBundle:IOS:updateProfil</default>
+    </route>
+
+    <route id="Nana_iOSConnect" pattern="/ios/connect">
+        <default key="_controller">TDNNanaBundle:IOS:connect</default>
+    </route>
+
+    <route id="Nana_iOSLogin" pattern="/ios/login">
+        <default key="_controller">TDNNanaBundle:IOS:login</default>
+    </route>
+
+    <route id="Nana_iOSPasswordReset" pattern="/ios/mot-de-passe-oublie">
+        <default key="_controller">TDNNanaBundle:IOS:passwordReset</default>
+    </route>
+
+
+</routes>
