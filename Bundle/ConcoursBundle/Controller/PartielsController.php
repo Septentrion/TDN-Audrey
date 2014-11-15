@@ -14,7 +14,7 @@ class PartielsController extends Controller {
 
 	public function concoursRecentsAction ($limite = 20, $panel = NULL) {
 
-		$variables['typeEntite'] = 'jeux-concours';
+		$variables['typeEntite'] = 'concours';
 		$variables['titreEntite'] = 'Jeux-Concours';
 		$variables['messageEmpty'] = 'Aucun jeu-concours publié sur TDN';
 		$variables['lienSommaire'] = 'Tous les jeux-concours';

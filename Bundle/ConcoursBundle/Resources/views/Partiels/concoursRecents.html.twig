@@ -4,11 +4,11 @@
 {% for rd in recents %}
 <article class="bloc-conseil col-lg-12">
 	<a href="{{ rd|targetURL }}">
-		<div class="rubriqueMarqueur iconex60 coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3">
+		<div class="rubriqueMarqueur coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-4">
 			<img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
 		</div>
 	</a>
-	<div class="col-lg-9 col-extended">
+	<div class="col-lg-8 col-extended">
 		<p class="datePublication credits">{{ rd.datePublication|laps }}</p>
 		<h4 class="apercuTexte">
 			<a href="{#{ rd|targetURL }#}">{{ rd.titre|raw }}</a>

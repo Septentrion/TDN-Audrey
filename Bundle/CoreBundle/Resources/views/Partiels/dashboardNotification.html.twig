@@ -1,0 +1,39 @@
+<div class="mesAlertes">
+	{% if entrees is empty %}
+	{% else %}
+	<div class="nano" style="height:300px">
+		<div class="content journal">
+			{% for e in entrees%}
+			<div class="entreeJournal">
+				<!--div class="dateEntree">
+				{#{ e.dateEntree|date('d/m/Y H:i:s') }#}
+				</div-->
+				<div class="avatarEntree partEntreeDirect">
+				{% if e.lnActeur is null or e.lnActeur.lnAvatar is null %}
+		         <img src="{{ asset('assets/images/theme/centre/avatar_profil/avatar5%2080x95.png')}}" />
+				{% else %}
+		         <img src="{{ asset('/uploads/documents/profils/'~ e.lnActeur.idNana ~'/'~ e.lnActeur.lnAvatar.fichier)}}" style="width:40px" />
+				{% endif %}
+				</div>
+				<div class="texteEntree partEntreeDirect">
+				{% if e.url is not empty %}
+				{% set url = '<a class="url" href="'~ e.url ~'?razj='~ e.id ~'">'~ e.titre[0:100] ~'</a>'%}
+				{% else %}
+				{% set url = e.titre[0:100] %}
+				{% endif %}
+				{% if e.lnActeur is null %}
+				{% set who = 'anonyme' %}
+				{% else %}
+				{% set who = '<a class="acteur" href='~ path('NanaBundle_profil', {'id': e.lnActeur.idNana}) ~'>'~ e.lnActeur.username ~'</a>' %}
+				{% endif %}
+				{{ who|raw }} {{ e.texte }} {{ url|raw }}
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<p class="razAlertes">
+		<a class="notifCallback" href="{{ path('Journal_razAlertes', {'actions': actions})}}">Tout effacer</a>
+	</p>
+	{% endif %}
+</div>

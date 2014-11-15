@@ -1,37 +1,228 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <routes xmlns="http://symfony.com/schema/routing"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="tdn_core_homepage" pattern="/hello/{name}">
-        <default key="_controller">TDNCoreBundle:Default:index</default>
-    </route>
-    <route id="Core_home" pattern="/">
+    <!-- Tests -->
+
+    <route id="Core_TestPolices" pattern="/test-polices">
+        <default key="_controller">TDNCoreBundle:Tests:polices</default>
+     </route>
+
+    <route id="Core_TestColorbox" pattern="/test-colorbox">
+        <default key="_controller">TDNCoreBundle:Tests:colorbox</default>
+     </route>
+
+    <!-- -->
+
+    <route id="_welcome" pattern="/">
         <default key="_controller">TDNCoreBundle:Default:home</default>
     </route>
-	<route id="question_liste" pattern="/questionsdenanas">
-		<default key="_controller">TDNCoreBundle:Default:qln</default>
-	</route>
-    <route id="Core_main" pattern="/{mainCat}">
-        <default key="_controller">TDNCoreBundle:Default:main</default>
+
+    <route id="core_homepage" pattern="/core/rubriques/dashboard">
+        <default key="_controller">TDNCoreBundle:Rubrique:dashboard</default>
     </route>
-    <route id="redaction_page_article" pattern="/article/{id}">
-        <default key="_controller">TDNRedactionBundle:article</default>
+
+    <route id="Core_home" pattern="/home">
+        <default key="_controller">TDNCoreBundle:Default:home</default>
     </route>
-    <route id="redaction_liste_article" pattern="/article/">
-        <default key="_controller">TDNRedactionBundle:article-l</default>
+
+    <route id="Core_sommaireGeneral" pattern="/sommaire">
+        <default key="_controller">TDNCoreBundle:Default:home</default>
     </route>
-    <route id="redaction_page_shopping" pattern="/shopping/{id}">
-        <default key="_controller">TDNRedactionBundle:shopping</default>
+
+    <route id="Core_sommaire" pattern="/{slug}/sommaire">
+        <default key="_controller">TDNCoreBundle:Core:sommaireRubrique</default>
+        <requirement key="slug">a-la-une|beaute|bien-etre|deco|geekette|mode|recettes|sexo-psycho</requirement>
     </route>
-    <route id="redaction_liste_shopping" pattern="/shopping/">
-        <default key="_controller">TDNRedactionBundle:shopping-l</default>
+
+    <route id="Core_sommaire" pattern="/sommaire/{slug}">
+        <default key="_controller">TDNCoreBundle:Core:sommaireRubrique</default>
+        <requirement key="slug">a-la-une|beaute|bien-etre|deco|geekette|mode|recettes|sexo-psycho</requirement>
     </route>
-    <route id="conseilExpert_liste" pattern="/conseils/">
-        <default key="_controller">TDNConseilBundle:conseil-l</default>
+
+    <route id="Core_sommaire_slashed" pattern="/sommaire/{slug}/">
+        <default key="_controller">TDNCoreBundle:Core:sommaireRubrique</default>
+        <requirement key="slug">a-la-une|beaute|bien-etre|deco|geekette|mode|recettes|sexo-psycho</requirement>
     </route>
-    <route id="conseilExpert_page" pattern="/conseils/{id}">
-        <default key="_controller">TDNConseilBundle:conseil</default>
+
+    <route id="Core_contact" pattern="/contact">
+        <default key="_controller">TDNCoreBundle:Default:contact</default>
     </route>
-	
+
+    <route id="Core_adminDashboard" pattern="/admin/tableau-de-bord">
+        <default key="_controller">TDNCoreBundle:Admin:dashboard</default>
+    </route>
+
+    <route id="Core_sendmail" pattern="/cron/sendmail/{message_limit}/{time_limit}/{recover}">
+        <default key="_controller">TDNCoreBundle:Spooler:flushQueue</default>
+    </route>
+
+    <route id="Journal_razAlertes" pattern="/alertes/raz">
+        <default key="_controller">TDNCoreBundle:Journal:razAlertes</default>
+    </route>
+
+    <route id="Spooler_flush" pattern="/spool/flush">
+        <default key="_controller">TDNCoreBundle:Spooler:flushQueue</default>
+    </route>
+
+    <!-- RSS -->
+
+    <route id="Core_RSSFeed" pattern="/feeds/tdn.{_format}">
+        <default key="_controller">TDNCoreBundle:RSS:feed</default>
+        <requirement key="_format">rss</requirement>
+    </route>
+
+    <route id="Core_RSSFeedByType" pattern="/feeds/{type}.{_format}">
+        <default key="_controller">TDNCoreBundle:RSS:feedByContenu</default>
+        <requirement key="_format">rss</requirement>
+    </route>
+
+    <route id="Core_RSSFeedByRubrique" pattern="/feeds/{type}/{rubrique}.{_format}">
+        <default key="_controller">TDNCoreBundle:RSS:feedByRubrique</default>
+        <requirement key="_format">rss</requirement>
+    </route>
+
+    <!-- Reprise v2 -->
+
+    <route id="Core_equipeLegacy" pattern="/page/equipe.html">
+        <default key="_controller">TDNCoreBundle:Legacy:equipe</default>
+    </route>
+
+    <route id="Core_equipeLegacy" pattern="/{equipe}.html">
+        <default key="_controller">TDNCoreBundle:Legacy:equipe</default>
+        <requirement key="equipe">equipe|quisommesnous</requirement>
+    </route>
+
+    <route id="Core_infolegalLegacy" pattern="/infolegal.html">
+        <default key="_controller">TDNCoreBundle:Legacy:infolegal</default>
+    </route>
+
+    <route id="Core_rubriquePrincipaleSommaireLegacy" pattern="/{rubrique}/sommaire/index.{_format}">
+        <default key="_controller">TDNCoreBundle:Legacy:sommaireRubrique</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="Core_rrechercheLegacy" pattern="/all/all/requete/index.html">
+        <default key="_controller">TDNCoreBundle:Legacy:recherche</default>
+    </route>
+
+    <route id="Core_pageLegacy" pattern="/page/{titre}.{_format}">
+        <default key="_controller">TDNCoreBundle:Legacy:page</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!--route id="Core_nakedURL" pattern="{slug},{identifiant}.{_format}">
+        <default key="_controller">TDNCoreBundle:Legacy:nakedSlug</default>
+        <requirement key="_format">html</requirement>
+    </route-->
+
+    <route id="Core_oldImageError" pattern="/{slug},{id}.{_format}">
+        <default key="_controller">TDNCoreBundle:Legacy:nakedURL</default>
+        <requirement key="id">\d+</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="Core_oldIndex" pattern="/index.{suffixe}">
+        <default key="_controller">TDNCoreBundle:Legacy:home</default>
+        <requirement key="suffixe">php|html</requirement>
+    </route>
+
+    <route id="Core_OldRSSArticles" pattern="/rss_articles.xml">
+        <default key="_controller">TDNCoreBundle:Apps:articlesRSS</default>
+        <requirement key="_format">rss</requirement>
+    </route>
+
+    <route id="Core_OldRSSFeedByType" pattern="/rss_tdn_{type}.{_format}">
+        <default key="_controller">TDNCoreBundle:Legacy:feedByContenu</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="Core_sommaireError" pattern="/sommaire">
+        <default key="_controller">TDNCoreBundle:Legacy:gone</default>
+    </route>
+
+    <route id="Core_oldSuggestions" pattern="/suggestions.html">
+        <default key="_controller">TDNCoreBundle:Default:contact</default>
+    </route>
+
+    <route id="oldies" pattern="/lepassage.html">
+        <default key="_controller">TDNCoreBundle:Default:gone</default>
+    </route>
+
+    <route id="oldies" pattern="/version_mobile.html">
+        <default key="_controller">TDNCoreBundle:Legacy:home</default>
+    </route>
+
+    <!-- Applications -->
+
+    <route id="Core_iPhoneLegacy" pattern="/lib/rss/json_tdn.php">
+        <default key="_controller">TDNCoreBundle:Apps:iPhoneFlux</default>
+    </route>
+
+    <route id="Core_iPhone" pattern="/lib/rss/v3/json_tdn.php">
+        <default key="_controller">TDNCoreBundle:Apps:iPhoneFlux</default>
+    </route>
+
+    <route id="Core_iOS" pattern="/ios/feed.{_format}">
+        <default key="_controller">TDNCoreBundle:IOS:iOSFlux</default>
+       <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_iOSArticle" pattern="/ios/article.{_format}">
+        <default key="_controller">TDNCoreBundle:IOS:iOSArticle</default>
+       <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_iOSVideo" pattern="/ios/video.{_format}">
+        <default key="_controller">TDNCoreBundle:IOS:iOSArticle</default>
+       <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_iOSAFeatured" pattern="/ios/featured.{_format}">
+        <default key="_controller">TDNCoreBundle:Apps:iOSFeatured</default>
+       <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_iOSDerniersArticles" pattern="/ios/derniers-articles.{_format}">
+        <default key="_controller">TDNCoreBundle:Apps:iOSDerniersArticles</default>
+       <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_iOSDernieresVideos" pattern="/ios/dernieres-videos.{_format}">
+        <default key="_controller">TDNCoreBundle:Apps:iOSVideos</default>
+       <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_articlesRSSLegacy" pattern="/lib/rss/articles_tdn.{_format}">
+        <default key="_controller">TDNCoreBundle:Apps:iPhoneFlux</default>
+        <requirement key="_format">json</requirement>
+    </route>
+
+    <route id="Core_articlesRSS" pattern="/articles/feed.{_format}">
+        <default key="_controller">TDNCoreBundle:Apps:articlesRSS</default>
+        <requirement key="_format">rss</requirement>
+    </route>
+
+    <route id="Core_articlesFeed" pattern="/articles/feed">
+        <default key="_controller">TDNCoreBundle:Apps:articlesRSS</default>
+    </route>
+
+    <route id="Core_conseilsRSS" pattern="/conseils-experts/feed.{_format}">
+        <default key="_controller">TDNCoreBundle:Apps:conseilsRSS</default>
+        <requirement key="_format">rss</requirement>
+    </route>
+
+    <!--oute id="Core_textFlux" pattern="/mobile/feed">
+        <default key="_controller">TDNCoreBundle:Apps:testFlux</default>
+    </route-->
+
+    <!-- Fakes -->
+    <route id="Core_fakes" pattern="/{fake}.{_format}">
+        <default key="_controller">TDNCoreBundle:Legacy:home</default>
+        <requirement key="fake">uetcqtunm|xpipcjaanedujc|hkfkqzedt|ipgoxffnxekqy|iuaqshkfepl|pbrxefzmp|twedkynsl</requirement>
+        <requirement key="_format">html</requirement>
+    </route>
+
 </routes>

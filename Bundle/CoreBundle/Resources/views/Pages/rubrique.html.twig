@@ -1,0 +1,41 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title %}Webzine participatif d'actualité beauté, mode, déco, psycho, forme{% endblock %}
+
+{%block contenuPrincipal %}
+<div id="sommaire-home">
+  <div id="slider" class="tdn-slider">
+    {% render(controller("TDNDocumentBundle:Slider:show", {'limite': 6})) %}
+  </div>
+
+  <div id="conseils-recents">
+    {% render(controller("TDNConseilExpertBundle:Partiels:conseilsRecents", {'limite': 2})) %}
+  </div>
+
+  <div id="dernieres-questions" class="bloc-questions">
+    {% render(controller("TDNCauseuseBundle:Partiels:questionsRecentes", {'limite': 2})) %}
+  </div>
+
+  <div id="articles-recents" class="bloc-bandeau">
+    {% render(controller("TDNRedactionBundle:Partiels:articlesRecents", {'limite': 3})) %}
+  </div>
+
+  <div id="coups-de-coeur-shopping">
+    {#% render "ProduitBundle:Partial:panoramaCoupsDeCoeur" with {'limite': 2} %#}
+  </div>
+
+  <div id="videos">
+    {% render(controller("TDNVideoBundle:Partiels:videosRecentes", {'limite': 6})) %}
+  </div>
+
+  <div id="tdn-cartonne">
+  {% render(controller("TDNRedactionBundle:Partiels:articlesPlusLus", {'limite': 6})) %}
+  {#% render "ConseilExpertBundle:Partial:conseilsPlusLus" with {'limite': 3} %#}
+  </div>
+
+  <div id="questions-recentes">
+    {% render(controller("TDNCauseuseBundle:Partiels:digestHome", {'limite': 6})) %}
+  </div>
+
+</div>
+{% endblock %}
