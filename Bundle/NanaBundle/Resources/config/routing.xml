@@ -25,7 +25,7 @@
     <!-- Routes publiques (Pages) -->
 
     <route id="NanaBundle_login" pattern="/login">
-        <default key="_controller">TDNNanaBundle:Public:login</default>
+        <default key="_controller">TDNNanaBundle:Security:login</default>
     </route>
 
     <route id="NanaBundle_popinLogin" pattern="/popinlogin">
@@ -35,19 +35,19 @@
     <route id="NanaBundle_loginCheck" pattern="/login_check"></route>
 
     <route id="NanaBundle_logout" pattern="/logout">
-        <default key="_controller">TDNNanaBundle:Public:login</default>
+        <default key="_controller">TDNNanaBundle:Security:login</default>
     </route>
 
-    <route id="NanaBundle_registerForm" pattern="/inscription">
-        <default key="_controller">TDNNanaBundle:Public:register</default>
+    <route id="Nana_inscription" pattern="/inscription">
+        <default key="_controller">TDNNanaBundle:Inscription:inscription</default>
     </route>
 
     <route id="NanaBundle_registerFormConcours" pattern="/inscription/concours">
-        <default key="_controller">TDNNanaBundle:Public:registerConcours</default>
+        <default key="_controller">TDNNanaBundle:Inscription:registerConcours</default>
     </route>
 
     <route id="NanaBundle_registerCheck" pattern="/registerCheck">
-        <default key="_controller">TDNNanaBundle:Public:registerCheck</default>
+        <default key="_controller">TDNNanaBundle:Inscription:registerCheck</default>
     </route>
 
     <route id="NanaBundle_myProfil" pattern="/my-tdn/profil">

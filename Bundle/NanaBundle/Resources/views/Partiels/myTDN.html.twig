@@ -16,7 +16,7 @@
 			</a>
 		</p>
 		<p class="role">{{ statut }}</p>
-		<p class="bouton_profil">
+		<p class="bouton-profil">
 			<a class='deconnexion' href="{{ path('NanaBundle_myProfil') }}">Accéder à mon profil</a>
 		</p>
 		<p>
@@ -24,30 +24,34 @@
 		</p>
 		{% endif %}
 	</div>
-	<div class="options col-lg-6 col-md-6 col-sm-6 col-xs-12">		
+	<div class="options col-lg-7 col-md-7 col-sm-6 col-xs-12">		
 	{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 		<h3> Communauté </h3>
-			<ul class="groupe-options col-lg-6">
+			<ul class="groupe-options col-lg-4">
 				{% if is_granted('ROLE_USER') %}
 				<li class="granted-options">
-					<a class='headerLink' href="{#{ path('ConseilExpert_creer') }#}">Poser une question à un expert</a>
+					<a class='headerLink' href="{#{ path('ConseilExpert_creer') }#}">Pose une question à un expert</a>
 				</li>
 				<li class="granted-options">
-					<a class='headerLink' href="{#{ path('CauseuseBundle_creer') }#}">Poser une question aux nanas</a>
+					<a class='headerLink' href="{#{ path('CauseuseBundle_creer') }#}">Pose une question aux nanas</a>
 				</li>
 				<li class="granted-options">
-					<a class='headerLink' href="{#{ path('Video_proposer') }#}">Proposer une vidéo</a>
+					<a class='headerLink' href="{#{ path('Video_proposer') }#}">Propose une vidéo</a>
 				</li>
-				<!--li class="granted-options">Jouer à un quiz</li-->
+				{% endif %}
+			</ul>
+			<ul class="groupe-options col-lg-4">
+				{% if is_granted('ROLE_USER') %}
 				<li class="granted-options">
 					<a href="{#{ path('Concours_sommaire') }#}">Voir les jeux-concours</a>
 				</li>
+				<!--li class="granted-options">Jouer à un quiz</li-->
 				<li class="granted-options">
 					<a class='headerLink' href="{#{ path('NanaBundle_myProfil') }#}">Accéder à mon profil</a>
 				</li>
 				{% endif %}
 			</ul>
-			<ul class="groupe-options col-lg-6">
+			<ul class="groupe-options col-lg-4">
 				{% if is_granted('ROLE_JOURNALISTE') %}
 				<li class="granted-options">
 					<a class='headerLink' href="{#{ path('RedactionBundle_articleAdd') }#}">Ecrire un article</a>
@@ -70,7 +74,7 @@
 		{% render(controller("TDNNanaBundle:Security:blockLogin", {'redirect_url': '#'})) %}
 		<p class="inviteInscription">
 			<a href="{#{ path('Nana_passwordResetS1') }#}" class="lienFleche">J'ai perdu mes identifiants ?</a> 
-			<a href="{#{ path('NanaBundle_registerForm') }#}" class="lienFleche popin">Inscris-toi sur Trucdenana.com</a>
+			<a href="{{ path('Nana_inscription') }}" class="lienFleche popin">Inscris-toi sur Trucdenana.com</a>
 		</p>				
 	{% endif %}
 	</div>
@@ -84,6 +88,7 @@
 		Me connecter à
 	{% endif %}
 	</div>
+	{% if username is defined %}
 	<div id="dashboard" class="dashboard">
 		<div id="digest">
 			{% if gain is defined and gain > 0 %}
@@ -142,7 +147,7 @@
 			<span class="hasMessages"></span>
 		</div>
 	{% endif %}
-	<!-- En cas de d'activié personnelle -->
+	<!-- En cas de d'activité personnelle -->
 	{% if follows is defined and follows is not empty %}
 		<div class="lighter hasFollowers-on">
 			<span class="hasFollowers"></span>
@@ -154,6 +159,7 @@
 		</div>
 	{% endif %}
 	</div>
+	{% endif %}
 	<div id="logo-grip" class="logo-grip"></div>
 	<div id="indicateur-etat-tiroir" class="indicateur-etat-tiroir"></div>
 </div>
