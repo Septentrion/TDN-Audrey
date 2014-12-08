@@ -1,0 +1,71 @@
+<div class="bloc-transparent">
+	<div class="bandeau bloc-coups-de-coeur row">
+		<h3 class="titre">Nos coups de coeur shopping</h3>
+	</div>
+	<div class="hot row slider-shopping">
+		<div class="bloc-icone"></div>
+		<button class="retour-arriere"></button>
+		<div id="scene-shopping" class="cell">
+			<div class="conteneur">
+				<div class="flux-shopping">
+					{% for produit in coupsDeCoeur %}
+					<figure class="snapshotProduit">
+						<a href="{{ path('Produit_afficher', {'id':produit.idDocument, 'slug':produit.slug}) }}">
+							<img src="{{ illustration(produit) }}"/>
+						</a>
+						<figcaption>
+							<a href="{{ path('Produit_afficher', {'id':produit.idDocument, 'slug':produit.slug}) }}">{{ produit.titre}}</a>					
+						</figcaption>
+					</figure>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<button class="avance-suite"></button>
+	</div>
+</div>
+<script type="text/javascript">
+
+	var move;
+	function moveleft () {
+		var pos = $('.flux-shopping').css('left');
+		console.log(pos.slice(0,-2));
+		if (parseInt(pos.slice(0,-2)) <= 0) {
+			clearInterval(move)
+		} else {
+			$('.flux-shopping').css('left', '-=4');
+		}
+	}
+	
+	function moveright () {
+		var pos = $('.flux-shopping').css('left');
+		console.log(pos.slice(0,-2));
+		if (parseInt(pos.slice(0,-2)) >= 742) {
+			clearInterval(move)
+		} else {
+			$('.flux-shopping').css('left', '+=4');
+		}
+	}
+
+	$(document).ready(function() {
+		$('.flux-shopping').draggable({
+			'axis': 'x',
+			'containment': 'parent',
+			'scroll': false
+		});
+		$('#selection-shopping .right').mousedown(function () {
+			console.log('down');
+			move = setInterval(moveleft, 10);
+		})
+		$('#selection-shopping .right').mouseup(function () {
+			clearInterval(move);
+		})
+		$('#selection-shopping .left').mousedown(function () {
+			console.log('down');
+			move = setInterval(moveright, 10);
+		})
+		$('#selection-shopping .left').mouseup(function () {
+			clearInterval(move);
+		})
+	});
+</script>
