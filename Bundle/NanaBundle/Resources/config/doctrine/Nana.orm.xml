@@ -19,10 +19,12 @@
 		<field name="sexe" type="integer" column="sexe" size="2" />
 		<field name="dateNaissance" type="datetime" column="date_naissance" nullable="true" />
 		<field name="email" type="string" column="email" nullable="true" unique="true" />
+		<field name="siteWeb" type="string" column="site_web" nullable="true" />
 		<field name="ville" type="string" column="ville" nullable="true" />
 		<field name="occupation" type="string" column="occupation" nullable="true" />
 		<field name="popularite" type="text" column="popularite" nullable="true" />
 		<field name="biographie" type="text" column="biographie" nullable="true" />
+		<field name="specialite" type="text" column="specialite" nullable="true" />
 		<field name="dateInscription" type="datetime" column="date_inscription" />
 		<field name="dateAbonnement" type="datetime" column="date_abonnement" nullable="true" />
 		<field name="active" type="integer" column="active" size="2" />

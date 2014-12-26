@@ -1,0 +1,147 @@
+{% extends 'TDNNanaBundle:Pages:mySectionsProfil.html.twig' %}
+
+{% block nanaData %}
+<article id="document-wrapper" class="main article-redaction">
+  <section class="contenu main-section">
+    <!-- Bloc pour l'affichage des métadonnées de l'article -->
+    <div id="metadata" class="metadata">
+       <p class="auteur">
+          <span class="standard-etiquette">Popularité : </span>   
+          <span class="stiletto has-{{ me.popularite|grade }}-escarpins"></span>
+          <span class="aide-escarpins"></span>
+       </p>
+       <p class="statut-nana">
+        <span class="standard-etiquette">Statut :</span> 
+        {% for r in me.roles %}
+        <span class="role">{{ r.name }}</span>
+        {% endfor %}
+      </p>
+    </div>
+
+  <!-- Bloc pour l'affichage du contenu du profil -->
+  <div id="corps" class="corps" style="margin-top:20px">
+    {{ form_errors(form) }}
+    <div id="enveloppe-avatar" class="col-lg-4">
+      <div id="avatar">
+        {% set imgAvatar = avatar(me, 'sqr_') %}
+        <a class="popin" href="{{ imgAvatar }}" >
+          <img src="{{ imgAvatar }}" class="profil-border contrainte" />
+        </a>
+      </div>
+      <p id="avatar_switcher">
+        <a href="{{ path('Nana_myAvatar') }}" class="popin">Changer ma photo de profil</a>
+      </p>
+    </div>
+    <div>{{ form_errors(form) }}</div>
+    <form name="editeur_profil" id="editeur_profil" action="{{ path('Nana_myIdentite', {'action': 'modifier'})}}" method="post" {#{ form_enctype(form) }#}>
+      <div id="enveloppe-data" class="col-lg-8">
+        <div id="donneesPersonnelles">
+          <div class="rowDonneesPersonnelles">
+            <span class="champ standardEtiquette">Prénom/Nom</span></span>
+            <span class="data"><strong>{{ me.prenom ~ " " ~ me.nom }}</strong></span>
+            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+          </div> 
+          <div class="closed-field form-input">
+            <span>{{ form_row(form.prenom) }}{{ form_row(form.nom) }}</span>
+          </div>
+          <div class="rowDonneesPersonnelles">
+            <span class="champ standardEtiquette">Pseudo</span>
+            <span class="data"><strong>{{ me.username }}</strong></span>
+            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+          </div>
+          <div class="closed-field form-input">
+            <span>{{ form_row(form.username) }}</span>
+          </div>
+          <div class="rowDonneesPersonnelles">
+            <span class=" champ standardEtiquette">Email</span>
+            <span class="data"><strong>{{ me.email }}</strong></span>
+            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+          </div> 
+          <div class="closed-field form-input">
+            <span>{{ form_row(form.email) }}</span>
+          </div>
+          <div class="rowDonneesPersonnelles">
+            <span class="champ standardEtiquette">Mot de passe</span>
+            <span class="data"><strong>{#{ password }#}</strong></span>
+            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+          </div> 
+          <div class="closed-field form-input">
+            <span>{{ form_row(form.password) }}</span>
+          </div>
+          <div class="rowDonneesPersonnelles">
+            <span class=" champ standardEtiquette">Date de naissance</span>
+            <span class="data"><strong>{{ me.dateNaissance | date('d m Y') }}</strong></span>
+            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+          </div>
+          <div class="closed-field form-input">
+           <span>{{ form_row(form.dateNaissance) }}</span>
+         </div>
+         <div class="rowDonneesPersonnelles">
+          <span class=" champ standardEtiquette">Sexe</span>
+          <span class="data"><strong>{% if me.sexe == 1 %}Garçon{% else %}Fille{% endif %}</strong></span>
+          <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+        </div>
+        <div class="closed-field form-input">
+         <span>{{ form_row(form.sexe) }}</span>
+       </div>
+       <div class="rowDonneesPersonnelles">
+        <span class="champ standardEtiquette">Ville</span>
+        <span clss="data"><strong>{{ me.ville }}</strong></span>
+        <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+      </div> 
+      <div class="closed-field form-input">
+       <span>{{ form_row(form.ville) }}</span>
+     </div>
+     <div class="rowDonneesPersonnelles">
+      <span class="champ standardEtiquette">Job/Etudes</span>
+      <span class="data"><strong>{{ me.occupation }}</strong></span>
+      <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+    </div>
+    <div class="closed-field form-input">
+     <span>{{ form_row(form.occupation) }}</span>
+   </div>
+        <!---div class="rowDonneesPersonnelles">
+          <span class="standardEtiquette">Membre de</span>
+          <span class="data">
+            <img src="{{ asset('assets/images/theme/centre/profil/picto_facebook_20x20.png')}}" />
+            <img src="{{ asset('assets/images/theme/centre/profil/picto_tweeter_20x20.png')}}" /> 
+            <img src="{{ asset('assets/images/theme/centre/profil/picto_hellocoton_20x20.png')}}" />
+          </span>
+          <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+        </div--> 
+        <div class="rowDonneesPersonnelles">
+          <span class="champ standardEtiquette">Newsletter</span>
+          <span class="data">{% if me.newsletter == 1 %}Inscrite{% else %}Non inscrite{% endif %}</span>
+          <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+        </div> 
+        <div class="closed-field form-input" colspan=3>
+         <span>{{ form_row(form.newsletter) }}</span>
+       </div>
+       <div class="rowDonneesPersonnelles">
+        <span class="champ standardEtiquette">Partenaires</span>
+        <span class="data">{% if me.newsletter == 1 %}Je reçois les offres{% else %}Je ne reçois pas les offres{% endif %}</span>
+        <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
+      </div> 
+      <div class="closed-field form-input" colspan=3>
+       <span>{{ form_row(form.offresPartenaires) }}</span>
+     </div>
+   </div>
+ </div>
+ <div id="enveloppe-biographie">
+  <div style="text-align:right;display:inline-block">
+    <span class="standardEtiquette">Ta présentation : <a href="#" id="switchEditor" class="lien-mince">Modifier</a></span>
+  </div>
+  <div class="dualEdition hiddenEditor">{{ me.biographie | raw }}</div>
+      <!--div id="source-biographie" class="dualEdition activeEditor" style="border:1px solid #A5E6E4; min-height:200px; overflow:visible; min-height:40px; width:480px; padding:10px; margin-left:5px">
+      {#{ me.biographie | raw }#}
+    </div-->
+    <div class="dualEdition activeEditor" style="margin:20px">
+      {{ form_row(form.biographie, {'id':'raw-biographie', 'attr': {'style': 'width:460px; height:200px;'}}) }}</div>
+    </div>
+    {{ form_rest(form) }}
+    <div style="margin-bottom:20px; text-align:right"> <input type="submit" value="Enregistrer tes données perso" /> </div>
+  </form>
+</div>
+</section>
+</article>
+{% endblock %}

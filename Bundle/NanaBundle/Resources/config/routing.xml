@@ -51,23 +51,49 @@
     </route>
 
     <route id="NanaBundle_myProfil" pattern="/my-tdn/profil">
-        <default key="_controller">TDNNanaBundle:Public:showMyProfil</default>
+        <default key="_controller">TDNNanaBundle:MyTDN:showMyProfil</default>
     </route>
 
-    <route id="NanaBundle_myProfilUpdate" pattern="/my-tdn/profil/update">
+    <!-- A rediriger
+    <route id="Nana_myProfilUpdate" pattern="/my-tdn/profil/update">
         <default key="_controller">TDNNanaBundle:Public:updateProfil</default>
+    </route>
+     -->
+
+    <route id="Nana_myIdentite" pattern="/my-tdn/profil/identite/{action}">
+        <default key="_controller">TDNNanaBundle:MyTDN:myIdentite</default>
+        <default key="action">afficher</default>
+        <requirement key="action">afficher|modifier</requirement>
+    </route>
+
+    <route id="Nana_myAvatar" pattern="/my-tdn/profil/avatar/{action}">
+        <default key="_controller">TDNNanaBundle:MyTDN:myAvatar</default>
+        <default key="action">afficher</default>
+        <requirement key="action">afficher|modifier</requirement>
+    </route>
+
+    <route id="Nana_myGaleries" pattern="/my-tdn/profil/galeries/{action}">
+        <default key="_controller">TDNNanaBundle:MyTDN:myGaleries</default>
+        <default key="action">afficher</default>
+        <requirement key="action">afficher|modifier</requirement>
+    </route>
+
+    <route id="Nana_myActivite" pattern="/my-tdn/profil/activite/{action}">
+        <default key="_controller">TDNNanaBundle:MyTDN:myActivite</default>
+        <default key="action">afficher</default>
+        <requirement key="action">afficher|modifier</requirement>
     </route>
 
     <route id="NanaBundle_myAvatarUpdate" pattern="/my-tdn/profil/update-avatar">
-        <default key="_controller">TDNNanaBundle:Public:updateAvatar</default>
+        <default key="_controller">TDNNanaBundle:MyTDN:updateAvatar</default>
     </route>
 
     <route id="NanaBundle_myGalerieUpdate" pattern="/my-tdn/profil/update-galerie">
-        <default key="_controller">TDNNanaBundle:Public:updateGalerie</default>
+        <default key="_controller">TDNNanaBundle:MyTDN:updateGalerie</default>
     </route>
 
     <route id="Nana_supprimerElementGalerie" pattern="/my-tdn/profil/galerie/enlever-image/{id}">
-        <default key="_controller">TDNNanaBundle:Public:supprimerElementGalerie</default>
+        <default key="_controller">TDNNanaBundle:MyTDN:supprimerElementGalerie</default>
     </route>
 
     <route id="NanaBundle_myProfilClose" pattern="/my-tdn/profil/close">
@@ -76,6 +102,18 @@
 
     <route id="NanaBundle_profil" pattern="/profil/{id}">
         <default key="_controller">TDNNanaBundle:Public:showProfil</default>
+    </route>
+
+    <route id="NanaBundle_profilIdentite" pattern="/profil/{id}/identite">
+        <default key="_controller">TDNNanaBundle:Public:showProfilIdentite</default>
+    </route>
+
+    <route id="NanaBundle_profilGaleries" pattern="/profil/{id}/galeries">
+        <default key="_controller">TDNNanaBundle:Public:showProfilGaleries</default>
+    </route>
+
+    <route id="NanaBundle_profilActivite" pattern="/profil/{id}/activite">
+        <default key="_controller">TDNNanaBundle:Public:showProfilActivite</default>
     </route>
 
     <route id="NanaBundle_follow" pattern="/follow/{nana}">
@@ -119,6 +157,7 @@
     <route id="Nana_supprimerImageHobby" pattern="/my-tdn/profil/hobby/supprimer-image/{id}">
         <default key="_controller">TDNNanaBundle:Hobby:supprimerImage</default>
     </route>
+    
     <!-- Routes publiques (Blocs) -->
 
    <route id="Nana_passwordResetS1" pattern="/mot-de-passe-oublie">

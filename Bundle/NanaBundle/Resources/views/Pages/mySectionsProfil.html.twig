@@ -1,0 +1,72 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title "Profil de " ~ me.username %}
+
+{% block contenuPrincipal %}
+<section id="profil-nana" class="enveloppe-contenu">
+
+  <nav class="titre-profil">
+    <!-- Bloc pour l'affichage des métadonnées de l'article -->
+    <ul class="menu-profil">
+      <li class="item-profil {{ isAffiche[0] }}">
+        <a href="{{ path('Nana_myIdentite') }}" class="onglet-profil">Mon profil</a>
+      </li>
+      <li class="item-profil {{ isAffiche[1] }}">
+        <a href="{{ path('Nana_myGaleries') }}" class="onglet-profil">Mes trucs à moi</a>
+      </li>
+      <li class="item-profil {{ isAffiche[2] }}">
+        <a href="{{ path('Nana_myActivite') }}" class="onglet-profil">TDN &amp; moi</a>
+      </li>
+      <li class="item-preview">
+        <a href="{{ path('NanaBundle_profil', {'id': me.idNana}) }}" class="">voir mon profil public</a>
+      </li>
+    </ul>
+  </nav>
+
+  {% block nanaData %}{% endblock %}
+
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+      $('.voir-activite').click(function (event) {
+        event.preventDefault();
+        $(this).html('Voir -');
+        var contenu = $(this).parent().next().children();
+        contenu.each(function () {
+          $(this).toggleClass('contenu-replie contenu-decouvert');
+        });
+        $(this).toggleClass('voir-activite masquer-activite');
+      });
+      $('.masquer-activite').click(function (event) {
+        event.preventDefault();
+        $(this).html('Voir +');
+        var contenu = $(this).parent().next().children();
+        contenu.each(function () {
+          $(this).toggleClass('contenu-replie contenu-decouvert');
+        });
+        $(this).toggleClass('voir-activite masquer-activite');
+      });
+      $(".modif-bascule").click(function (event) {
+        event.preventDefault();
+        $(this).parent().parent().next().toggleClass('closed-field open-field');
+      });
+      $("#source-biographie").blur(function () {
+        $("#raw-biographie").html($("#source-biographie").html());
+      });
+      $("#avatar_switcher").click(function (event) {
+        event.preventDefault();
+        $("#selecteur_avatar").toggleClass('closed-field open-field');
+      });
+      $("#galerie_switcher").click(function (event) {
+        event.preventDefault();
+        $("#selecteur_galerie").toggleClass('closed-field open-field');
+      });
+          $('.stiletto').click(function () {
+      alerte = $('.messages_systeme');
+      alerte.html("Les escarpins représentent la popularite sur TDN. Pour en gagner, participe autant que tu peux à la vie de la communauté.");
+      alerte.toggleClass('latentSystemMessages alerteSystemMessages');
+    });
+
+    })
+</script>
+{% endblock %}

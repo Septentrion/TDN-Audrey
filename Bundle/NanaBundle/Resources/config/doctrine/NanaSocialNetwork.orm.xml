@@ -7,7 +7,7 @@
     <entity name="TDN\Bundle\NanaBundle\Entity\NanaSocialNetwork"
 			repository-class="TDN\Bundle\NanaBundle\Entity\NanaSocialNetworkRepository">
 
-		<id name="id" type="string" column="id">
+		<id name="id" type="integer" column="id">
 			<generator strategy = "AUTO" />
 		</id>
 

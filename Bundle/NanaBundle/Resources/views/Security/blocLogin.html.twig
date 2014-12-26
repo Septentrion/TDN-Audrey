@@ -4,10 +4,10 @@
 <form action="{{ path('NanaBundle_loginCheck') }}" method="post">
     <div class="loginFields">
 	    <label for="username">Pseudo </label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" style="height:18px"/>
+        <input type="text" id="username" name="_username" value="{{ last_username }}" class="" />
      
         <label for="password">Mot de passe </label>
-        <input type="password" id="password" name="_password" style="height:18px" />
+        <input type="password" id="password" name="_password" class="" />
 
 	   <input id="envoyer" type="submit"  name="envoyer" value="" class="loginSubmit">
     </div>

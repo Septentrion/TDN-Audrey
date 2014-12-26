@@ -1,0 +1,143 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title "Profil de " ~ me.username %}
+
+{% block contenuPrincipal %}
+<section id="profil-nana" class="">
+
+  <h1 class="titre-profil">Profil de {{ me.username }}</h1>
+  <section class="enveloppe-contenu main-section row">
+    <!-- Bloc pour l'affichage des métadonnées de l'article -->
+    <div id="metadata" class="metadata">
+       <p class="auteur">
+          <span class="standard-etiquette">Popularité : </span>   
+          <span class="stiletto has-{{ me.popularite|grade }}-escarpins"></span>
+          <span class="aide-escarpins"></span>
+       </p>
+       <p class="statut-nana">
+        <span class="standard-etiquette">Statut :</span> 
+        {% for r in me.roles %}
+        <span class="role">{{ r.name }}</span>
+        {% endfor %}
+      </p>
+    </div>
+    <!-- Bloc pour l'affichage du contenu du profil -->
+    <div id="corps" class="">
+      <div id="enveloppe-avatar" class="col-lg-4">
+        {% set imgAvatar = avatar(me, 'sqr_') %}
+        <div class="avatar">
+          <a class="popin" href="{{ imgAvatar }}" >
+            <img class="contrainte profil-border" src="{{ imgAvatar }}" />
+          </a>
+        </div>
+        <button id="avatar_switcher">Changer
+          <!--a href="#">voir ses photos </a-->
+        </button>
+      </div>
+
+      <div id="enveloppe-data" class="perso-profil col-lg-8">
+      <table id="data">
+        <tr>
+          <td style="width:30%"><span class="standard-etiquette">Prénom/Nom</span></td>
+          <td>{{ me.prenom ~ " " ~ me.nom }}</td>
+        </tr> 
+        <tr>
+          <td><span class="standard-etiquette">Email</span></td>
+          <td>
+            {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('Nana_messagePriveShow', {'id': me.idNana}) }}" class="popin">
+              <img src="{{ asset('assets/images/theme/centre/profil/bt_la-contacter_135x26.png') }}" alt="Envoie-lui un message" />
+            </a>
+            {% endif %}
+          </td>
+        </tr> 
+        <tr>
+          <td><span class="standard-etiquette">Sexe</span></td>
+          <td>{% if me.sexe == 1 %}Garçon{% else %}Fille{% endif %}</td>
+        </tr>
+        <tr>
+          <td><span class="standard-etiquette">Né{% if me.sexe == 2 %}e{% endif %} le</span></td>
+          <td>{{ me.dateNaissance | date('d m Y') }}</td>
+        </tr>
+        <tr>
+            <td><span class="standard-etiquette">Ville</td>
+            <td>{{ me.ville }}</td>
+        </tr> 
+        <tr>
+            <td><span class="standard-etiquette">Job/Etudes</span></td>
+            <td>{{ me.occupation }}</td>
+        </tr>
+        {% if me.filPresence is not empty %}
+        <tr>
+          <td><span class="standard-etiquette">Réseaux </span></td>
+          <td>
+          {% for extern in me.filPresence %}
+            <a href="http://{{ extern.plateforme }}.com/{{ extern.userID }}" target="_blank">
+              <button class="bouton-social icone-rs-{{ extern.plateforme }}"></button>
+            </a>
+          {% endfor %}
+          </td>
+        </tr>
+        {% endif %}
+        {% if me.siteWeb is not null %}
+        <tr>
+          <td><span class="standard-etiquette">Site web </span></td>
+          <td>
+            <a href="{{ me.siteWeb }}" target="_blank">{{ me.siteWeb }}</a>
+          </td>
+        </tr>
+        {% endif %}
+      </table>
+      <p class="standard-etiquette">Je suis&hellip;</p>
+      <div>{{ me.biographie | raw }}</div>
+    </div>
+  </div>
+  </section>
+
+  {% block nanaData %}{% endblock %}
+
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+      $('.voir-activite').click(function (event) {
+        event.preventDefault();
+        $(this).html('Voir -');
+        var contenu = $(this).parent().next().children();
+        contenu.each(function () {
+          $(this).toggleClass('contenu-replie contenu-decouvert');
+        });
+        $(this).toggleClass('voir-activite masquer-activite');
+      });
+      $('.masquer-activite').click(function (event) {
+        event.preventDefault();
+        $(this).html('Voir +');
+        var contenu = $(this).parent().next().children();
+        contenu.each(function () {
+          $(this).toggleClass('contenu-replie contenu-decouvert');
+        });
+        $(this).toggleClass('voir-activite masquer-activite');
+      });
+      $(".modif-bascule").click(function (event) {
+        event.preventDefault();
+        $(this).parent().parent().next().toggleClass('closed-field open-field');
+      });
+      $("#source-biographie").blur(function () {
+        $("#raw-biographie").html($("#source-biographie").html());
+      });
+      $("#avatar_switcher").click(function (event) {
+        event.preventDefault();
+        $("#selecteur_avatar").toggleClass('closed-field open-field');
+      });
+      $("#galerie_switcher").click(function (event) {
+        event.preventDefault();
+        $("#selecteur_galerie").toggleClass('closed-field open-field');
+      });
+          $('.stiletto').click(function () {
+      alerte = $('.messages_systeme');
+      alerte.html("Les escarpins représentent la popularite sur TDN. Pour en gagner, participe autant que tu peux à la vie de la communauté.");
+      alerte.toggleClass('latentSystemMessages alerteSystemMessages');
+    });
+
+    })
+</script>
+{% endblock %}

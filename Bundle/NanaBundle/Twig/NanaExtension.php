@@ -19,8 +19,39 @@ class NanaExtension extends \Twig_Extension
     {
         return array(
             new \Twig_SimpleFilter('stiletto', array($this, 'stilettoFilter')),
+            new \Twig_SimpleFilter('grade', array($this, 'gradeFilter')),
             new \Twig_SimpleFilter('profilAccess', array($this, 'profilAccessFilter'))
         );
+    }
+
+    /**
+    *
+    * grade Filter
+    *
+    * calcule de "grade" de la personne (le nombre d'escarpins virtuel)
+    *
+    * @version 0.1
+    *
+    * @param JSON $pop — La liste des points glanés par la participation
+    * @return integer — le grade
+    *
+    **/
+
+    public function gradeFilter($pop) {
+        $total = 52;
+        $_activite = json_decode($pop);
+        if (isset($_activite->score)) {
+            $_score = $_activite->score;
+        } elseif (isset($_activite->$total)) {
+            $_score = 0;
+            for ($i = 1; $i <= $total ; $i++) {
+                $_score += $_activite->$i;
+            }
+        } else {
+            $_score = 0;
+        }
+
+        return floor(min(5,$_score/200));
     }
 
     public function stilettoFilter($pop)

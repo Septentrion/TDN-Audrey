@@ -1,0 +1,15 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title "L’équipe de Trucdenana.com" %}
+
+{% block contenuPrincipal %}
+<!-- Contenu de l'article -->
+<section class="contenu main-section">
+  <h1 class="titre-document titre-tdn">L'équipe TDN</h1>
+  <div class="liste-equipe">
+  {% for nana in equipe %}
+  {% include "TDNNanaBundle:Partiels:ficheEquipe.html.twig" with {'nana': nana} %}
+  {% endfor %}
+  </div>
+</section>
+{% endblock %}

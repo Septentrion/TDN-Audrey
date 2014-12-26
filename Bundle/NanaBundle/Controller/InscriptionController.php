@@ -25,16 +25,16 @@ class InscriptionController extends Controller {
         $variables['form'] = $form->createView();
         $variables['message'] = "";
 
-        return $this->render('TDNNanaBundle:Public:inscription.html.twig', $variables);
+        return $this->render('TDNNanaBundle:Pages:inscription.html.twig', $variables);
     }
 
-    public function registerConcoursAction() {
+    public function inscriptionConcoursAction() {
 
         $form = $this->createForm(new InscriptionType(), new Inscription());
         $variables['form'] = $form->createView();
         $variables['message'] = "";
 
-        return $this->render('NanaBundle:Public:registerConcours.html.twig', $variables);
+        return $this->render('NanaBundle:Pages:registerConcours.html.twig', $variables);
     }
 
     public function registerCheckAction()	{
@@ -48,6 +48,7 @@ class InscriptionController extends Controller {
 
         $form = $this->createForm(new InscriptionType(), new Inscription);
         $form->bind($request);
+
         // L'inscription suit-elle un abonnement à la newsletter ?
         $pathNewsletter = $request->get('nslFollowing');
         if ($pathNewsletter == 1) {
@@ -57,79 +58,74 @@ class InscriptionController extends Controller {
         } else {
             $_isValide = $form->isValid();
         }
+
         if ($_isValide) {
             // Recherche de rôle
             $registration = $form->getData();
             $nana = $form->getData()->getUser();
-            $rep_nana = $repository = $em->getRepository('TDN\NanaBundle\Entity\Nana');
-            $doublon = $rep_nana->findDoubleRegistration($nana->getUsername(), $nana->getEmail());
-            $rep_roles = $em->getRepository('TDN\NanaBundle\Entity\NanaRoles');
-            $role = $rep_roles->find('ROLE_USER');
-            if ($doublon) {
-                    $this->get('session')->getFlashBag()->add('fail', 'Un profil existe déjà pour ce pseudo ou cette adresse électronique');
+            if (!filter_var($email_a, FILTER_VALIDATE_EMAIL)) {
+                    $this->get('session')->getFlashBag()->add('fail', 'L’adresse électronique n’est pas valide');
             } else {
-                $nana->addRole($role);
-                $nakedPassword = $nana->getPassword();
-                $nana->setSalt(uniqid());
-                $encoder = $factory->getEncoder($nana);
-                $pwd = $encoder->encodePassword($nakedPassword, $nana->getSalt());
-                $nana->setPassword($pwd);
-                $nana->setDateInscription(new \DateTime);
-                // Valeurs par defaut
-                if ($pathNewsletter == 1) {
-                    $nana->setNewsletter(1);
+                $rep_nana = $repository = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+                $doublon = $rep_nana->findDoubleRegistration($nana->getUsername(), $nana->getEmail());
+                if ($doublon) {
+                        $this->get('session')->getFlashBag()->add('fail', 'Un profil existe déjà pour ce pseudo ou cette adresse électronique');
                 } else {
-                    $nana->setNewsletter($nana->getOffresPartenaires());
-                }
-                $nana->setBlacklist(0);
-                $nana->setActive(1);
-                $nana->resetPopularite();
-                $points = $this->container->getParameter('action_points');
-                $level = $points['inscription'];
-                $nana->updatePopularite($level);
-                // Enregistrment
-                $em->persist($nana);
-                $em->flush();
+                    $rep_roles = $em->getRepository('TDN\Bundle\NanaBundle\Entity\NanaRoles');
+                    $role = $rep_roles->find('ROLE_USER');
+                    $nana->addRole($role);
+                    $nakedPassword = $nana->getPassword();
+                    $nana->setSalt(uniqid());
+                    $encoder = $factory->getEncoder($nana);
+                    $pwd = $encoder->encodePassword($nakedPassword, $nana->getSalt());
+                    $nana->setPassword($pwd);
+                    $nana->setDateInscription(new \DateTime);
+                    // Valeurs par defaut
+                    if ($pathNewsletter == 1) {
+                        $nana->setNewsletter(1);
+                    } else {
+                        $nana->setNewsletter($nana->getOffresPartenaires());
+                    }
+                    $nana->setBlacklist(0);
+                    $nana->setActive(1);
+                    $nana->resetPopularite();
+                    $points = $this->container->getParameter('action_points');
+                    $level = $points['inscription'];
+                    $nana->updatePopularite($level);
+                    // Enregistrment
+                    // $em->persist($nana);
+                    // $em->flush();
 
-                // Notifier la nouvelle Nana
-                $admins = $this->container->getParameter('admin_notifications');
-                $expediteurs = $this->container->getParameter('mail_expediteur');               
-                $message = \Swift_Message::newInstance();
-                $corps['expediteur'] = "Justine";
-                $corps['role'] = "Rédaction";
-                $corps['destinataire'] = $nana->getUsername();
-                $corps['dateEnvoi'] = date(' d m Y - H:i:s');
+                    // Notifier la nouvelle Nana
+                    $admins = $this->container->getParameter('admin_notifications');
+                    $expediteurs = $this->container->getParameter('mail_expediteur');               
+                    $message = \Swift_Message::newInstance();
+                    $corps['expediteur'] = "Justine";
+                    $corps['role'] = "Rédaction";
+                    $corps['destinataire'] = $nana->getUsername();
+                    $corps['dateEnvoi'] = date(' d m Y - H:i:s');
 
-                $message->setSubject('[TDN] Inscription sur TDN')
-                        ->setContentType('text/html')
-                        ->setFrom($expediteurs['redaction'])
-                        ->setTo($nana->getEmail())
-                        ->setBody(
-                            $this->renderView('NanaBundle:Mail:inscription.html.twig', $corps),
-                            'text/html'
-                );
-                foreach($admins['redaction'] as $destinataire) {
-                    $message->addBcc($destinataire);
-                }
-                $this->get('mailer')->send($message);
+                    $message->setSubject('[TDN] Inscription sur TDN')
+                            ->setContentType('text/html')
+                            ->setFrom($expediteurs['redaction'])
+                            ->setTo($nana->getEmail())
+                            ->setBody(
+                                $this->renderView('TDNNanaBundle:Mail:inscription.html.twig', $corps),
+                                'text/html'
+                    );
+                    foreach($admins['redaction'] as $destinataire) {
+                        $message->addBcc($destinataire);
+                    }
+                    // $this->get('mailer')->send($message);
 
-                $this->authenticateUser($nana);
-                // $key = '_security.general.target_path';
-                // if ($session->has($key)) {
-                //     $url = $session->get($key);
-                //     $session->remove($key);
-                // } else {
-                //     $url = $this->container->get('router')->generate('homepage');
-                // }
-
-                // $this->get('session')->getFlashBag()->add('success', 'Merci. Ton compte est créé, tu peux te connecter');
-                // return new RedirectResponse($url);
+                    $this->authenticateUser($nana);
+                }                
             }
 
             // Suppression de la liste anonyme des abonnements à la newletter
             // si la paersonne a enchaîné avec une inscription
             if ($pathNewsletter == 1) {
-                $rep_abonnes = $repository = $em->getRepository('TDN\NewsletterBundle\Entity\AbonneNewsletter');
+                $rep_abonnes = $repository = $em->getRepository('TDN\Bundle\NewsletterBundle\Entity\AbonneNewsletter');
                 $abonne = $rep_abonnes->find($nana->getEmail());
                 $em->remove($abonne);
             }

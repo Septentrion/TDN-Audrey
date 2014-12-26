@@ -1,0 +1,27 @@
+<article class="membre-equipe">
+	<div class="avatar-equipe coin_profil">
+		<a class="" href="{#{ path('NanaBundle_profil', {'id': nana.idNana})}#}" title="{{ nana.username }}">
+			<img src="http://trucsdenana.com/{{ avatar(nana) }}" class="vignette" alt="Avatar de {{ nana.username }}" />
+		</a>
+	</div>
+	<div class="presentation">
+		<hgroup class="iCarte">
+			<h1 class="identite">{{ nana.prenom }} {{ nana.nom }}</h1>
+			<h2 class="specialite">Rôle : {{ nana.specialite }}</h2>
+		</hgroup>
+		<p class="biographie">{{ nana.biographie|raw }}</p>
+	</div>
+	<div class="links">
+		<button class="bouton-fleche-blanche">
+			<a class="bouton" href="{#{ path('NanaBundle_profil', {'id': nana.idNana})}#}" title="{{ nana.username }}">Voir son profil</a>
+		</button>
+		<div class="silos">
+		{% for extern in nana.filPresence %}
+			<a href="http://{{ extern.plateforme }}.com/{{ extern.userID }}" target="_blank">
+				<button class="bouton-social icone-rs-{{ extern.plateforme }}"></button>
+			</a>
+		{% endfor %}
+		</div>
+		<p class="lienSommaire">Lui ecrire</p>
+	</div>
+</article>

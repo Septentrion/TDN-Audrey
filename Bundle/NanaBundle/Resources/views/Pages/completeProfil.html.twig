@@ -1,0 +1,448 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title "Profil de " ~ me.username %}
+
+{% block contenuPrincipal %}
+<article id="profil-nana" class="">
+
+  <h1 class="titre-profil">Profil de {{ me.username }}</h1>
+  <section class="enveloppe-contenu main-section row">
+    <!-- Bloc pour l'affichage des métadonnées de l'article -->
+    <div id="metadata" class="metadata">
+       <p class="auteur">
+          <span class="standard-etiquette">Popularité : </span>   
+          <span class="stiletto has-{{ me.popularite|grade }}-escarpins"></span>
+          <span class="aide-escarpins"></span>
+       </p>
+       <p class="statut-nana">
+        <span class="standard-etiquette">Statut :</span> 
+        {% for r in me.roles %}
+        <span class="role">{{ r.name }}</span>
+        {% endfor %}
+      </p>
+    </div>
+    <!-- Bloc pour l'affichage du contenu du profil -->
+    <div id="corps" class="">
+      <div id="enveloppe-avatar" class="col-lg-4">
+        {% set imgAvatar = avatar(me, 'sqr_') %}
+        <div class="avatar">
+          <a class="popin" href="{{ imgAvatar }}" >
+            <img class="contrainte profil-border" src="{{ imgAvatar }}" />
+          </a>
+        </div>
+        <button id="avatar_switcher">Changer
+          <!--a href="#">voir ses photos </a-->
+        </button>
+      </div>
+
+      <div id="enveloppe-data" class="perso-profil col-lg-8">
+      <table id="data">
+        <tr>
+          <td style="width:30%"><span class="standard-etiquette">Prénom/Nom</span></td>
+          <td>{{ me.prenom ~ " " ~ me.nom }}</td>
+        </tr> 
+        <tr>
+          <td><span class="standard-etiquette">Email</span></td>
+          <td>
+            {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('Nana_messagePriveShow', {'id': me.idNana}) }}" class="popin">
+              <img src="{{ asset('assets/images/theme/centre/profil/bt_la-contacter_135x26.png') }}" alt="Envoie-lui un message" />
+            </a>
+            {% endif %}
+          </td>
+        </tr> 
+        <tr>
+          <td><span class="standard-etiquette">Sexe</span></td>
+          <td>{% if me.sexe == 1 %}Garçon{% else %}Fille{% endif %}</td>
+        </tr>
+        <tr>
+          <td><span class="standard-etiquette">Né{% if me.sexe == 2 %}e{% endif %} le</span></td>
+          <td>{{ me.dateNaissance | date('d m Y') }}</td>
+        </tr>
+        <tr>
+            <td><span class="standard-etiquette">Ville</td>
+            <td>{{ me.ville }}</td>
+        </tr> 
+        <tr>
+            <td><span class="standard-etiquette">Job/Etudes</span></td>
+            <td>{{ me.occupation }}</td>
+        </tr>
+        {% if me.filPresence is not empty %}
+        <tr>
+          <td><span class="standard-etiquette">Réseaux </span></td>
+          <td>
+          {% for extern in me.filPresence %}
+            <a href="http://{{ extern.plateforme }}.com/{{ extern.userID }}" target="_blank">
+              <button class="bouton-social icone-rs-{{ extern.plateforme }}"></button>
+            </a>
+          {% endfor %}
+          </td>
+        </tr>
+        {% endif %}
+        {% if me.siteWeb is not null %}
+        <tr>
+          <td><span class="standard-etiquette">Site web </span></td>
+          <td>
+            <a href="{{ me.siteWeb }}" target="_blank">{{ me.siteWeb }}</a>
+          </td>
+        </tr>
+        {% endif %}
+      </table>
+      <p class="standard-etiquette">Je suis&hellip;</p>
+      <div>{{ me.biographie | raw }}</div>
+    </div>
+  </div>
+  </section>
+
+  <section id="galerie-perso" class="">
+    <h2>Les photos de {{ me.username }}</h2>
+    {% if countGaleriePerso > 0 %}
+    {% for proxy in me.galeriePerso%}
+    {% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+    <a class="popin iconex60 lineaire" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+      <img src="{{ asset(sourceGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
+    </a>
+    {% endfor %}
+    {% else %}
+    <p class="warning">Sa galerie perso est encore vide</p>
+    {% endif %}
+  </section>
+
+  <section id="reseau-tdn" class="row">
+    <div id="followers" class="par-2 bas-rond">
+      <div class="densite">
+        <span class="taille">{{ me.isFollowed|length }}</span> nana(s)
+      </div>
+      <h2>Elles aiment son profil</h2>
+      {% if me.isFollowed|length > 0 %}
+      <div class="trombines">
+        {% for nana in me.isFollowed %}
+        <a class="iconex60 lineaire" href="{{ path('NanaBundle_profil', {'id': nana.idNana}) }}" title="{{ nana.username }}">
+          <img class="" src="{{ avatar(nana) }}" />
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if is_granted('ROLE_USER') and not alreadyFollowed %}
+      <p>
+        <a class="iconex60 lineaire" href="{{ path('NanaBundle_follow', { 'nana': me.idNana}) }}">
+          <img src="{{ asset('assets/images/theme/centre/profil/bt_suis-ses-activites_207x26.png') }}" alt="Suis son activité" />
+        </a>
+      </p>
+      {% endif %}
+    </div>
+    <div id="followings" class="par-2 bas-rond">
+      <div class="densite2">
+        <span class="taille">{{ me.follows|length }}</span> nana(s)
+      </div>
+      <h2>Elle s'intéresse à d'autres</h2>
+      {% if me.follows|length > 0 %}
+      <div class="trombines">
+        {% for nana in me.follows %}
+        <a class="iconex60 lineaire" href="{{ path('NanaBundle_profil', {'id': nana.idNana}) }}" title="{{ nana.username }}">
+          <img class="vignette" src="{{ avatar(nana) }}" />
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    </form>
+  </section>
+
+  <section id="hobbies">
+    <h2>Ce qu'elle aime dans la vie</h2>
+    {% if countHobbies > 0 %}
+    {% for hobby in my_hobbies %}
+   <div class="hobby-wrapper">
+      <div class="titre-hobby">
+        <span class="standard-etiquette">{{ hobby.domaine }}</span> : <span class="hobby-precisions">{{ hobby.precisions }}</span>
+      </div>
+      <div class="galerie-hobbie">
+      {% for proxy in hobby.galerieHobby %}
+      {% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+      <a class="popin framedGalerie" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+        <img class="vignette-medium" src="{{ imagePerso(proxy.lnImage, me.idNana, 'sqr_')}}" alt="{{ proxy.lnImage.titre }}" />
+      </a>
+      {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="warning-empty">Cette rubrique est encore vide</p>
+  {% endif %}
+  </section>
+
+  <section id="activite">
+    <h2>Son activité sur TDN</h2>
+    {% if productions is empty %}
+    <p class="warning-empty">Cette rubrique est encore vide</p>
+    {% else %}
+      <!-- Questions posées aux nanas -->
+      {% if productions['questions'] is not empty %}
+      <section id="ses-questions">
+        <div class="bloc-production bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['questions'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+           <h4>Ses questions de nanas</h4>
+         </div>
+         <div class="hot row colonnes-2">
+           {% for q in productions['questions'] %}
+           {% set qlikes = 0 %}
+           {% for r in q.filReponses %}
+           {% set qlikes = qlikes + r.likes %}
+           {% endfor %}
+           <article class="question-de-nana contenu-replie {{ rubriquePrincipale(q.lnThematique) }}_secondaire row">
+            <div class="col-lg-4">
+              <p class="bulle_{{ rubriquePrincipale(q.lnThematique) }}"></p>
+              <span class="n-reponses">{{ q.filReponses|length }}</span>
+              <span class="n-votes">{{ qlikes }}</span>                
+            </div>
+            <div class="col-lg-8">
+              <h4 class="soude" style="margin:0">
+                <a href="{{ q|targetURL }}">{{ q.titre }}</a>
+              </h4>
+              <p class="credits soude">Par <a href="{{ path('NanaBundle_profil', {'id': q.lnAuteur.idNana}) }}" class="auteur">{{ q.lnAuteur.username }}</a></p>
+              <p class="credits datePublication">{{ q.datePublication|laps }}</p>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    <!-- Commentaires -->
+    {% if productions['commentaires'] is not empty %}
+    <section id="ses-commentaires">
+      <div class="bloc-production bloc-bandeau">
+        <div class="bandeau fond-vert row">
+              {% if productions['commentaires'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+           <h4>Ses commentaires</h4>
+         </div>
+         <div class="hot row">
+         {% for p in productions['commentaires'] %}
+         {% set a = p.filDocument %}
+          <article class="commentaire contenu-replie row">
+            <div class="coin_{{ rubriquePrincipale(a.lnThematique) }} col-lg-1">
+              <a href="{{ a|targetURL }}">
+                {% if a.lnIllustration is not null %}
+                <img class="vignette" src="{{ illustration(a) }}" alt="{#{ alt }#}" />
+                {% endif %}
+              </a>
+            </div>
+            <div class="col-lg-11">
+              <p class="texte-commentaire">{{ p.texteCommentaire }}</p>
+              <h4 class="soude mini-article" style="margin:0">
+                <a href="{{ a|targetURL }}">{{ a.titre }}</a>
+              </h4>
+              <p class="credits datePublication">{{ p.datePublication|laps }}</p>
+            </div>
+          </article>
+         {% endfor %}
+         </div>
+     </div>
+    </section>
+    {% endif %}
+    <!-- Réponses à des questions de nanas -->
+      {% if productions['reponses'] is not empty %}
+      <section id="ses-reponses">
+        <div class="bloc-production bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['reponses'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+             <h4>Ses réponses</h4>
+           </div>
+           <div class="hot row colonnes-2">
+           {% for p in productions['reponses'] %}
+           {% set q = p.lnConversation %}
+            <article class="question-de-nana contenu-replie {{ rubriquePrincipale(q.lnThematique) }}_secondaire row">
+              <div class="col-lg-4">
+                <p class="bulle_{{ rubriquePrincipale(q.lnThematique) }}"></p>
+                <span class="n-reponses">{{ q.filReponses|length }}</span>
+                <span class="n-votes">{{ p.likes }}</span>                
+              </div>
+              <div class="col-lg-8">
+                <h4 class="soude" style="margin:0">
+                  <a href="{{ q|targetURL }}">{{ q.titre }}</a>
+                </h4>
+                <p class="credits soude">Par <a href="{{ path('NanaBundle_profil', {'id': q.lnAuteur.idNana}) }}" class="auteur">{{ q.lnAuteur.username }}</a></p>
+                <p class="credits datePublication">{{ q.datePublication|laps }}</p>
+              </div>
+            </article>
+           {% endfor %}
+           </div>
+       </div>
+     </section>
+     {% endif %}
+    <!-- Articles -->
+    {% if productions['articles'] is not empty %}
+      <section id="ses-articles">
+        <div class="bloc-production bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['articles'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+             <h4>Ses articles</h4>
+          </div>
+          <div class="hot row colonnes-2">
+            {% for a in productions['articles'] %}
+            {% set princeps = rubriquePrincipale(a.lnThematique) %}
+            <article class="bloc-article contenu-replie {{ rubriquePrincipale(a.lnThematique) }}_secondaire row">
+              {% set r = a.rubriques %}
+              <div class="rubriqueMarqueur coin_{{ rubriquePrincipale(a.lnThematique) }} col-lg-4">
+                <a href="{{ a|targetURL }}">
+                  <img class="vignette" src="{{ illustration(a) }}" alt="{#{ alt }#}" />
+                </a>
+              </div>
+              <div class="notice col-lg-8 col-extended">
+                <h4 class="soude" style="margin:0">
+                  <a href="{{ a|targetURL }}">{{ a.titre }}</a>
+                </h4>
+                <p class="credits soude">Par <a href="{{ path('NanaBundle_profil', {'id': a.lnAuteur.idNana}) }}" class="auteur">{{ a.lnAuteur.prenom~' '~a.lnAuteur.nom }}</a></p>
+                <p class="credits datePublication">{{ a.datePublication|laps }}</p>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+      {% if productions['demandes'] is not empty %}
+      <section id="ses-demandes-de-conseil">
+        <div class="bloc-production nano">
+          <div class="content">
+            <h4>Ses demandes de conseil</h4>
+            {% for p in productions['demandes'] %}
+            <p class="item-production">
+              <a href="{{ p|targetURL }}">{{ p.titre }}</a>
+            </p>
+            {% endfor %}
+          </div>
+        </div>
+        <a class="lien-mince lien-bloc popin" href="{{ path('ConseilExpert_filPerso', {'id': me.idNana}) }}">Toutes ses demandes de conseil</a>
+      </section>
+      {% endif %}
+      <!-- Les conseils en tant qu'expert(e) -->
+      {% if productions['conseils'] is not empty %}
+      <section id="ses-conseils">
+        <div class="activite-expert bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['conseils'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+              <h4>Ses conseils</h4>
+          </div>
+          <div class="hot row colonnes-2">
+            {% for rd in productions['conseils'] %}
+              <article class="bloc-conseil contenu-replie">
+                <div class="coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3 col-md-6 col-sm-4 col-xs-4 col-extended">
+                  <a href="{{ rd|targetURL }}">
+                    <img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
+                  </a>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-8 col-xs-8 col-extended">
+                  {% if rd.lnAuteur is not null%}
+                  <p class="lienAuteur credits soude">
+                    <span class="as">de </span>
+                    <a class="" href="{{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }}">
+                      {{ rd.lnAuteur.username }}
+                    </a> 
+                  {% endif %}
+                  <p class="datePublication credits">{{ rd.datePublication|laps }}</p>
+                  <a href="{{ rd|targetURL }}">
+                    <h4 class="apercuTexte">{{ rd.titre|raw }}</h4>
+                  </a>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    {% endif %}
+  </section>
+
+  <section id="tdn-like">
+    {% if likes is empty %}
+    {% set hasElements = 'no-elements' %}
+    {% else %}
+    {% set hasElements = '' %}
+    {% endif %}
+    <div class="activite-expert bloc-bandeau {{ hasElements }}">
+      <div class="bandeau fond-vert row">
+      {% if likes is not empty %}
+        <a href="" class="lien-propos voir-activite">Voir +</a>
+      {% endif %}
+        <h4>Ce qu'elle aime sur TDN ({{ likes|length }})</h4>
+      </div>
+      <div class="hot row colonnes-2">
+        {% for isLiked in likes %}
+        <article class="bloc-aime contenu-replie" style="clear:both; background-color:white;">
+          <p class="meta rubrique-{{ rubriquePrincipale(isLiked.lnRubrique) }}">{{ isLiked.lnRubrique.titre }}</p>
+          <a href="{{ isLiked.url }}">
+            <h4 class="apercuTexte soude">{{ isLiked.titre }}</h4>
+          </a>
+          {% if isLiked.lnVeilleur is not null%}
+          <p class="lienAuteur credits soude">
+            <span class="as">par </span>
+            <a class="" href="{{ path('NanaBundle_profil', {'id': isLiked.lnVeilleur.idNana}) }}">
+              {{ isLiked.lnVeilleur.username }}
+            </a> 
+          </p>
+          {% endif %}
+          <p class="datePublication credits">{{ isLiked.dateEntree|laps }}</p>
+        </article>
+        {% endfor %}           
+      </div>
+    </div>
+  </section>
+
+</article>
+<script type="text/javascript">
+    $(document).ready(function () {
+      $('.voir-activite').click(function (event) {
+        event.preventDefault();
+        $(this).html('Voir -');
+        var contenu = $(this).parent().next().children();
+        contenu.each(function () {
+          $(this).toggleClass('contenu-replie contenu-decouvert');
+        });
+        $(this).toggleClass('voir-activite masquer-activite');
+      });
+      $('.masquer-activite').click(function (event) {
+        event.preventDefault();
+        $(this).html('Voir +');
+        var contenu = $(this).parent().next().children();
+        contenu.each(function () {
+          $(this).toggleClass('contenu-replie contenu-decouvert');
+        });
+        $(this).toggleClass('voir-activite masquer-activite');
+      });
+      $(".modif-bascule").click(function (event) {
+        event.preventDefault();
+        $(this).parent().parent().next().toggleClass('closed-field open-field');
+      });
+      $("#source-biographie").blur(function () {
+        $("#raw-biographie").html($("#source-biographie").html());
+      });
+      $("#avatar_switcher").click(function (event) {
+        event.preventDefault();
+        $("#selecteur_avatar").toggleClass('closed-field open-field');
+      });
+      $("#galerie_switcher").click(function (event) {
+        event.preventDefault();
+        $("#selecteur_galerie").toggleClass('closed-field open-field');
+      });
+          $('.stiletto').click(function () {
+      alerte = $('.messages_systeme');
+      alerte.html("Les escarpins représentent la popularite sur TDN. Pour en gagner, participe autant que tu peux à la vie de la communauté.");
+      alerte.toggleClass('latentSystemMessages alerteSystemMessages');
+    });
+
+    })
+</script>
+{% endblock %}

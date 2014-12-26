@@ -1,0 +1,232 @@
+{% extends 'TDNNanaBundle:Pages:sectionsProfil.html.twig' %}
+
+{% block nanaData %}
+  <section id="activite">
+    <h2>Son activité sur TDN</h2>
+    {% if productions is empty %}
+    <p class="warning-empty">Cette rubrique est encore vide</p>
+    {% else %}
+      <!-- Questions posées aux nanas -->
+      {% if productions['questions'] is not empty %}
+      <section id="ses-questions">
+        <div class="bloc-production bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['questions'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+           <h4>Ses questions de nanas</h4>
+         </div>
+         <div class="hot row colonnes-2">
+           {% for q in productions['questions'] %}
+           {% set qlikes = 0 %}
+           {% for r in q.filReponses %}
+           {% set qlikes = qlikes + r.likes %}
+           {% endfor %}
+           <article class="question-de-nana contenu-replie {{ rubriquePrincipale(q.lnThematique) }}_secondaire row">
+            <div class="col-lg-4">
+              <p class="bulle_{{ rubriquePrincipale(q.lnThematique) }}"></p>
+              <span class="n-reponses">{{ q.filReponses|length }}</span>
+              <span class="n-votes">{{ qlikes }}</span>                
+            </div>
+            <div class="col-lg-8">
+              <h4 class="soude" style="margin:0">
+                <a href="{{ q|targetURL }}">{{ q.titre }}</a>
+              </h4>
+              <p class="credits soude">Par <a href="{{ path('NanaBundle_profil', {'id': q.lnAuteur.idNana}) }}" class="auteur">{{ q.lnAuteur.username }}</a></p>
+              <p class="credits datePublication">{{ q.datePublication|laps }}</p>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    <!-- Commentaires -->
+    {% if productions['commentaires'] is not empty %}
+    <section id="ses-commentaires">
+      <div class="bloc-production bloc-bandeau">
+        <div class="bandeau fond-vert row">
+              {% if productions['commentaires'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+           <h4>Ses commentaires</h4>
+         </div>
+         <div class="hot row">
+         {% for p in productions['commentaires'] %}
+         {% set a = p.filDocument %}
+          <article class="commentaire contenu-replie row">
+            <div class="coin_{{ rubriquePrincipale(a.lnThematique) }} col-lg-1">
+              <a href="{{ a|targetURL }}">
+                {% if a.lnIllustration is not null %}
+                <img class="vignette" src="{{ illustration(a) }}" alt="{#{ alt }#}" />
+                {% endif %}
+              </a>
+            </div>
+            <div class="col-lg-11">
+              <p class="texte-commentaire">{{ p.texteCommentaire }}</p>
+              <h4 class="soude mini-article" style="margin:0">
+                <a href="{{ a|targetURL }}">{{ a.titre }}</a>
+              </h4>
+              <p class="credits datePublication">{{ p.datePublication|laps }}</p>
+            </div>
+          </article>
+         {% endfor %}
+         </div>
+     </div>
+    </section>
+    {% endif %}
+    <!-- Réponses à des questions de nanas -->
+      {% if productions['reponses'] is not empty %}
+      <section id="ses-reponses">
+        <div class="bloc-production bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['reponses'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+             <h4>Ses réponses</h4>
+           </div>
+           <div class="hot row colonnes-2">
+           {% for p in productions['reponses'] %}
+           {% set q = p.lnConversation %}
+            <article class="question-de-nana contenu-replie {{ rubriquePrincipale(q.lnThematique) }}_secondaire row">
+              <div class="col-lg-4">
+                <p class="bulle_{{ rubriquePrincipale(q.lnThematique) }}"></p>
+                <span class="n-reponses">{{ q.filReponses|length }}</span>
+                <span class="n-votes">{{ p.likes }}</span>                
+              </div>
+              <div class="col-lg-8">
+                <h4 class="soude" style="margin:0">
+                  <a href="{{ q|targetURL }}">{{ q.titre }}</a>
+                </h4>
+                <p class="credits soude">Par <a href="{{ path('NanaBundle_profil', {'id': q.lnAuteur.idNana}) }}" class="auteur">{{ q.lnAuteur.username }}</a></p>
+                <p class="credits datePublication">{{ q.datePublication|laps }}</p>
+              </div>
+            </article>
+           {% endfor %}
+           </div>
+       </div>
+     </section>
+     {% endif %}
+    <!-- Articles -->
+    {% if productions['articles'] is not empty %}
+      <section id="ses-articles">
+        <div class="bloc-production bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['articles'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+             <h4>Ses articles</h4>
+          </div>
+          <div class="hot row colonnes-2">
+            {% for a in productions['articles'] %}
+            {% set princeps = rubriquePrincipale(a.lnThematique) %}
+            <article class="bloc-article contenu-replie {{ rubriquePrincipale(a.lnThematique) }}_secondaire row">
+              {% set r = a.rubriques %}
+              <div class="rubriqueMarqueur coin_{{ rubriquePrincipale(a.lnThematique) }} col-lg-4">
+                <a href="{{ a|targetURL }}">
+                  <img class="vignette" src="{{ illustration(a) }}" alt="{#{ alt }#}" />
+                </a>
+              </div>
+              <div class="notice col-lg-8 col-extended">
+                <h4 class="soude" style="margin:0">
+                  <a href="{{ a|targetURL }}">{{ a.titre }}</a>
+                </h4>
+                <p class="credits soude">Par <a href="{{ path('NanaBundle_profil', {'id': a.lnAuteur.idNana}) }}" class="auteur">{{ a.lnAuteur.prenom~' '~a.lnAuteur.nom }}</a></p>
+                <p class="credits datePublication">{{ a.datePublication|laps }}</p>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+      {% if productions['demandes'] is not empty %}
+      <section id="ses-demandes-de-conseil">
+        <div class="bloc-production nano">
+          <div class="content">
+            <h4>Ses demandes de conseil</h4>
+            {% for p in productions['demandes'] %}
+            <p class="item-production">
+              <a href="{{ p|targetURL }}">{{ p.titre }}</a>
+            </p>
+            {% endfor %}
+          </div>
+        </div>
+        <a class="lien-mince lien-bloc popin" href="{{ path('ConseilExpert_filPerso', {'id': me.idNana}) }}">Toutes ses demandes de conseil</a>
+      </section>
+      {% endif %}
+      <!-- Les conseils en tant qu'expert(e) -->
+      {% if productions['conseils'] is not empty %}
+      <section id="ses-conseils">
+        <div class="activite-expert bloc-bandeau">
+          <div class="bandeau fond-vert row">
+              {% if productions['conseils'] is not empty %}
+                <a href="" class="lien-propos voir-activite">Voir +</a>
+              {% endif %}
+              <h4>Ses conseils</h4>
+          </div>
+          <div class="hot row colonnes-2">
+            {% for rd in productions['conseils'] %}
+              <article class="bloc-conseil contenu-replie">
+                <div class="coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-3 col-md-6 col-sm-4 col-xs-4 col-extended">
+                  <a href="{{ rd|targetURL }}">
+                    <img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
+                  </a>
+                </div>
+                <div class="col-lg-9 col-md-6 col-sm-8 col-xs-8 col-extended">
+                  {% if rd.lnAuteur is not null%}
+                  <p class="lienAuteur credits soude">
+                    <span class="as">de </span>
+                    <a class="" href="{{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }}">
+                      {{ rd.lnAuteur.username }}
+                    </a> 
+                  {% endif %}
+                  <p class="datePublication credits">{{ rd.datePublication|laps }}</p>
+                  <a href="{{ rd|targetURL }}">
+                    <h4 class="apercuTexte">{{ rd.titre|raw }}</h4>
+                  </a>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    {% endif %}
+  </section>
+
+  <section id="tdn-like">
+    {% if likes is empty %}
+    {% set hasElements = 'no-elements' %}
+    {% else %}
+    {% set hasElements = '' %}
+    {% endif %}
+    <div class="activite-expert bloc-bandeau {{ hasElements }}">
+      <div class="bandeau fond-vert row">
+      {% if likes is not empty %}
+        <a href="" class="lien-propos voir-activite">Voir +</a>
+      {% endif %}
+        <h4>Ce qu'elle aime sur TDN ({{ likes|length }})</h4>
+      </div>
+      <div class="hot row colonnes-2">
+        {% for isLiked in likes %}
+        <article class="bloc-aime contenu-replie" style="clear:both; background-color:white;">
+          <p class="meta rubrique-{{ rubriquePrincipale(isLiked.lnRubrique) }}">{{ isLiked.lnRubrique.titre }}</p>
+          <a href="{{ isLiked.url }}">
+            <h4 class="apercuTexte soude">{{ isLiked.titre }}</h4>
+          </a>
+          {% if isLiked.lnVeilleur is not null%}
+          <p class="lienAuteur credits soude">
+            <span class="as">par </span>
+            <a class="" href="{{ path('NanaBundle_profil', {'id': isLiked.lnVeilleur.idNana}) }}">
+              {{ isLiked.lnVeilleur.username }}
+            </a> 
+          </p>
+          {% endif %}
+          <p class="datePublication credits">{{ isLiked.dateEntree|laps }}</p>
+        </article>
+        {% endfor %}           
+      </div>
+    </div>
+  </section>
+{% endblock %}

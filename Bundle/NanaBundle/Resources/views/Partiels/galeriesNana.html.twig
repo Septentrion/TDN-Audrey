@@ -1,0 +1,81 @@
+{% extends 'TDNNanaBundle:Pages:sectionsProfil.html.twig' %}
+
+{% block nanaData %}
+  <section id="galerie-perso" class="">
+    <h2>Les photos de {{ me.username }}</h2>
+    {% if countGaleriePerso > 0 %}
+    {% for proxy in me.galeriePerso%}
+    {% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+    <a class="popin iconex60 lineaire" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+      <img src="{{ asset(sourceGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
+    </a>
+    {% endfor %}
+    {% else %}
+    <p class="warning">Sa galerie perso est encore vide</p>
+    {% endif %}
+  </section>
+
+  <section id="reseau-tdn" class="row">
+    <div id="followers" class="par-2 bas-rond">
+      <div class="densite">
+        <span class="taille">{{ me.isFollowed|length }}</span> nana(s)
+      </div>
+      <h2>Elles aiment son profil</h2>
+      {% if me.isFollowed|length > 0 %}
+      <div class="trombines">
+        {% for nana in me.isFollowed %}
+        <a class="iconex60 lineaire" href="{{ path('NanaBundle_profil', {'id': nana.idNana}) }}" title="{{ nana.username }}">
+          <img class="" src="{{ avatar(nana) }}" />
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if is_granted('ROLE_USER') and not alreadyFollowed %}
+      <p>
+        <a class="iconex60 lineaire" href="{{ path('NanaBundle_follow', { 'nana': me.idNana}) }}">
+          <img src="{{ asset('assets/images/theme/centre/profil/bt_suis-ses-activites_207x26.png') }}" alt="Suis son activité" />
+        </a>
+      </p>
+      {% endif %}
+    </div>
+    <div id="followings" class="par-2 bas-rond">
+      <div class="densite2">
+        <span class="taille">{{ me.follows|length }}</span> nana(s)
+      </div>
+      <h2>Elle s'intéresse à d'autres</h2>
+      {% if me.follows|length > 0 %}
+      <div class="trombines">
+        {% for nana in me.follows %}
+        <a class="iconex60 lineaire" href="{{ path('NanaBundle_profil', {'id': nana.idNana}) }}" title="{{ nana.username }}">
+          <img class="vignette" src="{{ avatar(nana) }}" />
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    </form>
+  </section>
+
+  <section id="hobbies">
+    <h2>Ce qu'elle aime dans la vie</h2>
+    {% if countHobbies > 0 %}
+    {% for hobby in my_hobbies %}
+   <div class="hobby-wrapper">
+      <div class="titre-hobby">
+        <span class="standard-etiquette">{{ hobby.domaine }}</span> : <span class="hobby-precisions">{{ hobby.precisions }}</span>
+      </div>
+      <div class="galerie-hobbie">
+      {% for proxy in hobby.galerieHobby %}
+      {% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+      <a class="popin framedGalerie" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+        <img class="vignette-medium" src="{{ imagePerso(proxy.lnImage, me.idNana, 'sqr_')}}" alt="{{ proxy.lnImage.titre }}" />
+      </a>
+      {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="warning-empty">Cette rubrique est encore vide</p>
+  {% endif %}
+  </section>
+{% endblock %}

@@ -47,6 +47,11 @@ class Nana implements AdvancedUserInterface, \Serializable
     private $email;
 
     /**
+     * @var string $siteWeb
+     */
+    private $siteWeb;
+
+    /**
      * @var integer $sexe
      */
     private $sexe;
@@ -70,6 +75,11 @@ class Nana implements AdvancedUserInterface, \Serializable
      * @var string $biographie
      */
     private $biographie;
+
+    /**
+     * @var string $spcialite
+     */
+    private $specialite;
 
     /**
      * @var \DateTime $dateInscription
@@ -350,6 +360,29 @@ class Nana implements AdvancedUserInterface, \Serializable
     }
 
     /**
+     * Set site web perso
+     *
+     * @param string $siteWeb
+     * @return Nana
+     */
+    public function setSiteWeb($siteWeb)
+    {
+        $this->siteWeb = $siteWeb;
+    
+        return $this;
+    }
+
+    /**
+     * Get site web perso
+     *
+     * @return string 
+     */
+    public function getSiteWeb()
+    {
+        return $this->siteWeb;
+    }
+
+    /**
      * Set sexe
      *
      * @param string $sexe
@@ -462,6 +495,29 @@ class Nana implements AdvancedUserInterface, \Serializable
     public function getBiographie()
     {
         return $this->biographie;
+    }
+
+    /**
+     * Set specialite
+     *
+     * @param string $specialite
+     * @return Nana
+     */
+    public function setSpecialite($specialite)
+    {
+        $this->specialite = $specialite;
+    
+        return $this;
+    }
+
+    /**
+     * Get specialite
+     *
+     * @return string 
+     */
+    public function getSpecialite()
+    {
+        return $this->specialite;
     }
 
     /**
