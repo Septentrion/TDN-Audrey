@@ -35,19 +35,26 @@ class RemplacementExtension extends \Twig_Extension {
             $idNana = $who->getIdNana();
             $fichier = $who->getLnAvatar()->getFichier();
             $dir = $_SERVER['DOCUMENT_ROOT'].'/uploads/documents/profils/'.$idNana;
-            // echo $dir.'/'.$format.$fichier; die;
-            if (is_file($dir.'/'.$format.$fichier)) {
+                print_r($dir); die;
+             if (is_file($dir.'/'.$format.$fichier)) {
                 return '/uploads/documents/profils/'.$idNana.'/'.$format.$fichier;
             } elseif ($format != '' && (is_file($dir.'/'.$fichier))) {
                 return '/uploads/documents/profils/'.$idNana.'/'.$fichier;
-            } else {}
+            } else {
+                $dir = $_SERVER['DOCUMENT_ROOT'].'../../../v3/web/uploads/documents/profils/'.$idNana;
+                 if (is_file($dir.'/'.$format.$fichier)) {
+                    return '/uploads/documents/profils/'.$idNana.'/'.$format.$fichier;
+                } elseif ($format != '' && (is_file($dir.'/'.$fichier))) {
+                    return '/uploads/documents/profils/'.$idNana.'/'.$fichier;
+                } else {}
+            }
         } 
         
         return 'assets/images/theme/centre/avatar_profil/avatar5%2080x95.png';
     }
 
-    public function avatarFunction($who, $format = NULL)
-    {
+    public function avatarFunction($who, $format = NULL) {
+        
         if (is_object($who)) {
             $type = get_class($who);
             $type = explode('\\', $type);
@@ -70,7 +77,14 @@ class RemplacementExtension extends \Twig_Extension {
                         return '/uploads/documents/profils/'.$idNana.'/'.$prefix.$fichier;
                     } elseif ($format != '' && (is_file($dir.'/'.$fichier))) {
                         return '/uploads/documents/profils/'.$idNana.'/'.$fichier;
-                    } else {}
+                    } else {
+                        $dir = $_SERVER['DOCUMENT_ROOT'].'../../../v3/web/uploads/documents/profils/'.$idNana;
+                         if (is_file($dir.'/'.$prefix.$fichier)) {
+                            return '/uploads/documents/profils/'.$idNana.'/'.$prefix.$fichier;
+                        } elseif ($format != '' && (is_file($dir.'/'.$fichier))) {
+                            return '/uploads/documents/profils/'.$idNana.'/'.$fichier;
+                        } else {}
+                    }
                  }
             }
         } 
