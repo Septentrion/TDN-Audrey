@@ -33,73 +33,26 @@
       </p>
     </div>
     <div>{{ form_errors(form) }}</div>
-    <form name="editeur_profil" id="editeur_profil" action="{{ path('Nana_myIdentite', {'action': 'modifier'})}}" method="post" {#{ form_enctype(form) }#}>
-      <div id="enveloppe-data" class="col-lg-8">
-        <div id="donneesPersonnelles">
-          <div class="rowDonneesPersonnelles">
-            <span class="champ standardEtiquette">Prénom/Nom</span></span>
-            <span class="data"><strong>{{ me.prenom ~ " " ~ me.nom }}</strong></span>
-            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-          </div> 
-          <div class="closed-field form-input">
-            <span>{{ form_row(form.prenom) }}{{ form_row(form.nom) }}</span>
-          </div>
-          <div class="rowDonneesPersonnelles">
-            <span class="champ standardEtiquette">Pseudo</span>
-            <span class="data"><strong>{{ me.username }}</strong></span>
-            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-          </div>
-          <div class="closed-field form-input">
-            <span>{{ form_row(form.username) }}</span>
-          </div>
-          <div class="rowDonneesPersonnelles">
-            <span class=" champ standardEtiquette">Email</span>
-            <span class="data"><strong>{{ me.email }}</strong></span>
-            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-          </div> 
-          <div class="closed-field form-input">
-            <span>{{ form_row(form.email) }}</span>
-          </div>
-          <div class="rowDonneesPersonnelles">
-            <span class="champ standardEtiquette">Mot de passe</span>
-            <span class="data"><strong>{#{ password }#}</strong></span>
-            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-          </div> 
-          <div class="closed-field form-input">
-            <span>{{ form_row(form.password) }}</span>
-          </div>
-          <div class="rowDonneesPersonnelles">
-            <span class=" champ standardEtiquette">Date de naissance</span>
-            <span class="data"><strong>{{ me.dateNaissance | date('d m Y') }}</strong></span>
-            <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-          </div>
-          <div class="closed-field form-input">
-           <span>{{ form_row(form.dateNaissance) }}</span>
-         </div>
-         <div class="rowDonneesPersonnelles">
-          <span class=" champ standardEtiquette">Sexe</span>
-          <span class="data"><strong>{% if me.sexe == 1 %}Garçon{% else %}Fille{% endif %}</strong></span>
-          <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-        </div>
-        <div class="closed-field form-input">
-         <span>{{ form_row(form.sexe) }}</span>
-       </div>
-       <div class="rowDonneesPersonnelles">
-        <span class="champ standardEtiquette">Ville</span>
-        <span clss="data"><strong>{{ me.ville }}</strong></span>
-        <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-      </div> 
-      <div class="closed-field form-input">
-       <span>{{ form_row(form.ville) }}</span>
-     </div>
-     <div class="rowDonneesPersonnelles">
-      <span class="champ standardEtiquette">Job/Etudes</span>
-      <span class="data"><strong>{{ me.occupation }}</strong></span>
-      <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-    </div>
-    <div class="closed-field form-input">
-     <span>{{ form_row(form.occupation) }}</span>
-   </div>
+    <div id="donneesPersonnelles" class="enveloppe-data col-lg-8">
+      <form name="editeur_profil" id="editeur_profil" action="{{ path('Nana_myIdentite', {'action': 'modifier'})}}" method="post" {#{ form_enctype(form) }#}>
+        {{ form_label(form.username) }}
+        {{ form_widget(form.username, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+        {{ form_label(form.prenom) }}
+        {{ form_widget(form.prenom, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+        {{ form_label(form.nom) }}
+        {{ form_widget(form.nom, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+        {{ form_label(form.password) }}
+        {{ form_widget(form.password, {'attr': {'class': 'champ-profil champ-tableau'}}) }}
+        {{ form_label(form.dateNaissance) }}
+        {{ form_widget(form.dateNaissance, {'attr': {'class': 'champ-profil champ-date'}}) }}
+        {{ form_label(form.sexe) }}
+        {{ form_widget(form.sexe, {'attr': {'class': 'champ-profil champ-radio'}}) }}
+        {{ form_label(form.ville) }}
+        {{ form_widget(form.ville, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+        {{ form_label(form.occupation) }}
+        {{ form_widget(form.occupation, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
         <!---div class="rowDonneesPersonnelles">
           <span class="standardEtiquette">Membre de</span>
           <span class="data">
@@ -109,39 +62,66 @@
           </span>
           <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
         </div--> 
-        <div class="rowDonneesPersonnelles">
-          <span class="champ standardEtiquette">Newsletter</span>
-          <span class="data">{% if me.newsletter == 1 %}Inscrite{% else %}Non inscrite{% endif %}</span>
-          <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-        </div> 
-        <div class="closed-field form-input" colspan=3>
-         <span>{{ form_row(form.newsletter) }}</span>
-       </div>
-       <div class="rowDonneesPersonnelles">
-        <span class="champ standardEtiquette">Partenaires</span>
-        <span class="data">{% if me.newsletter == 1 %}Je reçois les offres{% else %}Je ne reçois pas les offres{% endif %}</span>
-        <span class="bascule"><a href="#" class="modif-bascule">Modifier</a></span>
-      </div> 
-      <div class="closed-field form-input" colspan=3>
-       <span>{{ form_row(form.offresPartenaires) }}</span>
-     </div>
-   </div>
- </div>
- <div id="enveloppe-biographie">
-  <div style="text-align:right;display:inline-block">
-    <span class="standardEtiquette">Ta présentation : <a href="#" id="switchEditor" class="lien-mince">Modifier</a></span>
-  </div>
-  <div class="dualEdition hiddenEditor">{{ me.biographie | raw }}</div>
-      <!--div id="source-biographie" class="dualEdition activeEditor" style="border:1px solid #A5E6E4; min-height:200px; overflow:visible; min-height:40px; width:480px; padding:10px; margin-left:5px">
-      {#{ me.biographie | raw }#}
-    </div-->
-    <div class="dualEdition activeEditor" style="margin:20px">
-      {{ form_row(form.biographie, {'id':'raw-biographie', 'attr': {'style': 'width:460px; height:200px;'}}) }}</div>
+        {{ form_row(form.newsletter) }}
+        {{ form_row(form.offresPartenaires) }}
+        {{ form_row(form.biographie, {'id':'raw-biographie', 'attr': {'style': 'width:460px; height:200px;'}}) }}
+        {{ form_rest(form) }}
+        <p class="bouton-fleche-blanche">
+          <button type="submit" class="bouton" />Enregistrer tes données perso</button>
+        </p>
+      </form>
     </div>
-    {{ form_rest(form) }}
-    <div style="margin-bottom:20px; text-align:right"> <input type="submit" value="Enregistrer tes données perso" /> </div>
-  </form>
-</div>
 </section>
 </article>
+<script type="text/javascript">
+
+  var $formLink = $('<a href="#" class="ajout-collection">Ajouter un profil</a>');
+  var $socialConteneur = $('<div id="profils-sociaux"></div>');
+
+function addCollectionDelete($formConteneur) {
+    var $removeFormA = $('<a href="#">Supprimer ce profil</a>');
+    $formConteneur.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+        // supprime l'élément li pour le formulaire de tag
+        $formConteneur.remove();
+    });
+}
+  function addCollectionForm(collectionHolder) {
+      // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+      var prototype = collectionHolder.attr('data-prototype');
+
+      // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+      // la longueur de la collection courante
+      var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+
+      // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+      var $newFormLi = $('<div class="form-profil-social"></div>').append(newForm);
+      //
+      addCollectionDelete($newFormLi);
+      //
+      collectionHolder.append($newFormLi);
+  }
+
+  $(document).ready(function() {
+    // Récupère le div qui contient la collection de tags
+    var collectionHolder = $('#nana_complete_profil_filPresence');
+
+    // ajoute l'ancre « ajouter un profil » et le conteneur au bloc
+    // collectionHolder.append($socialConteneur);
+    collectionHolder.after($formLink);
+    collectionHolder.children().each(function () {
+      addCollectionDelete($(this));
+    })
+
+    $formLink.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+        // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+        addCollectionForm(collectionHolder);
+    });
+});
+</script>
 {% endblock %}

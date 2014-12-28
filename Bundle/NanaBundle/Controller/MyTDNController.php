@@ -4,6 +4,8 @@ namespace TDN\Bundle\NanaBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use TDN\Bundle\NanaBundle\Entity\Nana;
 use TDN\Bundle\NanaBundle\Entity\NanaRoles;
 use TDN\Bundle\NanaBundle\Entity\NanaPortraitImageProxy;
@@ -17,6 +19,98 @@ use TDN\Bundle\ImageBundle\Form\Type\simpleImageType;
 use TDN\Bundle\ImageBundle\Entity\Image;
 
 class MyTDNController extends Controller {
+
+
+    private function _upgradeIfProfileCompleted ($nana, $ancien) {
+        // Mise à jour des points pour les escarpins
+        $points = $this->container->getParameter('action_points');
+        $_points = 0;
+        if ($nana->hasCompletedProfile()) {
+            if (!$ancien['ProfilComplet']) {
+                $_points += $points['completer_profil'];
+            }
+        } else {
+            if ($ancien['ProfilComplet']) {
+                $_points -= $points['completer_profil'];
+            }
+        }
+        if ($nana->getNewsletter()) {
+            if (!$ancien['Newsletter']) {
+                $_points += $points['abonnee_newsletter'];
+            }
+        } else {
+            if ($ancien['Newsletter']) {
+                $_points -= $points['abonnee_newsletter'];
+            }
+        }
+        if ($nana->getOffresPartenaires()) {
+            if (!$ancien['OffresPartenaires']) {
+                $_points += $points['offres_partenaires'];
+            }
+        } else {
+            if ($ancien['OffresPartenaires']) {
+                $_points -= $points['offres_partenaires'];
+            }
+        }
+
+        return $_points;
+    }
+
+    /**
+    *
+    * _hasHomonyme
+    *
+    * Recherche de doublon dans les profils (pseudo ou email déjà existant)
+    *
+    * @version 1.0.1
+    *
+    * @return integer
+    *
+    **/
+    private function _hasHomonyme () {
+
+        $request = $this->get('request');
+        $em = $this->get('doctrine.orm.entity_manager');
+        $rep_nanas = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+        $usr= $this->get('security.context')->getToken()->getUser();
+
+        $err = 0;
+
+        $newParameters = $request->request->get('nana_complete_profil');
+        $newUsername = $newParameters['username'];
+        $newEmail = $newParameters['email'];
+        $ancienUsername = $usr->getUsername();
+        $ancienEmail = $usr->getEmail();
+
+        if (empty($newUsername)) {
+            $newParameters['username'] = $ancienUsername;
+            $this->get('session')->getFlashBag()->add('fail', 'Un pseudo est obligatoire');
+        } elseif ($ancienUsername != $newUsername) {
+            $homonyme = $rep_nana->findOneByUsername($newUsername);
+            if ($homonyme instanceof Nana) {
+                if (!($homonyme->getIdNana() == $usr->getIdNana())) {
+                    $err += 1;
+                    $this->get('session')->getFlashBag()->add('fail', 'Le pseudo <strong>'.$newUsername.'</strong> est déjà utilisé sur le site');
+                }                    
+            }
+        }
+
+        if (empty($newEmail)) {
+            $newParameters['email'] = $ancienEmail;
+            $this->get('session')->getFlashBag()->add('fail', 'Une adresse électronique est obligatoire');
+        } elseif ($ancienEmail != $newEmail) {
+            $homomail = $rep_nana->findOneByEmail($newEmail);
+            if ($homomail instanceof Nana) {
+                if (!($homomail->getIdNana() == $usr->getIdNana())) {
+                    $err += 2;
+                    $this->get('session')->getFlashBag()->add('fail', 'L’email <strong>'.$newEmail.'</strong> est déjà utilisé sur le site');
+                }                    
+            }
+        }
+
+        return $err;
+    }
+
 
     public function tiroirAction () {
 
@@ -132,7 +226,7 @@ class MyTDNController extends Controller {
     *
     * Traitement du formulaire d'identité
     *
-    * @version 1.0.1
+    * @version 2.0.1
     *
     * @param array $vars — Données pour l'affichage
     *
@@ -150,54 +244,29 @@ class MyTDNController extends Controller {
         $rep_nana = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
         $usr= $this->get('security.context')->getToken()->getUser();
         $nana = $rep_nana->find($usr->getIdNana());
-        $ancienPassword = $usr->getPassword();
-        $ancienUsername = $usr->getUsername();
-        $ancienEmail = $usr->getEmail();
-        // Le profil était-il déjà complet
-        $ancienProfilComplet = $this->isProfileComplete($usr);
-        $ancienNewsletter = $usr->getNewsletter();
-        $ancienOffresPartenaires = $usr->getOffresPartenaires();
 
-        $newParameters = $request->request->get('nana_complete_profil');
-        $newUsername = $newParameters['username'];
-        $newEmail = $newParameters['email'];
-
-        if (!empty($newUsername) && ($ancienUsername != $newUsername)) {
-            $homonyme = $rep_nana->findOneByUsername($newUsername);
-            if ($homonyme instanceof Nana) {
-                if ($homonyme->getIdNana() == $nana->getIdNana()) {
-                    unset($homonyme);
-                } else {
-                    $this->get('session')->getFlashBag()->add('fail', 'Le pseudo <strong>'.$newUsername.'</strong> est déjà utilisé sur le site');
-                }                    
-            } else {
-                unset($homonyme);
-            }
+        $anciennesIdentites = new ArrayCollection();
+        foreach ($usr->getFilPresence() as $_sid) {
+            $anciennesIdentites->add($_sid);
         }
 
-        if (empty($newEmail)) {
-            $newParameters['email'] = $ancienEmail;
-            $this->get('session')->getFlashBag()->add('fail', 'Une adresse électronique est obligatoire');
-        } elseif ($ancienEmail != $newEmail) {
-            $homomail = $rep_nana->findOneByEmail($newEmail);
-            if ($homomail instanceof Nana) {
-                if ($homomail->getIdNana() == $nana->getIdNana()) {
-                    unset($homomail);
-                } else {
-                    $this->get('session')->getFlashBag()->add('fail', 'L’email <strong>'.$newEmail.'</strong> est déjà utilisé sur le site');
-                }                    
-            } else {
-                unset($homomail);
-            }
-        }
 
-        if (!(isset($homomail) || isset($homonyme))) {
+        // Etat antérieur des élémnts du profil
+        $ancien['ProfilComplet'] = $usr->hasCompletedProfile();
+        $ancien['Password'] = $usr->getPassword();
+        $ancien['Newsletter'] = $usr->getNewsletter();
+        $ancien['OffresPartenaires'] = $usr->getOffresPartenaires();
+
+        $hasHomonyme = $this->_hasHomonyme();
+
+
+        if (!$hasHomonyme) {
             $form = $this->createForm(new completeProfilType(), $nana);
-            $form->bind($request);
+            $form->handleRequest($request);
             if ($form->isValid()) {
                 $p = $nana->getPassword();
                 if (empty($p)) {
-                    $nana->setPassword($ancienPassword);
+                    $nana->setPassword($ancien['Password']);
                 } else {
                     $factory = $this->get('security.encoder_factory');
                     $encoder = $factory->getEncoder($nana);
@@ -205,40 +274,22 @@ class MyTDNController extends Controller {
                     $nana->setPassword($password);
                 }
 
-                // Mise à jour des points pour les escarpins
-                $points = $this->container->getParameter('action_points');
-                $_points = 0;
-                if ($this->isProfileComplete($nana)) {
-                    if (!$ancienProfilComplet) {
-                        $_points += $points['completer_profil'];
-                    }
-                } else {
-                    if ($ancienProfilComplet) {
-                        $_points -= $points['completer_profil'];
-                    }
-                }
-                if ($nana->getNewsletter()) {
-                    if (!$ancienNewsletter) {
-                        $_points += $points['abonnee_newsletter'];
-                    }
-                } else {
-                    if ($ancienNewsletter) {
-                        $_points -= $points['abonnee_newsletter'];
-                    }
-                }
-                if ($nana->getOffresPartenaires()) {
-                    if (!$ancienOffresPartenaires) {
-                        $_points += $points['offres_partenaires'];
-                    }
-                } else {
-                    if ($ancienOffresPartenaires) {
-                        $_points -= $points['offres_partenaires'];
-                    }
-                }
+                $nana->updatePopularite($this->_upgradeIfProfileCompleted($nana, $ancien));
 
-                $nana->updatePopularite($_points);
+                // supprime la relation entre le tag et la « Task »
+                foreach ($anciennesIdentites as $_sid) {
+                    print_r($_sid->getUserID());
+                    if ($nana->getFilPresence()->contains($_sid) == false) {
+                        $_sid->setLnIdentite(NULL);
+                        $em->persist($_sid);
+                        $em->remove($_sid);
+                    } else {
+                        $_sid->setLnIdentite($nana);
+                    }
+                }
 
                 $em->flush();
+
                 $this->get('session')->getFlashBag()->add('success', 'Les modifications ont bien été prises en compte.');
             } else {
                 $errs = "";

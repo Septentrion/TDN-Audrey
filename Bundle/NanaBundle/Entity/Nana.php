@@ -1333,7 +1333,7 @@ class Nana implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-    private function hasCompletedProfile () {
+    public function hasCompletedProfile () {
         $prenom = $this->getPrenom();
         $nom = $this->getNom();
         $bio = $this->getBiographie();

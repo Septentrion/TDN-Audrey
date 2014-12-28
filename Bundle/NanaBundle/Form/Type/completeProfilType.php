@@ -20,11 +20,12 @@ class completeProfilType extends AbstractType {
         ));
         $builder->add('password', 'repeated',
             array(
+                'label' => 'Mot de passe',
                 'type' => 'password',
                 'invalid_message' => 'Les mots de passe doivent correspondre',
                 'options' => array('required' => true),
-                'first_options'  => array('label' => 'Mot de passe'),
-                'second_options' => array('label' => '(Validation)'),
+                'first_options'  => array('label' => 'Choix'),
+                'second_options' => array('label' => 'Validation'),
                 'required' => false
         ));
         $builder->add('email', 'email',
@@ -51,7 +52,7 @@ class completeProfilType extends AbstractType {
         ));
         $builder->add('sexe', 'choice',
             array(
-                 'label' => 'sexe',
+                 'label' => 'Sexe',
                  'multiple' => false,
                  'expanded' => true,
                  'choices' => array('2' =>'Fille', '1' => 'Garçon')
@@ -83,7 +84,15 @@ class completeProfilType extends AbstractType {
                 'label' => '',
                 'required' => false
         ));
-
+        $builder->add('filPresence', 'collection',
+            array(
+                'label' => 'Autres profils',
+                'type' => new SocialIdentitiesType(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+                'options' => array('label' => '> profil', 'attr' => array('class' => 'identite-sociale champ-tableau'))
+        ));
      }
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
