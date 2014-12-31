@@ -1,0 +1,17 @@
+<div id="selecteur_avatar" class="popin-avatar" style="width:600px;overflow:auto">
+	<div id="enveloppe-avatar" class="col-lg-2">
+		<div id="avatar">
+			{% set imgAvatar = avatar(me, 'sqr_') %}
+			<a class="popin" href="{{ imgAvatar }}" >
+				<img src="http://www.trucsdenana.com{{ imgAvatar }}" class="profil-border contrainte" />
+			</a>
+		</div>
+	</div>
+	<form name="selecteur_galerie" id="selecteur_galerie" class="closed-field constraintFile col-lg-10" action="{{ path('NanaBundle_myGalerieAjout')}}" method="post" {{ form_enctype(form_avatar) }}>
+		<p class="maxSizeWarning">Les images doivent être dans un format compatible (gif, jpg, png, svg), poids maximum 2Mo</p>
+		{{ form_row(form_galerie.upload) }}
+		{{ form_row(form_galerie.titre) }}
+		{{ form_rest(form_galerie) }}
+		<input type="submit" value="Valider" />
+	</form>
+</div>

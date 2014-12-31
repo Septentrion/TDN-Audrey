@@ -1,7 +1,7 @@
 {% extends 'TDNNanaBundle:Pages:mySectionsProfil.html.twig' %}
 
 {% block nanaData %}
-<article id="document-wrapper" class="main article-redaction">
+<article id="mes-donnees" class="main article-redaction">
   <section class="contenu main-section">
     <!-- Bloc pour l'affichage des métadonnées de l'article -->
     <div id="metadata" class="metadata">
@@ -21,19 +21,19 @@
   <!-- Bloc pour l'affichage du contenu du profil -->
   <div id="corps" class="corps" style="margin-top:20px">
     {{ form_errors(form) }}
-    <div id="enveloppe-avatar" class="col-lg-4">
+    <div id="enveloppe-avatar" class="col-lg-3">
       <div id="avatar">
         {% set imgAvatar = avatar(me, 'sqr_') %}
         <a class="popin" href="{{ imgAvatar }}" >
           <img src="{{ imgAvatar }}" class="profil-border contrainte" />
         </a>
       </div>
-      <p id="avatar_switcher">
+      <p class="avatar-switcher">
         <a href="{{ path('Nana_myAvatar') }}" class="popin">Changer ma photo de profil</a>
       </p>
     </div>
     <div>{{ form_errors(form) }}</div>
-    <div id="donneesPersonnelles" class="enveloppe-data col-lg-8">
+    <div id="donneesPersonnelles" class="enveloppe-data col-lg-9">
       <form name="editeur_profil" id="editeur_profil" action="{{ path('Nana_myIdentite', {'action': 'modifier'})}}" method="post" {#{ form_enctype(form) }#}>
         {{ form_label(form.username) }}
         {{ form_widget(form.username, {'attr': {'class': 'champ-profil champ-bloc'}}) }}

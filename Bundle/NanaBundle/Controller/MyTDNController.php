@@ -12,6 +12,7 @@ use TDN\Bundle\NanaBundle\Entity\NanaPortraitImageProxy;
 use TDN\Bundle\NanaBundle\Form\Type\completeProfilType;
 use TDN\Bundle\NanaBundle\Entity\NanaHobby;
 use TDN\Bundle\NanaBundle\Form\Type\HobbyType;
+use TDN\Bundle\NanaBundle\Form\Type\SelfHobbiesType;
 
 use TDN\Bundle\CoreBundle\Entity\Journal;
 
@@ -417,6 +418,57 @@ class MyTDNController extends Controller {
         $vars['form_avatar'] = $form_avatar->createView();
         // print_r($form->getErrors()); die;
         return $this->render('TDNNanaBundle:Partiels:myProfil_Avatar.html.twig', $vars);
+    }
+
+    /**
+    *
+    * myGaleriesAction
+    *
+    * Contrôleur gérant la section 'Galeries' du profil
+    *
+    * @version 0.0.1
+    *
+    * @param string $action — mode d'action : afficher|mofidier
+    *
+    * @return Response
+    *
+    */
+    public function myGaleriesAction ($action) {
+
+        // Récupération de l'entity manager qui va nous permettre de gérer les entités.
+        $em = $this->get('doctrine.orm.entity_manager');      
+        $rep_nana = $repository = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+        
+        $variables = array();  
+        $vars['me'] = $this->container->get('security.context')->getToken()->getUser();
+
+        if ($action === 'modifier') {
+            return $this->_updateMyGaleriesAction($vars);
+        } else {
+            return $this->_showMyGaleriesAction($vars);
+        }
+
+    }
+
+    /**
+    *
+    * _showMyGaleriesAction
+    *
+    * Préparation pour l'affichage du formulaire 'Galeries'
+    *
+    * @version 0.0.1
+    *
+    * @param array $vars — Données pour l'affichage
+    *
+    * @return Response
+    *
+    **/
+    private function _showMyGaleriesAction (array $vars) {
+
+       // Formulaire pour les données personnelles
+        $vars['form_hobbies'] = $this->createForm(new SelfHobbiesType(), $vars['me'])->createView();
+
+        return $this->render('TDNNanaBundle:Partiels:myProfil_Galeries.html.twig', $vars);
     }
 
 

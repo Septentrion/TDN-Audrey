@@ -1,0 +1,39 @@
+{% extends 'TDNNanaBundle:Pages:mySectionsProfil.html.twig' %}
+
+{% block nanaData %}
+<article id="mes-galeries" class="main">
+	<section id="galerie-perso">
+		<h2>Mes photos</h2>
+		{% set compteGaleriePerso = me.galeriePerso|length %}
+		<div class="galerie-lineaire">	
+			{% for proxy in me.galeriePerso%}
+			{% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+			{% set vignetteGalerie = imagePerso(proxy.lnImage, me.idNana, 'SQUARE') %}
+			<figure class="element-galerie has-croix-suppression">
+				<a class="popin" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+					<img class="apercu vignette" src="{{ asset(vignetteGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
+				</a>
+				<figcaption>
+					<button href="{{ path('Nana_supprimerElementGalerie', {'id': proxy.idPortrait}) }}" class="croix-suppression">X</button>
+				</figcaption>
+			</figure>
+			{% endfor %}
+			{% for i in compteGaleriePerso .. 9 %}
+			<figure class="element-avenir">
+				<a href="#" class="bouton-ajout-image">Ajoute une image</a>
+			</figure>
+			{% endfor %}
+		</div>
+	</section>
+
+	<section id="galerie-hobbies" class="fond-vert">
+	{% set compteHobbies = me.lnHobbies|length %}
+		<h2>Mes passions dans la vie</h2>
+		<div class="hobby-wrapper">
+			<form name="formModificationHobby" id="formModificationHobby" class="closed-field" action="{{ path('NanaBundle_myHobbyModifier')}}" method="post" {{ form_enctype(form_hobbies) }}>
+				{{ form_row(form_hobbies.lnHobbies) }}
+			</form>
+		</div>
+	</section>
+</article>
+{% endblock %}
