@@ -2,6 +2,16 @@
 
 {% import _self as builder %}
 
+{% macro hobbyImageBuilder(widget) %}
+     {% if widget.vars.prototype %}
+        {% set form = widget.vars.prototype %}
+    {% else %}
+        {% set form = widget %}
+    {% endif %}
+
+   {{ form_widget(form.lnImage|e, {'attr': {'class': 'champ-image'}}) }}
+{% endmacro %}
+
 {% macro hobbyWidgetBuilder(widget) %}
     {% if widget.vars.prototype %}
         {% set form = widget.vars.prototype %}
@@ -11,11 +21,17 @@
         {% set name = 'hobby' %}
     {% endif %}
 
-    <div data-content="{{ name }}">
-        {{ form_widget(form.domaine|e) }}
-        {{ form_widget(form.precisions|e) }}
-        <a class="btn-remove" data-related="{{ name }}">Effacer</a>
+	{{ form_label(form.domaine) }}
+    {{ form_widget(form.domaine|e, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+	{{ form_label(form.precisions) }}
+    {{ form_widget(form.precisions|e, {'attr': {'class': 'champ-profil champ-bloc'}}) }}
+	<div id="tdn_nana_hobbies_lnHobbies_galleryHobby" class="galerie-hobby" data-prototype="{{ _self.hobbyImageBuilder(form.children['galerieHobby'])|e }}">
     </div>
+    <a id="bouton-ajout-image" class="lien-propos" href="#">Ajouter une image</a>
+    {#{ form_rest(form) }#}
+	<div class="bouton-fleche-blanche">
+		<button class="bouton">Enregistrer</button>
+	</div>
 {% endmacro %}
 
 {% block nanaData %}
@@ -45,46 +61,49 @@
 	</section>
 
 	<section id="galerie-hobbies" class="fond-simple">
-	{% set compteHobbies = me.lnHobbies|length %}
-		<a href="#" class="lienPropos">Ajoute une passion</a>
-	{% if compteHobbies == 0 %}
-		<h2>Dis-nous quelles sont tes passions dans la vie !</h2>
-	{% elseif compteHobbies == 0 %}
-		<h2>Ma passion dans la vie</h2>
-	{% else %}
-		<h2>Mes {{ compteHobbies }} passions dans la vie</h2>
-	{% endif %}
+		<header class="titre-inline">
+		{% set compteHobbies = me.lnHobbies|length %}
+			<a href="#" id="bouton-ajout-passion" class="lien-propos">Ajoute une passion</a>
+		{% if compteHobbies == 0 %}
+			<h2>Dis-nous quelles sont tes passions dans la vie !</h2>
+		{% elseif compteHobbies == 0 %}
+			<h2>Ma passion dans la vie</h2>
+		{% else %}
+			<h2>Mes {{ compteHobbies }} passions dans la vie</h2>
+		{% endif %}
+		</header>
 		<div class="hobby-wrapper">
 			<form name="formModificationHobby" id="formModificationHobby" class="closed-field" action="{{ path('NanaBundle_myHobbyModifier')}}" method="post" {{ form_enctype(form_hobbies) }}>
-				<div class="setHobbies" data-prototype="{{ builder.hobbyWidgetBuilder(form_hobbies.lnHobbies)|e }}">
+				<div id="tdn_nana_hobbies_lnHobbies" class="setHobbies" data-prototype="{{ builder.hobbyWidgetBuilder(form_hobbies.lnHobbies)|e }}">
 				{% set j = 0 %}
 		        {% for hobby in form_hobbies.lnHobbies %}
+			        <div class="formulaire-hobby">
 	            	{{ form_widget(hobby.domaine) }}
 	            	{{ form_widget(hobby.precisions) }}
-					<div class="bouton-fleche-blanche">
-						<button class="bouton">Enregistrer</button>
-					</div>
-	            	{% set imagesHobby = me.lnHobbies[j].galerieHobby %}
-					<div class="galerie-lineaire">	
-						{% for proxy in imagesHobby %}
-						{% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
-						{% set vignetteGalerie = imagePerso(proxy.lnImage, me.idNana, 'SQUARE') %}
-						<figure class="element-galerie has-croix-suppression">
-							<a class="popin" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
-								<img class="apercu vignette" src="{{ asset(vignetteGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
-							</a>
-							<figcaption>
-								<button href="{{ path('Nana_supprimerElementGalerie', {'id': proxy.idImageHobby }) }}" class="croix-suppression">X</button>
-							</figcaption>
-						</figure>
-						{% endfor %}
-						{% for i in imagesHobby|length .. 9 %}
-						<figure class="element-avenir">
-							<a href="#" class="bouton-ajout-image">Ajoute une image</a>
-						</figure>
-						{% endfor %}
-					</div>
-					<a href="{#{ path() }#}" class="solid">Supprimer cette passion</a>
+						<div class="bouton-fleche-blanche">
+							<button class="bouton">Enregistrer</button>
+						</div>
+		            	{% set imagesHobby = me.lnHobbies[j].galerieHobby %}
+						<div class="galerie-lineaire">	
+							{% for proxy in imagesHobby %}
+							{% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+							{% set vignetteGalerie = imagePerso(proxy.lnImage, me.idNana, 'SQUARE') %}
+							<figure class="element-galerie has-croix-suppression">
+								<a class="popin" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+									<img class="apercu vignette" src="{{ asset(vignetteGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
+								</a>
+								<figcaption>
+									<button href="{{ path('Nana_supprimerElementGalerie', {'id': proxy.idImageHobby }) }}" class="croix-suppression">X</button>
+								</figcaption>
+							</figure>
+							{% endfor %}
+							{% for i in imagesHobby|length .. 9 %}
+							<figure class="element-avenir">
+								<a href="#" class="bouton-ajout-image">Ajoute une image</a>
+							</figure>
+							{% endfor %}
+						</div>
+			        </div>
 					{% set j = j + 1 %}
 		        {% endfor %}
 				</div>
@@ -92,4 +111,59 @@
 		</div>
 	</section>
 </article>
+<script type="text/javascript">
+var $socialConteneur = $('<div id="profils-sociaux"></div>');
+
+function addCollectionDelete($formConteneur, texteBouton) {
+    var $removeFormA = $('<a href="#">'+texteBouton+'</a>');
+    $formConteneur.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+        // supprime l'élément li pour le formulaire de tag
+        $formConteneur.remove();
+    });
+}
+  function addCollectionForm(collectionHolder, classeForm, texteBouton) {
+      // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+      var prototype = collectionHolder.attr('data-prototype');
+
+      // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+      // la longueur de la collection courante
+      var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+
+      // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+      var $newFormLi = $('<div class="'+classeForm+'"></div>').append(newForm);
+      //
+      addCollectionDelete($newFormLi,texteBouton);
+      //
+      collectionHolder.prepend($newFormLi);
+  }
+
+  $(document).ready(function() {
+    // Récupère le div qui contient la collection de tags
+    var collectionHolder = $('#tdn_nana_hobbies_lnHobbies');
+
+    $('.formulaire-hobby').each(function() {
+    	addCollectionDelete($(this));
+    })
+
+    $('#bouton-ajout-passion').on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+        // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+        addCollectionForm(collectionHolder, 'formulaire-hobby', 'Supprimer cette passion');
+    });
+
+    $('#formModificationHobby').on('click', '#bouton-ajout-image', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+        // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+        $imageCollectionHolder = $(this).parent().find('.galerie-hobby');
+        addCollectionForm($imageCollectionHolder, 'formulaire-images-hobby', 'Supprimer cette image');
+    });
+});
+
+</script>
 {% endblock %}
