@@ -23,6 +23,8 @@ class SelfHobbiesType extends AbstractType {
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
+                'prototype' => true,
+                'prototype_name' => 'hobby__name__',
                 'options' => array('label' => '> hobby', 'attr' => array('class' => 'hobby masque champ-tableau'))
         ));
      }

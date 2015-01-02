@@ -1,8 +1,26 @@
 {% extends 'TDNNanaBundle:Pages:mySectionsProfil.html.twig' %}
 
+{% import _self as builder %}
+
+{% macro hobbyWidgetBuilder(widget) %}
+    {% if widget.vars.prototype %}
+        {% set form = widget.vars.prototype %}
+        {% set name = form.domaine.vars.name %}
+    {% else %}
+        {% set form = widget %}
+        {% set name = 'hobby' %}
+    {% endif %}
+
+    <div data-content="{{ name }}">
+        {{ form_widget(form.domaine|e) }}
+        {{ form_widget(form.precisions|e) }}
+        <a class="btn-remove" data-related="{{ name }}">Effacer</a>
+    </div>
+{% endmacro %}
+
 {% block nanaData %}
 <article id="mes-galeries" class="main">
-	<section id="galerie-perso">
+	<section id="galerie-perso" class="fond-simple">
 		<h2>Mes photos</h2>
 		{% set compteGaleriePerso = me.galeriePerso|length %}
 		<div class="galerie-lineaire">	
@@ -26,12 +44,50 @@
 		</div>
 	</section>
 
-	<section id="galerie-hobbies" class="fond-vert">
+	<section id="galerie-hobbies" class="fond-simple">
 	{% set compteHobbies = me.lnHobbies|length %}
-		<h2>Mes passions dans la vie</h2>
+		<a href="#" class="lienPropos">Ajoute une passion</a>
+	{% if compteHobbies == 0 %}
+		<h2>Dis-nous quelles sont tes passions dans la vie !</h2>
+	{% elseif compteHobbies == 0 %}
+		<h2>Ma passion dans la vie</h2>
+	{% else %}
+		<h2>Mes {{ compteHobbies }} passions dans la vie</h2>
+	{% endif %}
 		<div class="hobby-wrapper">
 			<form name="formModificationHobby" id="formModificationHobby" class="closed-field" action="{{ path('NanaBundle_myHobbyModifier')}}" method="post" {{ form_enctype(form_hobbies) }}>
-				{{ form_row(form_hobbies.lnHobbies) }}
+				<div class="setHobbies" data-prototype="{{ builder.hobbyWidgetBuilder(form_hobbies.lnHobbies)|e }}">
+				{% set j = 0 %}
+		        {% for hobby in form_hobbies.lnHobbies %}
+	            	{{ form_widget(hobby.domaine) }}
+	            	{{ form_widget(hobby.precisions) }}
+					<div class="bouton-fleche-blanche">
+						<button class="bouton">Enregistrer</button>
+					</div>
+	            	{% set imagesHobby = me.lnHobbies[j].galerieHobby %}
+					<div class="galerie-lineaire">	
+						{% for proxy in imagesHobby %}
+						{% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
+						{% set vignetteGalerie = imagePerso(proxy.lnImage, me.idNana, 'SQUARE') %}
+						<figure class="element-galerie has-croix-suppression">
+							<a class="popin" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+								<img class="apercu vignette" src="{{ asset(vignetteGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
+							</a>
+							<figcaption>
+								<button href="{{ path('Nana_supprimerElementGalerie', {'id': proxy.idImageHobby }) }}" class="croix-suppression">X</button>
+							</figcaption>
+						</figure>
+						{% endfor %}
+						{% for i in imagesHobby|length .. 9 %}
+						<figure class="element-avenir">
+							<a href="#" class="bouton-ajout-image">Ajoute une image</a>
+						</figure>
+						{% endfor %}
+					</div>
+					<a href="{#{ path() }#}" class="solid">Supprimer cette passion</a>
+					{% set j = j + 1 %}
+		        {% endfor %}
+				</div>
 			</form>
 		</div>
 	</section>

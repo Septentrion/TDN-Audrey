@@ -15,11 +15,11 @@ class HobbyType extends AbstractType {
     {
         $builder->add('domaine', 'text', 
         	array(
-                'attr' => array('size' => 80)
+                'attr' => array('size' => 60)
         	));
         $builder->add('precisions', 'text', 
         	array(
-                'attr' => array('size' => 80)
+                'attr' => array('size' => 60)
         	));
         $builder->add('galerieHobby', 'collection', 
             array(
