@@ -6,14 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class JournalController extends Controller {
 
-    public function filJournalAction () {
+    public function filJournalAction ($limite = 5) {
 
         // Récupération de l'entity manager qui va nous permettre de gérer les entités.
         $em = $this->get('doctrine.orm.entity_manager');      
 
         // Récupération de la question la plus récente
         $rep = $em->getRepository('TDN\Bundle\CoreBundle\Entity\Journal');
-        $variables['entrees'] = $rep->findMostRecent(20);
+        $variables['entrees'] = $rep->findMostRecent($limite);
 
 		return $this->render('TDNCoreBundle:Partiels:filJournal.html.twig', $variables);
 	}

@@ -10,12 +10,13 @@
 	<meta name="verification" content="2f58130aa4c3936441a51b3b7d85f013" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	{% stylesheets 
-	'assets/css/*'
+	'assets/css/sass/*'
 	filter='cssrewrite' filter='sass'
 	output='assets/css/TDN_large.css'
 	%}
 	<link rel="stylesheet" href="{{ asset_url }}">
 	{% endstylesheets %}
+	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/colorbox.css') }}" />
 
 	<!-- Polices de caractères -->
 	<link href='http://fonts.googleapis.com/css?family=Questrial' rel='stylesheet' type='text/css' />
@@ -66,7 +67,7 @@
 			{% include "TDNCoreBundle:Partiels:menuContenus.html.twig" %}
 		</div>
 		<div class="row">
-			{% include "TDNCoreBundle:Partiels:menuRubriques.html.twig" %}
+			{% render(controller("TDNDocumentBundle:Rubrique:menuRubriques")) %}
 		</div>
 
 		{% include "TDNCoreBundle:Partiels:blocRecherche.html.twig" %}
@@ -75,7 +76,7 @@
 		<main id="contenuPrincipal" class="row">
 			
 			<!-- Contenu Principal -->
-			<section class="col-lg-8 col-md-8 col-sm-12 col-xs-12 bg-blanc scene">
+			<section class="col-lg-8 col-md-8 col-sm-12 col-xs-12 bg-blanc en-scene">
 				{% block contenuPrincipal %}{% endblock %}
 			</section>
 
@@ -96,6 +97,7 @@
 		</footer>
 	</div>
 
+<script src="{{ asset('assets/js/jquery.colorbox-min.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     console.log('Traitement des URL images');
@@ -105,7 +107,11 @@
       if (radix == '/photos'|| radix == '/upload') {
         $(this).attr('src', 'http://www.trucdenana.com'+source);
       }
-    })
+    });
+
+    // Configuration de la Colorbox
+	$('a.popin').colorbox({'close': 'Fermer la fenêtre'});
+
   })
 </script>
 </body>

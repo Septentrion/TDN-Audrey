@@ -1,123 +1,119 @@
-<div id="avis">
-	<h2 class="titreFormContribution">Ajoute un commentaire</h2>
-<form id="formCommentaire" class="formUser formCommentaire" name="formCommentaire" action="{#{ path('Commentaire_add') }#}" class="table-content" method="post">
-
-	<figure class="avatar">
-		<img src="{{ avatar(app.user) }}" class="avatar-image" alt="Avatar {% if app.user.username is defined %}de {{ app.user.username }}{% endif %}" title="{% if app.user.username is defined %}{{ app.user.username }}{% else %}Commentateur anonyme{% endif %}" />
-	</figure>
-	<div id="fields">
-		{{ form_row(form._token) }}
-		{{ form_row(form.idThread) }}
-		<input type="hidden" name="idDocument" id="idDocument" value="{{ idDocument }}" />
-		<div class="form-element">
-			{{ form_row(form.texteCommentaire, {'attr': {'class': 'texteContribution'}} )}}
-		</div>
-		<div class="form-options">
-			<div class="form-element formCellFollow">
-				{{ form_row(form.abonne) }}
+<div id="avis-communaute">
+	<h2>Ajoute un commentaire</h2>
+	<form id="formCommentaire" class="form-commentaire" name="formCommentaire" action="{#{ path('Commentaire_add') }#}" class="table-content" method="post">
+		<figure class="avatar-contribue">
+			<img src="{{ avatar(app.user) }}" class="avatar-image" alt="Avatar {% if app.user.username is defined %}de {{ app.user.username }}{% endif %}" title="{% if app.user.username is defined %}{{ app.user.username }}{% else %}Commentateur anonyme{% endif %}" />
+		</figure>
+		<div class="form-champs">
+			{{ form_row(form._token) }}
+			{{ form_row(form.idThread) }}
+			<input type="hidden" name="idDocument" id="idDocument" value="{{ idDocument }}" />
+			<div class="">
+				{{ form_row(form.texteCommentaire, {'attr': {'class': 'texteContribution'}} )}}
 			</div>
-			<div class="form-element formCellAntispam">
-				<label for="antispam" class="inline-label" required><strong>1 + 1 vaut ?</strong> (question anti-spam)</label>
-				<input type="text" name="antispam" id="antispam" size="4" required />
-			</div>
-			<div class="form-element">
-				<input type="submit" class="submitter" name="envoiCommentaire" value="Envoyer" />
-			</div>			
-		</div>
-	</div>
-	
-	
-</form>
-</div>
-
-{% if commentaires is defined %}
-<h2 style="margin-left:10px; color:#488C8C">{{ commentaires|length }} commentaire{% if commentaires|length > 1 %}s{% endif %}</h2>
-<div id="flux-commentaires">
-	{% if commentaires is not empty %}
-		{% set i = 0 %}
-		{% set commentStatut = 'commentaire-affiche' %}
-		{% for thread in commentaires %}
-		{% if i == 3 %}{% set commentStatut = 'commentaire-masque stalled' %}{% endif %}
-			<div class="commentaire-reponses" data-thread="{{ thread[0][0].idThread }}">
-			{% for parts in 0..1 %}
-				{% if thread[parts] is defined %}
-				{% for c in thread[parts] %}
-				{% if parts == 0 %}
-					{% set commentClass = 'isMain' %}
-					{% set style = 'visible' %}
-				{% else %}
-					{% set commentClass = 'isReponse' %}
-					{% set style = 'stalled' %}
-				{% endif %}
-				{% set auteur = c.filAuteur %}
-				{% if auteur is not null %}
-					{% set alias = 'de '~auteur.username %}
-				{% else %}
-					{% set alias = 'anonyme' %}
-				{% endif %}
-
-				<!-- Bloc du commentaire -->
-				<div class="commentaire-wrapper {{ style }} {{ commentClass }} {{ commentStatut }}">
-					<figure class="avatar">
-						{% if auteur is not null %}<a href="/profil/{{auteur.idNana}}">{% endif %}
-						<img src="{{ avatar(auteur, 'sqr_') }}" class="avatar-image" alt="Avatar {{ alias }}" title="{{ alias }}" />
-						{% if auteur is not null %}</a>{% endif %}
-					</figure>
-					<div class="commentaire">
-						<p class="metadata">
-							<span class="auteur">
-								{% if auteur is not null %}
-								<a href="/profil/{{auteur.idNana}}">{{ auteur.username }}</a>
-								{% else %}
-								Anonyme
-								{% endif %}
-							</span>
-							<span class="date-publication">
-								{{ c.datePublication|date('d/m/Y') }}
-							</span>
-							{% if auteur is not null %}
-							<span class="escarpins">{{ auteur.popularite|stiletto|raw }}</span>
-							{% endif %}
-						</p>
-						<p class="texte">
-							{{ c.texteCommentaire|raw }}
-						</p>
-						<p class="actions-commentaires">
-					        <a href="{#{ path('commentaireBundle_voteFor', { 'id': c.idCommentaire }) }#}" class="bottomTextLink">
-								<span style="color:#159993">
-								{% if c.like > 0 %}{{ c.like }} {% if c.like > 1 %}{% endif %}{% endif %}
-								</span>
-								<img src="{{asset('assets/images/theme/commentaire/jaime.png')}}" align="absmiddle" title="J’aime"/>
-								<span class="icone-aime">J'aime</span>
-							</a>
-							{% if commentClass == 'isMain' %}
-							<a href="#" id="responseCommentaire" class="bottomTextLink boutonReponse"> Répondre à ce commentaire </a>
-							{% if (thread|length > 1) %}
-								{% if (thread|length == 2) %}
-								{% set labelReponses = 'la réponse' %}
-								{% else %}
-								{% set labelReponses = 'les ' ~ (thread|length - 1) ~ ' réponses' %}
-								{% endif %}
-								<a class="switchReponses unstall">Afficher {{ labelReponses }} à ce commentaire</a>
-								<a class="switchReponses stalled">Masquer {{ labelReponses }}</a>
-							{% endif %}
-							{% endif %}
-						</p>
-					</div>
+			<div class="form-options">
+				<div class="">
+					{{ form_row(form.abonne) }}
 				</div>
-				<!-- Fin du bloc commentaire -->
-				{% endfor %}
-				{% endif %}
-			{% endfor %}
+				<div class="">
+					<label for="antispam" class="inline-label" required><strong>1 + 1 vaut ?</strong> (question anti-spam)</label>
+					<input type="text" name="antispam" id="antispam" size="4" required />
+				</div>
+				<div class="bouton-fleche-blanche">
+					<button type="submit" class="bouton" name="envoiCommentaire" >Envoyer</button>
+				</div>			
 			</div>
-		{% set i = i + 1 %}
-		{% endfor %}
-	{% else %}
-		<p>Aucun commentaire pour ce contenu</p>
-	{% endif %}
-	{% if i > 2%}
-	<p class="pliCommentaire">Tous les commentaires</p>
-	{% endif %}
+		</div>
+	</form>
+
+	{% if commentaires is defined %}
+	<h2>{{ commentaires|length }} commentaire{% if commentaires|length > 1 %}s{% endif %}</h2>
+	<div id="flux-commentaires">
+		{% if commentaires is not empty %}
+			{% set i = 0 %}
+			{% set commentStatut = '' %}
+			{% for thread in commentaires %}
+			{% if i == 3 %}{% set commentStatut = 'commentaire-masque' %}{% endif %}
+				<div class="commentaire-reponses {{ commentStatut }}" data-thread="{{ thread[0][0].idThread }}">
+				{% for parts in 0..1 %}
+					{% if thread[parts] is defined %}
+					{% for c in thread[parts] %}
+					{% if parts == 0 %}
+						{% set commentClass = 'commentaire-principal' %}
+						{% set style = 'visible' %}
+					{% else %}
+						{% set commentClass = 'commentaire-reponse' %}
+						{% set style = 'stalled' %}
+					{% endif %}
+					{% set auteur = c.filAuteur %}
+					{% if auteur is not null %}
+						{% set alias = 'de '~auteur.username %}
+					{% else %}
+						{% set alias = 'anonyme' %}
+					{% endif %}
+
+					<!-- Bloc du commentaire -->
+					<div class="commentaire-wrapper {{ style }} {{ commentClass }}">
+						<figure class="avatar">
+							{% if auteur is not null %}<a href="/profil/{{auteur.idNana}}">{% endif %}
+							<img src="{{ avatar(auteur, 'sqr_') }}" class="avatar-image" alt="Avatar {{ alias }}" title="{{ alias }}" />
+							{% if auteur is not null %}</a>{% endif %}
+						</figure>
+						<div class="commentaire">
+							<p class="metadata">
+								<span class="auteur">
+									{% if auteur is not null %}
+									<a href="/profil/{{auteur.idNana}}">{{ auteur.username }}</a>
+									{% else %}
+									Anonyme
+									{% endif %}
+								</span>
+								<span class="date-publication">
+									{{ c.datePublication|laps }}
+								</span>
+								{% if auteur is not null %}{{ auteur.popularite|stiletto|raw }}{% endif %}
+							</p>
+							<p class="texte">
+								{{ c.texteCommentaire|raw }}
+							</p>
+							<p class="actions-commentaires chaine-points">
+						        <span>
+									{% if true or c.like > 0 %}
+									<span class="nombre-likes">{{ c.like }}</span>
+									{% endif %}
+									<a href="{#{ path('Commentaire_vote', { 'id': c.idCommentaire }) }#}" class="">J'aime</a>
+								</span>
+								{% if commentClass == 'isMain' %}
+								<a href="#" id="responseCommentaire" class=""> Répondre à ce commentaire </a>
+								{% if (thread|length > 1) %}
+									{% if (thread|length == 2) %}
+									{% set labelReponses = 'la réponse' %}
+									{% else %}
+									{% set labelReponses = 'les ' ~ (thread|length - 1) ~ ' réponses' %}
+									{% endif %}
+									<a class="switchReponses unstall">Afficher {{ labelReponses }} à ce commentaire</a>
+									<a class="switchReponses stalled">Masquer {{ labelReponses }}</a>
+								{% endif %}
+								{% endif %}
+							</p>
+						</div>
+					</div>
+					<!-- Fin du bloc commentaire -->
+					{% endfor %}
+					{% endif %}
+				{% endfor %}
+				</div>
+			{% set i = i + 1 %}
+			{% endfor %}
+		{% else %}
+			<p>Aucun commentaire pour ce contenu</p>
+		{% endif %}
+		{% if i > 3 %}
+		<div class="pli-commentaire pli-ferme">
+			<p class="lienSommaire">Tous les commentaires ({{ commentaires|length }})</p>
+		</div>
+		{% endif %}
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -143,9 +139,15 @@
 			$(texte).focus();
 			return false;
 		});
-		$('.pliCommentaire').click(function (e) {
-			$('.commentaire-masque').toggleClass('stalled unstall');
-			$(this).html('Masquer les commentaires');
+		$('.pli-commentaire').click(function (e) {
+			$('.commentaire-reponses').toggleClass('commentaire-masque commentaire-affiche');
+			$(this).toggleClass('pli-ferme pli-ouvert');
+			var bouton = $(this).children('.lienSommaire');
+			if ($(this).hasClass('pli-ferme')) {
+				bouton.html('Tous les commentaires');
+			} else {
+				bouton.html('Réduire les commentaires');
+			}
 		});
 	});		
 </script>

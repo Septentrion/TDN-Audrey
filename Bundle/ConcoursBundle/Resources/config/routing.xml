@@ -9,7 +9,7 @@
     <route id="Concours_page" pattern="{theme}/{rubrique}/concours/{id}/{slug}">
         <default key="_controller">TDNConcoursBundle:Public:concours</default>
         <requirement key="id">\d+</requirement>
-        <requirement key="slug">[0-9|a-z|-]+</requirement>
+        <!--requirement key="slug">[0-9|a-z|-]+</requirement-->
     </route>
 
     <route id="Concours_sommaire" pattern="/concours">

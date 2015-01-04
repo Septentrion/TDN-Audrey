@@ -3,30 +3,31 @@
 {% block corpsPublicationsRecentes %}
 {% for rd in recents %}
 <article class="bloc-conseil col-lg-6 col-md-6 col-sm-6 col-xs-12">
-	<div class="coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-4 col-md-4 col-sm-4 col-xs-4">
+	<div class="coin_{{ rubriquePrincipale(rd.lnThematique) }} col-lg-6 col-md-6 col-sm-4 col-xs-4 col-extended">
 		<a href="{{ rd|targetURL }}">
 			<img class="vignette" src="{{ illustration(rd, 'SQUARE') }}" alt="{{ rd.lnIllustration.alt }}" title="{{ rd.lnIllustration.alt }}" />
 		</a>
 	</div>
-	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 col-extended">
+	<div class="col-lg-6 col-md-6 col-sm-8 col-xs-8 col-extended">
 		{% if rd.lnAuteur is not null%}
 		<p class="lienAuteur credits soude">
 			<span class="as">de </span>
-			<a class="{{ rubriquePrincipale(rd.lnThematique) }}" href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}">
+			<a class="" href="{#{ path('NanaBundle_profil', {'id': rd.lnAuteur.idNana}) }#}">
 				{{ rd.lnAuteur.username }}
 			</a> 
 		{% endif %}
-		<p class="datePublication credits">{{ rd.datePublication|date('d/m/Y') }}</p>
+		<p class="datePublication credits">{{ rd.datePublication|laps }}</p>
 		<a href="{{ rd|targetURL }}">
 			<h4 class="apercuTexte">{{ rd.titre|raw }}</h4>
 		</a>
 		{% if rd.lnExpert is not null%}
-		<p class="lienExpert credits">
+		<p class="lienExpert credits soude">
 			<span calss="as">Réponse de </span>
-			<a class="{{ rubriquePrincipale(rd.lnThematique) }}" href="{#{ path('NanaBundle_profil', {'id': rd.lnExpert.idNana}) }#}">
-				{{ rd.lnExpert.prenom~', '~rd.lnExpert.occupation }}
+			<a class="" href="{#{ path('NanaBundle_profil', {'id': rd.lnExpert.idNana}) }#}">
+				{{ rd.lnExpert.prenom }}
 			</a>					
 		</p>
+		<p class="{{ rubriquePrincipale(rd.lnThematique) }} credits">{{ rd.lnExpert.occupation }}</p>
 		{% endif %}
 	</div>
 </article>

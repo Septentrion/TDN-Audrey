@@ -47,6 +47,10 @@
         <requirement key="slug">a-la-une|beaute|bien-etre|deco|geekette|mode|recettes|sexo-psycho</requirement>
     </route>
 
+    <route id="Document_equipeTDN" pattern="/equipe">
+        <default key="_controller">TDNCoreBundle:Infos:equipeTDN</default>
+    </route>
+
     <route id="Core_contact" pattern="/contact">
         <default key="_controller">TDNCoreBundle:Default:contact</default>
     </route>

@@ -3,8 +3,7 @@
 	{% if entrees is empty %}
 	<p>Aucune activité sur TDN</p>
 	{% else %}
-	<div style="display:block">
-	<div class="nano" style="height:520px">
+	<div>
 		<div class="content journal">
 			{% for e in entrees%}
 			<div class="entreeJournal">
@@ -34,7 +33,6 @@
 				</div>
 			</div>
 			{% endfor %}
-		</div>
 		</div>
 	</div>
 	{% endif %}

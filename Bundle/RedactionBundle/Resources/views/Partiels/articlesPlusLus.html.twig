@@ -19,7 +19,7 @@
 				<h4 class="soude" style="margin:0">
 					<a href="{{ a|targetURL }}">{{ a.titre }}</a>
 				</h4>
-				<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': a.lnAuteur.idNana}) }#}" class="{{ rubriquePrincipale(a.lnThematique) }}">{{ a.lnAuteur.prenom~' '~a.lnAuteur.nom }}</a></p>
+				<p class="credits soude">Par <a href="{#{ path('NanaBundle_profil', {'id': a.lnAuteur.idNana}) }#}" class="auteur">{{ a.lnAuteur.prenom~' '~a.lnAuteur.nom }}</a></p>
 				<p class="credits datePublication">{{ a.datePublication|laps }}</p>
 	 		</div>
 		</article>

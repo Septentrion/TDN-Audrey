@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <!-- Gestion des rubriques -->
+
+    <route id="DocumentRubrique_Index" pattern="/admin/rubriques/index">
+        <default key="_controller">TDNDocumentBundle:Rubrique:index</default>
+    </route>
+
+    <route id="DocumentRubrique_Creer" pattern="/admin/rubrique/creer">
+        <default key="_controller">TDNDocumentBundle:Rubrique:creer</default>
+    </route>
+
+    <route id="DocumentBundle_add" pattern="/admin/rubrique/add">
+        <default key="_controller">TDNDocumentBundle:Rubrique:add</default>
+    </route>
+
+    <route id="DocumentRubrique_modifier" pattern="/admin/rubrique/modifier/{id}">
+        <default key="_controller">TDNDocumentBundle:Rubrique:modifier</default>
+    </route>
+
+   <route id="DocumentBundle_saveRubrique" pattern="/admin/rubrique/save/{id}">
+        <default key="_controller">TDNDocumentBundle:Rubrique:save</default>
+    </route>
+
+    <route id="DocumentBundle_suppressionRubrique" pattern="/admin/rubrique/supprimer/{id}">
+        <default key="_controller">TDNDocumentBundle:Rubrique:supprimer</default>
+    </route>
+
+    <!-- Routes publiques -->
+    
+    <route id="Document_recherche" pattern="/recherche/{seed}">
+        <default key="_controller">TDNDocumentBundle:Public:recherche</default>
+    </route>
+
+    <route id="Document_rechercheForm" pattern="/recherche">
+        <default key="_controller">TDNDocumentBundle:Public:recherche</default>
+    </route>
+
+    <route id="Document_mentionsLegales" pattern="/mentions-legales">
+        <default key="_controller">TDNDocumentBundle:Public:mentionsLegales</default>
+    </route>
+
+    <route id="Document_equipeTDN" pattern="/quisommesnous.php">
+        <default key="_controller">TDNDocumentBundle:Public:equipeTDN</default>
+    </route>
+
+    <route id="Document_aime" pattern="/aime/{id}">
+        <default key="_controller">TDNDocumentBundle:Public:aime</default>
+    </route>
+
+    <route id="Document_sitemap" pattern="/sitemap/make/{docType}/{annee}">
+        <default key="_controller">TDNDocumentBundle:Sitemap:make</default>
+        <default key="annee"></default>
+    </route>
+
+    <!-- Slider -->
+
+    <route id="DocumentBundle_sliderIndex" pattern="/admin/slider/index">
+        <default key="_controller">TDNDocumentBundle:Slider:index</default>
+    </route>
+
+    <route id="Document_sliderInspecteur" pattern="/admin/slide/inspect/{id}">
+        <default key="_controller">TDNDocumentBundle:Slider:inspect</default>
+    </route>
+
+    <route id="DocumentBundle_sliderSupprimer" pattern="/admin/slider/supprimer/{id}">
+        <default key="_controller">TDNDocumentBundle:Slider:supprimer</default>
+    </route>
+
+    <!-- IOS -->
+
+    <route id="Document_IOSRecherche" pattern="/ios/recherche">
+        <default key="_controller">TDNDocumentBundle:IOS:recherche</default>
+    </route>
+
+    <route id="Document_iOSAime" pattern="/ios/aime/{id}">
+        <default key="_controller">TDNDocumentBundle:IOS:aime</default>
+    </route>
+
+    <!-- Anciennes URL v2 -->
+
+    <route id="Document_rechercheLegacy" pattern="/{seed},search.{_format}">
+        <default key="_controller">TDNDocumentBundle:Public:recherche</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="Document_rechercheLegacyQuery" pattern="/all/all/requete/fil/index.{_format}">
+        <default key="_controller">CoreBundle:Legacy:recherche</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <route id="Document_rechercheLegacyGeneral" pattern="/tdn/recherche/index.{_format}">
+        <default key="_controller">CoreBundle:Legacy:recherche</default>
+        <requirement key="_format">html</requirement>
+    </route>
+
+    <!-- Legacy -->
+
+    <route id="Documnt_rebuildThematique" pattern="/{type}/rebuild/thematique">
+        <default key="_controller">TDNDocumentBundle:Legacy:rebuildThematique</default>
+        <requirement key="type">articles|conseils|videos</requirement>
+    </route>
+
+
+    <!-- Divers -->
+
+    <route id="Document_tagBuilder" pattern="/tag/build">
+        <default key="_controller">TDNDocumentBundle:DefaultMigration:indexBuild</default>
+    </route>
+
+</routes>

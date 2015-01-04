@@ -9,7 +9,7 @@ class PartielsController extends Controller {
 	public function articlesRecentsAction ($limite = 3, $panel = NULL) {
 
 		$variables['typeEntite'] = 'article';
-		$variables['titreEntite'] = 'Articles';
+		$variables['titreEntite'] = 'Posts de la rédac';
 		$variables['messageEmpty'] = 'Aucun article publié sur TDN';
 		$variables['lienSommaire'] = 'Tous les articles';
 		$variables['classeEntite'] = 'Article';

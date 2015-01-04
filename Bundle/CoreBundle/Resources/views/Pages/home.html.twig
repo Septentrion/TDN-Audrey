@@ -16,15 +16,15 @@
     {% render(controller("TDNCauseuseBundle:Partiels:questionsRecentes", {'limite': 2})) %}
   </div>
 
-  <div id="articles-recents" class="bloc-bandeau">
+  <div id="articles-recents">
     {% render(controller("TDNRedactionBundle:Partiels:articlesRecents", {'limite': 3})) %}
   </div>
 
   <div id="coups-de-coeur-shopping">
-    {#% render "ProduitBundle:Partial:panoramaCoupsDeCoeur" with {'limite': 2} %#}
+    {% render(controller("TDNProduitBundle:Partiels:panoramaCoupsDeCoeur", {'limite': 20})) %}
   </div>
 
-  <div id="videos">
+  <div id="videos-recentes">
     {% render(controller("TDNVideoBundle:Partiels:videosRecentes", {'limite': 6})) %}
   </div>
 

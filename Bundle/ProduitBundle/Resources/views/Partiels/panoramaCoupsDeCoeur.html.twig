@@ -4,13 +4,18 @@
 	</div>
 	<div class="hot row slider-shopping">
 		<div class="bloc-icone"></div>
-		<button class="retour-arriere"></button>
-		<div id="scene-shopping" class="cell">
+		<button id="cdc-shopping-rewind" class="retour-arriere"></button>
+		<div class="scene-shopping">
 			<div class="conteneur">
-				<div class="flux-shopping">
+				<div id="flux-shopping" class="flux-shopping" style="left:0px">
 					{% for produit in coupsDeCoeur %}
-					<figure class="snapshotProduit">
-						<a href="{{ path('Produit_afficher', {'id':produit.idDocument, 'slug':produit.slug}) }}">
+					{% if produit.citation is not null %}
+						{% set isFeatured = 'featured' %}
+					{% else %}
+						{% set isFeatured = '' %}
+					{% endif %}
+					<figure class="snapshot-produit">
+						<a class="{{ isFeatured }}" href="{{ path('Produit_afficher', {'id':produit.idDocument, 'slug':produit.slug}) }}">
 							<img src="{{ illustration(produit) }}"/>
 						</a>
 						<figcaption>
@@ -21,51 +26,132 @@
 				</div>
 			</div>
 		</div>
-		<button class="avance-suite"></button>
+		<button id="cdc-shopping-forward" class="avance-suite"></button>
 	</div>
 </div>
 <script type="text/javascript">
 
 	var move;
-	function moveleft () {
+	var delta;
+	var shoppingAnimationTrigger;
+
+	function shoppingAnimation(render, element) {
+		var running = true;
+		var start = null;
+		var deltaT = 0;
+		function loop(now) {
+			// console.log('now : '+now);
+			if (!start) start = now;
+			// stop the loop if render returned false
+			if (running !== false) {
+				deltaT = now - start;
+				// do not render frame when deltaT is too high
+				if ( deltaT < 160 ) {
+					running = render(element, deltaT);
+				}
+				start = now;
+				shoppingAnimationTrigger = requestAnimationFrame(loop);
+			} else {
+		       window.cancelAnimationFrame(shoppingAnimationTrigger);
+		       shoppingAnimationTrigger = undefined;
+			}
+		}
+		loop( start );
+	}
+
+	function rq_movestop() {
+	    if (shoppingAnimationTrigger) {
+	       window.cancelAnimationFrame(shoppingAnimationTrigger);
+	       shoppingAnimationTrigger = undefined;
+	    } else {
+	    	clearInterval(move);
+	    }
+	}
+
+	function rq_moveleft(element, deltaT) {
+		var butee;
+		if (!shoppingAnimationTrigger) {
+			shoppingAnimation(
+				function(element, deltaT) {
+					var butee = parseInt(element.style.left.slice(0,-2));
+					if ( parseInt(butee) <= -2500 ) {
+						return false;
+					} else {
+						butee -= 10 * deltaT / 16 ;
+						element.style.left = butee.toString() + "px";
+						return true;
+					}
+				}
+				, element);
+		}
+	}
+
+	function rq_moveright(element) {
+		var butee;
+		if (!shoppingAnimationTrigger) {
+			shoppingAnimation(
+				function(element, deltaT) {
+					var butee = parseInt(element.style.left.slice(0,-2));
+					if ( parseInt(butee) >= 0 ) {
+						return false;
+					} else {
+						butee += 10 * deltaT / 16 ;
+						element.style.left = butee.toString() + "px";
+						return true;
+					}
+				}
+				, element);
+		}
+	}
+
+	function moveright () {
 		var pos = $('.flux-shopping').css('left');
-		console.log(pos.slice(0,-2));
-		if (parseInt(pos.slice(0,-2)) <= 0) {
+		console.log(pos);
+		pos = pos.slice(0,-2);
+		if (parseInt(pos) >= 0) {
 			clearInterval(move)
 		} else {
-			$('.flux-shopping').css('left', '-=4');
+			delta = parseInt(pos) + 4;
+			console.log(delta+'px');
+			$('.flux-shopping').css('left', delta+'px');
 		}
 	}
 	
-	function moveright () {
+	function moveleft () {
 		var pos = $('.flux-shopping').css('left');
-		console.log(pos.slice(0,-2));
-		if (parseInt(pos.slice(0,-2)) >= 742) {
+		console.log(pos);
+		pos = pos.slice(0,-2);
+		if (parseInt(pos) <= -2500) {
 			clearInterval(move)
 		} else {
-			$('.flux-shopping').css('left', '+=4');
+			delta = parseInt(pos) - 4;
+			console.log(delta+'px');
+			$('.flux-shopping').css('left', delta+'px');
 		}
 	}
 
 	$(document).ready(function() {
-		$('.flux-shopping').draggable({
-			'axis': 'x',
-			'containment': 'parent',
-			'scroll': false
+		$('#cdc-shopping-forward').mousedown(function () {
+			console.log('down');
+			if (window.requestAnimationFrame) {
+				rq_moveleft(document.getElementById('flux-shopping'));
+			} else {
+				move = setInterval(moveleft, 10);
+			}
 		});
-		$('#selection-shopping .right').mousedown(function () {
+		$('#cdc-shopping-forward').mouseup(function () {
+			rq_movestop();
+		});
+		$('#cdc-shopping-rewind').mousedown(function () {
 			console.log('down');
-			move = setInterval(moveleft, 10);
-		})
-		$('#selection-shopping .right').mouseup(function () {
-			clearInterval(move);
-		})
-		$('#selection-shopping .left').mousedown(function () {
-			console.log('down');
-			move = setInterval(moveright, 10);
-		})
-		$('#selection-shopping .left').mouseup(function () {
-			clearInterval(move);
-		})
+			if (window.requestAnimationFrame) {
+				rq_moveright(document.getElementById('flux-shopping'));
+			} else {
+				move = setInterval(moveleft, 10);
+			}
+		});
+		$('#cdc-shopping-rewind').mouseup(function () {
+			rq_movestop();
+		});
 	});
 </script>

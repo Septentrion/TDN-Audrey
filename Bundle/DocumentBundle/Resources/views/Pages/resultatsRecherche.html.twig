@@ -1,0 +1,90 @@
+{% extends 'TDNCoreBundle:Topoi:TDNPageLarge.html.twig' %}
+
+{% block title "Résultats de recherche" %}
+
+{% block contenuPrincipal %}
+
+<div class="resultats-recherche en-scene">
+	<h1 class="titre-recherche">Résultats de ta recherche</h1>
+	<div class="message-utilisateur">
+		<p class="information">Pour affiner ta recherche, tu peux utiliser et combiner les astuces suivantes&nbsp;:</p>
+		<ul>
+			<li>Une suite de mots séparés par des espaces cherche tous les articles où l'un des mots apparaît (e.g. : cadeau Noël)</li>
+			<li>Une suite de mots séparés par le signe + cherche tous les articles où tous les mots apparaissent (e.g. : cadeau+Noël)</li>
+			<li>Une suite de mots entourés par des " cherche tous les articles l'expression entière apparaît (e.g. : "cadeau de Noël")</li>
+		</ul>		
+	</div>	
+	{% if contenus is defined %}
+		{% for type, resultats in contenus %}
+			{% set cssType = type[0:-1]%}
+			{% set open = 0%}
+		<section  id="tabsResultats-{{type}}" class="resultats bloc-bandeau">
+			<header class="bandeau fond-vert row widget-liste-{{ cssType|lower }}">
+				<a href="#" class="lien-propos lien-ouvrir">Tout voir</a>
+				<h1 class="titre-icone">{{ resultats|length }} {{ type }}</h1>
+			</header>
+			<div class="hot row">				
+			{% for r in resultats %}
+				{% if r.lnThematique is defined %}
+					{% set RR = r.lnThematique %}
+					{% set RRslug = r.lnThematique.slug %}
+				{% elseif r.rubriques[0] is defined %}
+					{% set RR = r.rubriques[0] %}
+					{% set RRslug = r.rubriques[0].slug %}
+				{% else %}
+					{% set RR = 'tdn' %}
+					{% set RRslug = 'tdn' %}
+				{% endif %}
+				{% if open == 0 %}
+					{% set displayReference = 'reference-affichee' %}
+					{% set open = 1%}
+				{% else %}
+					{% set displayReference = 'reference-masquee' %}
+				{% endif %}
+
+				<article class="reference recommandation-{{ cssType|lower }} {{ displayReference }}">
+					<div class="coin_a-la-une col-lg-2 col-md-2 col-sm-2 col-xs-12 col-extended">
+						<a href="{#{ path(paths[type],{'id':r.idDocument, 'slug':r.slug, 'rubrique':RRslug}) }#}">
+						{% if r.vignette is defined %}
+							<img class="vignette" src="{{ r.vignette }}" />
+						{% else %}
+							<img class="vignette" src="{{ illustration(r) }}" />
+						{% endif %}		
+						</a>						
+					</div>
+					<div class="suite-abstract col-lg-10 col-md-10 col-sm-10 col-xs-12 col-extended">
+						<h1>
+							<a href="{#{ path(paths[type],{'id':r.idDocument, 'slug':r.slug, 'rubrique':RRslug}) }#}" >{{ r.titre }}</a>
+						</h1>
+						{% if r.abstract != '' %}
+						{% set abstract = r.abstract %}
+						{% elseif r.corps is defined %}
+						{% set abstract = r.corps %}
+						{% elseif r.question is defined %}
+						{% set abstract = r.question %}
+						{% else %}
+						{% set abstract = "" %}
+						{% endif %}
+						<p class="abstractSliced">
+							<a href="{#{ path(paths[type],{'id':r.idDocument, 'slug':r.slug, 'rubrique':RRslug}) }#}" >
+							{{ textCutter(abstract,200)|striptags|raw }} — publié {{ r.datePublication|laps }}
+							</a>
+						</p>
+					</div>
+					<div class="cascadeTags">{{ r.tags|tags|raw }}</div>
+				</article>
+			{% endfor %}
+			</div>
+			<footer class="row">
+				<p class="fermeture">
+					<a href="#" class="lien-propos lien-fermer">Fermer</a>
+				</p>
+				<p class="filet-bas"></p>
+			</footer>
+		</section>
+		{% endfor %}
+	{% else %}
+	<h2>Pas de résultats pour l'expression que vous cherchez</h2>
+	{% endif %}
+</div>
+{% endblock %}

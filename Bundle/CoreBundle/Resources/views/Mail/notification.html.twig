@@ -1,0 +1,125 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Trucs de Nanas</title>
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+-->
+</style></head>
+
+<body text="#000000" link="#752670" vlink="#752670" alink="#752670" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table width="526" border="0" cellpadding="0" cellspacing="0" align="center">
+  <tr>
+    <td colspan="2" rowspan="3" align="left" valign="bottom">
+      <table width="126" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="17" align="left" valign="bottom">
+            <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/bord_gauche_avatar.gif') }}" width="17" height="105" />
+          </td>
+          <td width="107" align="center" valign="middle" bgcolor="#FFCCFF">
+            {% if sender is defined %}
+            <img src="http://www.trucdenana.com{{ mailAvatar(sender, 'sqr_') }}" width="102" height="102" alt="avatar" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+            {% else %}
+            <img src="http://www.trucdenana.com{{ mailAvatar('') }}" width="102" height="102" alt="avatar" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td height="123" colspan="4"  align="left" valign="top">
+      <a href="http://www.trucdenana.com" target="_blank">
+        <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/top.jpg') }}" width="516" height="128" alt="Trucs De Nanas" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td width="14" height="29">&nbsp;</td>
+    <td width="367" align="left" valign="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000;">
+      <strong>De {{ expediteur }}</strong><span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color:#666666;"> / {{ role }}</span>
+    </td>
+    <td width="128" align="right" valign="middle" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color:#666666;">{{ dateEnvoi|date('d M Y à H:i:s') }}</td>
+    <td width="11">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="19" colspan="4" align="left" valign="bottom">
+      <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/ligne.gif') }}" width="516" height="19" /></td>
+  </tr>
+  <tr>
+    <td width="17" height="40" bgcolor="#F3F8FC">&nbsp;</td>
+    <td width="109" bgcolor="#F3F8FC">&nbsp;</td>
+    <td colspan="4" align="right" valign="top" bgcolor="#F3F8FC">
+      <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="left" valign="top">
+            <a href="https://www.facebook.com/trucdenana" target="_blank">
+              <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/facebook.gif') }}" width="36" height="32" alt="Groupe Facebook TDN" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+            </a>
+          </td>
+          <td align="left" valign="top">
+            <a href="http://www.twitter.com/Trucdenana" target="_blank">
+              <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/twitter.gif') }}" width="35" height="32" alt="Suivre sur Twitter" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+            </a>
+          </td>
+          <td align="left" valign="top">
+            <a href="http://www.hellocoton.fr/mapage/trucdenana">
+              <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/com.gif') }}" width="36" height="32" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+            </a>
+          </td>
+          <td align="left" valign="top">
+            <a href="http://www.instagram.com/justine_trucsdenana">
+              <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/instagram.gif') }}" width="36" height="32" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+            </a>
+          </td>
+          <td align="left" valign="top">
+            <a href="itms://itunes.apple.com/fr/app/truc-de-nana/id369735750?mt=8" target="_blank">
+              <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/appli.gif') }}" width="54" height="32" alt="Appli TDN Apple store"  style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;"/>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td height="104" bgcolor="#F3F8FC">&nbsp;</td>
+    <td colspan="4" align="center" valign="top" bgcolor="#F3F8FC">
+      <table width="574" border="0" cellpadding="0" cellspacing="0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px; color:#000;">
+        <tr>
+          <td height="24" colspan="2" align="left" valign="top">Bonjour <strong>{{ destinataire }}</strong>,</td>
+        </tr>
+        <tr>
+          <td width="53">&nbsp;</td>
+          <td width="521" align="left" valign="top">
+            {% block corps %}{% endblock %}
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td align="right" valign="top" style="padding-top:14px;font-style:italic">Bien à toi, L'équipe TDN</td>
+        </tr>
+      </table>
+    </td>
+    <td bgcolor="#F3F8FC">&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="6">
+      <a href="http://www.trucsdenana.com{% if mailTargetPage is defined%}/{{ mailtargetPage}}{% endif %}">
+        <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/mytdn.jpg') }}" width="640" height="69" alt="MyTDN" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; display: block;" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td colspan="4" align="right" valign="top">
+      <img src="http://www.trucdenana.com{{ asset('assets/images/theme/mails/aufeminin.gif') }}" width="293" height="52" alt="AuFeminin.com" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic;" />
+    </td>
+  </tr>
+</table>
+</body>
+</html>

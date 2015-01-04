@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PartielsController extends Controller {
 
-    public function videosRecentesAction($limite) {
+    public function videosRecentesAction($limite, $panel = NULL) {
 
 		$variables['activeParticipe'] = 'Propose une vidéo';
 		$variables['typeEntite'] = 'video';
@@ -21,7 +21,7 @@ class PartielsController extends Controller {
 
 		// Récupération de la question la plus récente
 		$repCauseuse = $em->getRepository('TDN\Bundle\VideoBundle\Entity\Video');
-		$variables['recents'] = $repCauseuse->findMostRecent($limite);
+		$variables['recents'] = $repCauseuse->findMostRecent($limite, $panel);
 		$variables['live'] = array_shift($variables['recents']);
 
 		if (!empty($variables['live'])) {		

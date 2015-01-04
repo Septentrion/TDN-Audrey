@@ -9,6 +9,7 @@
         <parameter key="core.shortener.class">TDN\Bundle\CoreBundle\URL\URLShortener</parameter>
         <parameter key="core.sitemapper.class">TDN\Bundle\CoreBundle\URL\URLSitemapper</parameter>
         <parameter key="core.textprocessor.class">TDN\Bundle\CoreBundle\Texte\TextProcessor</parameter>
+        <parameter key="core.notifier.class">TDN\Bundle\CoreBundle\Notifier\Notifier</parameter>
     </parameters>
 
     <services>
@@ -16,6 +17,10 @@
         <service id="tdn.core.urlshortener" class="%core.shortener.class%"></service>
         <service id="tdn.core.urlsitemapper" class="%core.sitemapper.class%"></service -->
         <service id="tdn.core.textprocessor" class="%core.textprocessor.class%"></service>
+
+        <service id="tdn.core.notifier" class="%core.notifier.class%">
+            <argument type="service" id="mailer" />
+        </service>
 
         <service id="tdn.twig.age_extension" class="TDN\Bundle\CoreBundle\Twig\DateExtension">
             <tag name="twig.extension" />

@@ -2,6 +2,8 @@
 
 namespace TDN\Bundle\DocumentBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use TDN\Bundle\CoreBundle\Entity\Journal;
@@ -69,7 +71,7 @@ class PublicController extends Controller
         }
 
         $vars['rubrique'] = 'tdn';
-        return $this->render('DocumentBundle:Page:resultatsRecherche.html.twig', $vars);
+        return $this->render('TDNDocumentBundle:Pages:resultatsRecherche.html.twig', $vars);
     }
 
     public function mentionsLegalesAction () {
@@ -88,7 +90,7 @@ class PublicController extends Controller
         $vars['experts'] = $rep->findByRole('ROLE_EXPERT');
         $vars['technique'] = array();
         $vars['rubrique'] = 'tdn';
-        return $this->render('DocumentBundle:Page:equipeTDN.html.twig', $vars);
+        return $this->render('TDNDocumentBundle:Page:equipeTDN.html.twig', $vars);
     }
 
     public function aimeAction ($id) {

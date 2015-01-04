@@ -1,0 +1,7 @@
+{% extends 'TDNCoreBundle:Mail:notification.html.twig' %}
+
+{% block corps %}
+<p>Voici la question qui a été enregistrée</p>
+<div>{{ question |raw }}</div>
+<p>La rédaction va la transmettre à un de nos experts pour que tu aies une réponse rapide.</p>
+{% endblock %}

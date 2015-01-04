@@ -50,8 +50,8 @@ class PublicController extends MainPublicController {
 
 		$variables['rubrique'] = 'tdn';
 
+        $notifieur = $this->get('tdn.core.notifier');
 		$request = $this->get('request');
-	    // Récupération de l'entity manager qui va nous permettre de gérer les entités.
 	    $em = $this->get('doctrine.orm.entity_manager');      
 
 		// Instanciation du formulaire
@@ -89,34 +89,35 @@ class PublicController extends MainPublicController {
 		// $em->flush();
 
 		// Notification
-		// $higgins = $this->get('tdn.notifieur');
-		// $err = $higgins->notification_admin($corps, 'TDNConseilExpertBundle:Mail:demandeConseil.html.twig');
-		$admins = $this->container->getParameter('admin_notifications');
-		$expediteurs = $this->container->getParameter('mail_expediteur');				
-		$message = \Swift_Message::newInstance();
+		// $nestor = $this->get('tdn.notifieur');
+		$metadata['sujet'] = "Demande de conseil";
+		$metadata['template'] = 'ConseilExpert:demandeConseil';
 		$corps['expediteur'] = "Administrateur";
 		$corps['role'] = "Système";
-		$corps['destinataire'] = "Justine";
-		$corps['dateEnvoi'] = date(' d m Y - H:i:s');
+		$corps['destinataire'] = "";
 		$corps['pseudo'] = $usr->getUsername();
 		$corps['question'] = $_TDNDocument->getQuestion();
-
-		$message->setSubject('[TDN] Demande de conseil')
-				->setContentType('text/html')
-    			->setFrom($expediteurs['admin'])
-        			->setBody(
-        			$this->renderView('TDNConseilExpertBundle:Mail:demandeConseil.html.twig', $corps),
-        			'text/html'
-        		);
-		foreach($admins['redaction'] as $destinataire) {
-			$message->addTo($destinataire);
-		}
-	    $this->get('mailer')->send($message);
+		$notifier->admin_notify('redaction', $metadata, $corps);
 
 		$this->get('session')->getFlashBag()->add('success', 'Merci. Ta question va être envoyée à un de nos experts qui te répondra au plus vite');
-		return $this->redirect($this->generateURL('Core_home'));
+		return $this->redirect($this->generateURL('Core_messageSysteme'));
 	}
 
+	/**
+	 *
+	 * conseilAction
+	 *
+	 * contrôleur pour le tratitement de l'affichage d'un conseil d'expert
+	 *
+	 * @version 1.0
+	 *
+	 * @param $rubrique
+	 * @param integer $id — Identifiant du conseil
+	 * @param string $slug — chaîne d'URL
+	 *
+	 * @return Response
+	 *
+	 **/
 	public function conseilAction ($rubrique, $id, $slug = NULL) {
 	/* Tableau qui va stocker toutes les données à remplacer dans le template twig */
 	    $variables = array();  
