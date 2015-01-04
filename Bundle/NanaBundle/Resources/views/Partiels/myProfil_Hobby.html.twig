@@ -1,0 +1,18 @@
+<form id="form_hobby" name="form_hobby" class="popin-hobby contenu-popin" data-prototype="{{ form_widget(form_hobby.galerieHobby.vars.prototype)|e }}" action="{{ path('Nana_ajouterHobby', {'action': 'modifier'}) }}" method="post" {{ form_enctype(form_hobby) }} style="width:600px; height:800px;">
+	<div class="form-table">
+		<div class="forme-ligne">
+			{{ form_label(form_hobby.domaine) }}
+		    {{ form_widget(form_hobby.domaine|e, {'attr': {'class': 'champ-profil champ-bloc'}}) }}			
+		</div>
+		<div class="form-ligne">
+			{{ form_label(form_hobby.precisions) }}
+		    {{ form_widget(form_hobby.precisions|e, {'attr': {'class': 'champ-profil champ-bloc'}}) }}		
+		</div>
+	</div>
+	<div class="galerie-images">
+	</div>
+	<a>Ajouter une image</a>
+	<div class="bouton-fleche-blanche">
+		<button class="bouton">Enregistrer</button>
+	</div>
+</form>

@@ -54,7 +54,7 @@
 			{% endfor %}
 			{% for i in compteGaleriePerso .. 9 %}
 			<figure class="element-avenir">
-				<a href="#" class="bouton-ajout-image">Ajoute une image</a>
+				<a href="{{ path('Nana_ajouterImagePortrait') }}" class="bouton-ajout-image popin">Ajoute une image</a>
 			</figure>
 			{% endfor %}
 		</div>
@@ -63,7 +63,7 @@
 	<section id="galerie-hobbies" class="fond-simple">
 		<header class="titre-inline">
 		{% set compteHobbies = me.lnHobbies|length %}
-			<a href="#" id="bouton-ajout-passion" class="lien-propos">Ajoute une passion</a>
+			<a href="{{ path('Nana_ajouterHobby') }}" id="bouton-ajout-passion" class="popin lien-propos">Ajoute une passion</a>
 		{% if compteHobbies == 0 %}
 			<h2>Dis-nous quelles sont tes passions dans la vie !</h2>
 		{% elseif compteHobbies == 0 %}
@@ -89,7 +89,7 @@
 							{% set sourceGalerie = '/uploads/documents/profils/'~me.idNana~'/'~proxy.lnImage.fichier %}
 							{% set vignetteGalerie = imagePerso(proxy.lnImage, me.idNana, 'SQUARE') %}
 							<figure class="element-galerie has-croix-suppression">
-								<a class="popin" href="{{ asset(sourceGalerie)}}" title="{{ proxy.lnImage.titre }}">
+								<a class="popin" href="{{ asset(sourceGalerie) }}" title="{{ proxy.lnImage.titre }}">
 									<img class="apercu vignette" src="{{ asset(vignetteGalerie)}}" alt="{{ proxy.lnImage.titre }}" />
 								</a>
 								<figcaption>
@@ -99,7 +99,7 @@
 							{% endfor %}
 							{% for i in imagesHobby|length .. 9 %}
 							<figure class="element-avenir">
-								<a href="#" class="bouton-ajout-image">Ajoute une image</a>
+								<a href="{{ path('Nana_ajouterImageHobby', {'hobby': me.lnHobbies[j].idHobby}) }}" class="popin bouton-ajout-image">Ajoute une image</a>
 							</figure>
 							{% endfor %}
 						</div>
@@ -146,14 +146,14 @@ function addCollectionDelete($formConteneur, texteBouton) {
     var collectionHolder = $('#tdn_nana_hobbies_lnHobbies');
 
     $('.formulaire-hobby').each(function() {
-    	addCollectionDelete($(this));
+    	addCollectionDelete($(this), 'Supprimer cette passion');
     })
 
     $('#bouton-ajout-passion').on('click', function(e) {
         // empêche le lien de créer un « # » dans l'URL
-        e.preventDefault();
+        // e.preventDefault();
         // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
-        addCollectionForm(collectionHolder, 'formulaire-hobby', 'Supprimer cette passion');
+        // addCollectionForm(collectionHolder, 'formulaire-hobby', 'Supprimer cette passion');
     });
 
     $('#formModificationHobby').on('click', '#bouton-ajout-image', function(e) {

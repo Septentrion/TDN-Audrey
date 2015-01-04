@@ -88,12 +88,15 @@
         <default key="_controller">TDNNanaBundle:MyTDN:updateAvatar</default>
     </route>
 
-    <route id="NanaBundle_myGalerieUpdate" pattern="/my-tdn/profil/update-galerie">
-        <default key="_controller">TDNNanaBundle:MyTDN:updateGalerie</default>
+    <route id="Nana_ajouterImagePortrait" pattern="/my-tdn/profil/portrait/ajouter-image/{action}">
+        <default key="_controller">TDNNanaBundle:MyTDN:ajouterImagePortrait</default>
+        <default key="action">afficher</default>
+        <requirement key="action">afficher|modifier</requirement>
     </route>
 
     <route id="Nana_supprimerElementGalerie" pattern="/my-tdn/profil/galerie/enlever-image/{id}">
         <default key="_controller">TDNNanaBundle:MyTDN:supprimerElementGalerie</default>
+        <requirement key="id">\d+</requirement>
     </route>
 
     <route id="NanaBundle_myProfilClose" pattern="/my-tdn/profil/close">
@@ -142,16 +145,18 @@
 
     <!-- Hobbies -->
 
-    <route id="NanaBundle_myHobbyAdd" pattern="/my-tdn/profil/hobby/add">
-        <default key="_controller">TDNNanaBundle:Hobby:add</default>
+    <route id="Nana_ajouterHobby" pattern="/my-tdn/profil/hobby/ajouter">
+        <default key="_controller">TDNNanaBundle:MyTDN:ajouterHobby</default>
     </route>
 
     <route id="NanaBundle_myHobbyModifier" pattern="/my-tdn/profil/hobby/modifier">
         <default key="_controller">TDNNanaBundle:Hobby:modifier</default>
     </route>
 
-    <route id="Nana_ajouterImageHobby" pattern="/my-tdn/profil/hobby/ajouter-image">
-        <default key="_controller">TDNNanaBundle:Hobby:ajouterImage</default>
+    <route id="Nana_ajouterImageHobby" pattern="/my-tdn/profil/hobby/{hobby}/ajouter-image/{action}">
+        <default key="_controller">TDNNanaBundle:MyTDN:ajouterImageHobby</default>
+        <default key="action">afficher</default>
+        <requirement key="action">afficher|modifier</requirement>
     </route>
 
     <route id="Nana_supprimerImageHobby" pattern="/my-tdn/profil/hobby/supprimer-image/{id}">

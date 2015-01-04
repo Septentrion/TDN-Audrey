@@ -11,6 +11,7 @@ use TDN\Bundle\NanaBundle\Entity\NanaRoles;
 use TDN\Bundle\NanaBundle\Entity\NanaPortraitImageProxy;
 use TDN\Bundle\NanaBundle\Form\Type\completeProfilType;
 use TDN\Bundle\NanaBundle\Entity\NanaHobby;
+use TDN\Bundle\NanaBundle\Entity\NanaHobbyImageProxy;
 use TDN\Bundle\NanaBundle\Form\Type\HobbyType;
 use TDN\Bundle\NanaBundle\Form\Type\SelfHobbiesType;
 
@@ -21,6 +22,7 @@ use TDN\Bundle\ImageBundle\Entity\Image;
 
 class MyTDNController extends Controller {
 
+    private $classeAffiche = array('','affiche');
 
     private function _upgradeIfProfileCompleted ($nana, $ancien) {
         // Mise à jour des points pour les escarpins
@@ -188,6 +190,7 @@ class MyTDNController extends Controller {
         $variables = array();  
         $vars['me'] = $this->container->get('security.context')->getToken()->getUser();
         $vars['likes'] = $rep_journal->likes($vars['me']->getIdNana());
+        $vars['isAffiche'] = array($this->classeAffiche[1],'','');
 
         if ($action === 'modifier') {
             return $this->_updateMyIdentiteAction($vars);
@@ -389,9 +392,6 @@ class MyTDNController extends Controller {
         $form_avatar = $this->createForm(new simpleImageType(), $avatar);
 
         $form_avatar->handleRequest($request);
-
-        echo $request->request->get('titre');
-
         if ($form_avatar->isValid()) {      
             // Création du nouvel avatar
             $now = new \DateTime;
@@ -441,11 +441,12 @@ class MyTDNController extends Controller {
         
         $variables = array();  
         $vars['me'] = $this->container->get('security.context')->getToken()->getUser();
+        $vars['isAffiche'] = array('', $this->classeAffiche[1],'');
 
         if ($action === 'modifier') {
             return $this->_updateMyGaleriesAction($vars);
         } else {
-            return $this->_showMyGaleriesAction($vars);
+            return $this->_showMyGaleries($vars);
         }
 
     }
@@ -463,14 +464,205 @@ class MyTDNController extends Controller {
     * @return Response
     *
     **/
-    private function _showMyGaleriesAction (array $vars) {
+    private function _showMyGaleries (array $vars) {
 
        // Formulaire pour les données personnelles
         $vars['form_hobbies'] = $this->createForm(new SelfHobbiesType(), $vars['me'])->createView();
-
         return $this->render('TDNNanaBundle:Partiels:myProfil_Galeries.html.twig', $vars);
     }
 
 
+    public function ajouterHobbyAction () {
+
+        $variables = array();  
+       // Formulaire pour les données personnelles
+        $vars['form_hobby'] = $this->createForm(new HobbyType(), new NanaHobby)->createView();
+
+        return $this->render('TDNNanaBundle:Partiels:myProfil_Hobby.html.twig', $vars);
+    }
+
+
+    /**
+    *
+    * ajouterImageHobbyAction
+    *
+    * Contrôleur pour l'ajout d'images dans le profil personnel
+    *
+    * @version 0.0.1
+    *
+    * @param integer $hobby — Identifiant du hobby
+    * @param string $action — mode d'action : afficher|mofidier
+    *
+    * @return Response
+    *
+    */
+    public function ajouterImageHobbyAction ($hobby, $action = 'afficher') {
+        // Récupération de l'entity manager qui va nous permettre de gérer les entités.
+        $em = $this->get('doctrine.orm.entity_manager');      
+        $rep_nana = $repository = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+        
+        $variables = array();  
+        $vars['me'] = $this->container->get('security.context')->getToken()->getUser();
+
+        if ($action === 'modifier') {
+            return $this->_ajouterImageHobby($hobby, $vars);
+        } else {
+            $vars['targetRoute'] = $this->generateURL('Nana_ajouterImageHobby', array('hobby' => $hobby, 'action' => 'modifier'));
+            return $this->_formImage($vars);
+        }
+    }
+
+    /**
+    *
+    * _formImage
+    *
+    * Préparation du formulaire pour ajout d'image
+    *
+    * @version 0.0.1
+    *
+    * @param array $vars — Données à afficher dans le template
+    *
+    * @return View
+    *
+    */
+    private function _formImage ($vars) {
+
+        // Formulaire pour changer d'avatar
+        $vars['form_image'] = $this->createForm(new simpleImageType(), new Image)->createView();
+
+        return $this->render('TDNImageBundle:Partiels:popinFormImage.html.twig', $vars);
+    }
+
+    /**
+    *
+    * _ajouterImageHobby
+    *
+    * Traitement d'une nouvelle image pour un hobby
+    *
+    * @version 0.0.1
+    *
+    * @param array $vars — Données à afficher dans le template
+    *
+    * @return Response
+    *
+    */
+    private function _ajouterImageHobby ($idHobby, $vars) {
+
+        $request = $this->get('request');
+        $whoami= $this->get('security.context')->getToken()->getUser();
+
+       // Récupération de l'entity manager qui va nous permettre de gérer les entités.
+        $em = $this->get('doctrine.orm.entity_manager');
+        // $URLmanager = $this->get('tdn.document.url');
+
+        $rep_hobby = $repository = $em->getRepository('TDN\Bundle\NanaBundle\Entity\NanaHobby');
+        $hobby =  $rep_hobby->find($idHobby);
+        $proxy = new NanaHobbyImageProxy;
+        $imageHobby =  new Image;
+
+        $form_image = $this->createForm(new SimpleImageType(), $imageHobby);
+        $form_image->handleRequest($request);
+        if ($form_image->isValid()) {
+            $proxy->setLnHobby($hobby);
+            $proxy->setLnImage($imageHobby);
+            $dossier = '/profils/'.$whoami->getIdNana().'/';
+            $imageHobby->init($whoami, $dossier);
+            // $em->persist($proxy);
+            // $em->persist($imageHobby);
+            // $em->flush();
+
+            // Post-traitement de l'image
+            $imageProcessor = $this->get('tdn.image_processor');
+            $fichierImage = $imageHobby->getFichier();
+            $source = $this->container->getParameter('media_root').$dossier.$fichierImage;
+            $err = $imageProcessor->square($source, 80, 'min_');
+            $err = $imageProcessor->square($source, 300, 'sqr_');
+            $err = $imageProcessor->downScale($source, 700, 'height');
+
+            $this->get('session')->getFlashBag()->add('success', 'Les modifications ont bien été prises en compte.');
+        }
+
+        return $this->redirect($this->generateURL('Nana_myGaleries'));
+    }
+
+    /**
+    *
+    * ajouterImagePortraitAction
+    *
+    * Contrôleur pour l'ajout d'images dans le profil personnel
+    *
+    * @version 0.0.1
+    *
+    * @param integer $hobby — Identifiant du hobby
+    * @param string $action — mode d'action : afficher|mofidier
+    *
+    * @return Response
+    *
+    */
+    public function ajouterImagePortraitAction ($action = 'afficher') {
+        // Récupération de l'entity manager qui va nous permettre de gérer les entités.
+        $em = $this->get('doctrine.orm.entity_manager');      
+        $rep_nana = $repository = $em->getRepository('TDN\Bundle\NanaBundle\Entity\Nana');
+        
+        $variables = array();  
+        $vars['me'] = $this->container->get('security.context')->getToken()->getUser();
+
+        if ($action === 'modifier') {
+            return $this->_ajouterImagePortrait();
+        } else {
+            $vars['targetRoute'] = $this->generateURL('Nana_ajouterImagePortrait', array('action' => 'modifier'));
+            return $this->_formImage($vars);
+        }
+    }
+
+    /**
+    *
+    * _ajouterImagePortrait
+    *
+    * Traitement d'une nouvelle image pour la galerie « Portrait »
+    *
+    * @version 0.0.1
+    *
+    * @return Response
+    *
+    */
+    private function _ajouterImagePortrait () {
+
+        $request = $this->get('request');
+        $whoami= $this->get('security.context')->getToken()->getUser();
+
+       // Récupération de l'entity manager qui va nous permettre de gérer les entités.
+        $em = $this->get('doctrine.orm.entity_manager');
+        // $URLmanager = $this->get('tdn.document.url');
+
+        $rep_hobby = $repository = $em->getRepository('TDN\Bundle\NanaBundle\Entity\NanaHobby');
+        $hobby =  $rep_hobby->find($idHobby);
+        $proxy = new NanaHobbyImageProxy;
+        $imageHobby =  new Image;
+
+        $form_image = $this->createForm(new SimpleImageType(), $imageHobby);
+        $form_image->handleRequest($request);
+        if ($form_image->isValid()) {
+            $proxy->setLnHobby($hobby);
+            $proxy->setLnImage($imageHobby);
+            $dossier = '/profils/'.$whoami->getIdNana().'/';
+            $imageHobby->init($whoami, $dossier);
+            // $em->persist($proxy);
+            // $em->persist($imageHobby);
+            // $em->flush();
+
+            // Post-traitement de l'image
+            $imageProcessor = $this->get('tdn.image_processor');
+            $fichierImage = $imageHobby->getFichier();
+            $source = $this->container->getParameter('media_root').$dossier.$fichierImage;
+            $err = $imageProcessor->square($source, 80, 'min_');
+            $err = $imageProcessor->square($source, 300, 'sqr_');
+            $err = $imageProcessor->downScale($source, 700, 'height');
+
+            $this->get('session')->getFlashBag()->add('success', 'Les modifications ont bien été prises en compte.');
+        }
+
+        return $this->redirect($this->generateURL('Nana_myGaleries'));
+    }
 
 }
