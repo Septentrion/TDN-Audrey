@@ -108,20 +108,20 @@ class ImageProcessor {
 
 		$source = $_SERVER['DOCUMENT_ROOT'].$fichier;
 		if (is_file($source)) {
-	        $imsource = new \Imagick($source);
-	        $geo = $imsource->getImageGeometry();
+	        $imSource = new \Imagick($source);
+	        $geo = $imSource->getImageGeometry();
 	        if ($geo['width'] > $geo['height']) {
-	            $imsource->scaleImage(0, $cote);
-	            $geoS = $imsource->getImageGeometry();
+	            $imSource->scaleImage(0, $cote);
+	            $geoS = $imSource->getImageGeometry();
 	            $offsetX = floor(($geoS['width'] - $cote)/2);
 	            $offsetY = 0;
 	        } else {
-	            $imsource->scaleImage($cote,0);
-	            $geoS = $imsource->getImageGeometry();
+	            $imSource->scaleImage($cote,0);
+	            $geoS = $imSource->getImageGeometry();
 	            $offsetX = 0;
 	            $offsetY = floor(($geoS['height'] - $cote)/2);
 	        }
-	        $imsource->cropImage($cote, $cote, $offsetX, $offsetY);
+	        $imSource->cropImage($cote, $cote, $offsetX, $offsetY);
 	        if (!is_null($prefixe)) {
 	        	$path = explode('/', $source);
 	        	$fichier = $prefixe.array_pop($path);
@@ -131,8 +131,8 @@ class ImageProcessor {
 	        	$cible = $source;
 	        }
 	        $this->normalizeJPEG($imSource);
-	        $imsource->writeImage($cible);
-	        $imsource->destroy();  
+	        $imSource->writeImage($cible);
+	        $imSource->destroy();  
 
 	        return true;                             
 		} else {
@@ -141,10 +141,10 @@ class ImageProcessor {
     }
 
     private function normalizeJPEG (\Imagick $source) {
-        $imSource->setImageFormat('jpeg');
+        $source->setImageFormat('jpeg');
 	    $source->setImageCompression(\Imagick::COMPRESSION_JPEG);
 	    $source->setImageCompressionQuality(70);
-    	$imSource->setInterlaceScheme(Imagick::INTERLACE_PLANE);
+    	$source->setInterlaceScheme(\Imagick::INTERLACE_PLANE);
 	    $source->stripImage();
     }
 

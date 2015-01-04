@@ -1,0 +1,19 @@
+<div id="selecteur_image" class="popin-image contenu-popin" style="width:600px;overflow:auto">
+	<div id="enveloppe-avatar" class="col-lg-2">
+		<div id="avatar">
+			{% set imgAvatar = avatar(me, 'sqr_') %}
+			<a class="popin" href="{{ imgAvatar }}" >
+				<img src="http://www.trucsdenana.com{{ imgAvatar }}" class="profil-border contrainte" />
+			</a>
+		</div>
+	</div>
+	<form name="selecteur_avatar" id="form_selecteur_avatar" class="closed-field constraintFile col-lg-10" action="{{ targetRoute }}" method="post" {{ form_enctype(form_image) }}>
+		<p class="message-inline information">Les images doivent être dans un format compatible (gif, jpg, png, svg), poids maximum 2Mo</p>
+		{{ form_row(form_image.upload) }}
+		{{ form_row(form_image.titre) }}
+		{{ form_rest(form_image) }}
+		<div class="bouton-fleche-blanche" style="margin-top:1rem">
+			<button type="submit" class="bouton">Enregistrer cette image</button>
+		</div>
+	</form>
+</div>

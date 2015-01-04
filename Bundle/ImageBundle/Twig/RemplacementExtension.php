@@ -136,7 +136,15 @@ class RemplacementExtension extends \Twig_Extension {
                 return '/uploads/documents/profils/'.$idNana.'/'.$prefix.$fichier;
             } elseif ($format != '' && (is_file($dir.'/'.$fichier))) {
                 return '/uploads/documents/profils/'.$idNana.'/'.$fichier;
-            } else {}
+            } else {
+                $dir = $_SERVER['DOCUMENT_ROOT'].'../../../v3/web/uploads/documents/profils/'.$idNana;
+                 if (is_file($dir.'/'.$prefix.$fichier)) {
+                    return '/uploads/documents/profils/'.$idNana.'/'.$prefix.$fichier;
+                } elseif ($format != '' && (is_file($dir.'/'.$fichier))) {
+                    return '/uploads/documents/profils/'.$idNana.'/'.$fichier;
+                } else {}
+
+            }
         } 
         
         return '/assets/images/theme/centre/avatar_profil/avatar5%2080x95.png';
