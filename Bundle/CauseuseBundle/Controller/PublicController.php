@@ -74,7 +74,7 @@ class PublicController extends MainPublicController {
 	    $statement = $this->get('database_connection');	    
 	    $sims = $rep_tags->findSimilars($id);
 
-		$variables['canonical'] = $this->generateURL('Causeuse_page', 
+		$variables['canonical'] = $this->generateURL('Question_page', 
 			array('id' => $variables['TDNDocument']->getIdDocument(),
 				  'slug' => $variables['TDNDocument']->getSlug(),
 				  'rubrique' => $variables['rubrique'],
@@ -346,7 +346,7 @@ class PublicController extends MainPublicController {
 			$params['id'] = $_TDNDocument->getIdDocument();
 			$_r = $_TDNDocument->getRubriques();
 			$params['rubrique'] = $_r[0]->getSlug();
- 			$corps['url'] = 'http://www.trucsdenana.com'.$this->generateURL('Causeuse_page', $params);
+ 			$corps['url'] = 'http://www.trucsdenana.com'.$this->generateURL('Question_page', $params);
 
 			$message->setSubject('[TDN] '.$usr->getUsername().' a répondu à une de tes questions aux nanas')
 					->setContentType('text/html')
