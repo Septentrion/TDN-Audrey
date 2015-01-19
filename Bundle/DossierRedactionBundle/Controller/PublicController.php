@@ -76,15 +76,15 @@ class PublicController extends MainPublicController {
 	    }
 
 	    $variables['paths'] = array(
-	    	'Article' => 'RedactionBundle_article',
-	    	'ConseilExpert' => 'ConseilExpert_conseil',
-	    	'Question' => 'CauseuseBundle_conversation',
-	    	'Video' => 'VideoBundle_video',
-	    	'Dossier' => 'DossierRedaction_dossier'
+	    	'Article' => 'Article_page',
+	    	'ConseilExpert' => 'ConseilExpert_page',
+	    	'Question' => 'Question_page',
+	    	'Video' => 'Video_page',
+	    	'Dossier' => 'DossierRedaction_page'
 	    	);
 
 		// Affichage de la page
-		return $this->render('TDNDossierRedactionBundle:Page:dossierAbstract.html.twig', $variables);
+		return $this->render('TDNDossierRedactionBundle:Page:dossier.html.twig', $variables);
 
 	}
 
